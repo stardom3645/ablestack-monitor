@@ -19,11 +19,14 @@ package main
 
 import (
 	"encoding/xml"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"strconv"
+	"strings"
 
 	"github.com/AlexZzz/libvirt-exporter/libvirtSchema"
 	"github.com/prometheus/client_golang/prometheus"
@@ -31,6 +34,8 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 	"libvirt.org/go/libvirt"
 )
+
+var rbdImageDiskUsageResult []interface{}
 
 var (
 	libvirtUpDesc = prometheus.NewDesc(
@@ -605,10 +610,20 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 				disk.Name)
 		}
 		if disk.AllocationSet {
+			
+			diskAllocation := float64(disk.Allocation)
+			
+			for _, diskUsage := range rbdImageDiskUsageResult {
+				result := diskUsage.(map[string]interface{})
+				if result["snapshot_id"] == nil && strings.Contains(DiskSource, result["name"].(string)) {
+					diskAllocation = result["used_size"].(float64)
+				}
+			}
+
 			ch <- prometheus.MustNewConstMetric(
 				libvirtDomainBlockAllocationDesc,
 				prometheus.GaugeValue,
-				float64(disk.Allocation),
+				diskAllocation,
 				domainName,
 				disk.Name)
 		}
@@ -1116,6 +1131,22 @@ func (e *LibvirtExporter) Collect(ch chan<- prometheus.Metric) {
 }
 
 func main() {
+
+	//rbd Image DiskUsage(du) information
+	cmd := exec.Command("rbd", "du", "--format", "json")
+	output, err := cmd.Output()
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+
+		var dat map[string]interface{}
+		if err := json.Unmarshal([]byte(output), &dat); err != nil {
+			fmt.Println(err)
+		}
+		rbdImageDiskUsageResult = (dat["images"].([]interface{}))		
+	}
+	
 	var (
 		app           = kingpin.New("libvirt_exporter", "Prometheus metrics exporter for libvirt")
 		listenAddress = app.Flag("web.listen-address", "Address to listen on for web interface and telemetry.").Default(":9177").String()
