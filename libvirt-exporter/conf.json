@@ -1,0 +1,9 @@
+{
+    "mold_db": {
+        "serverhost":"10.10.1.10",
+        "port":"3306",
+        "database": "cloud",
+        "username": "cloud",
+        "password": "Ablecloud1!"
+    }
+}

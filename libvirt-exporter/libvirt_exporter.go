@@ -27,6 +27,11 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"io/ioutil"
+	"database/sql"
+	_ "reflect"
+
+	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/AlexZzz/libvirt-exporter/libvirtSchema"
 	"github.com/prometheus/client_golang/prometheus"
@@ -36,6 +41,11 @@ import (
 )
 
 var rbdImageDiskUsageResult []interface{}
+var confValue map[string]interface{}
+var byteValue []uint8
+var domainMetaInfo = map[int]map[string]string{}
+var networkMetaInfo = map[int]map[string]string{}
+var diskMetaInfo = map[int]map[string]string{}
 
 var (
 	libvirtUpDesc = prometheus.NewDesc(
@@ -51,7 +61,7 @@ var (
 	libvirtDomainInfoMetaDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_info", "meta"),
 		"Domain metadata",
-		[]string{"domain", "uuid", "instance_name", "flavor", "user_name", "user_uuid", "project_name", "project_uuid", "root_type", "root_uuid"},
+		[]string{"domain", "uuid", "instance_name", "flavor", "user_name", "user_uuid", "project_name", "project_uuid", "root_type", "root_uuid","domain_mold_name","vm_user_name"},
 		nil)
 	libvirtDomainInfoMaxMemBytesDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_info", "maximum_memory_bytes"),
@@ -113,7 +123,7 @@ var (
 	libvirtDomainMetaBlockDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_block", "meta"),
 		"Block device metadata info. Device name, source file, serial.",
-		[]string{"domain", "target_device", "source_file", "serial", "bus", "disk_type", "driver_type", "cache", "discard"},
+		[]string{"domain", "target_device", "source_file", "serial", "bus", "disk_type", "driver_type", "cache", "discard","mold_disk_name"},
 		nil)
 	libvirtDomainBlockRdBytesDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_block_stats", "read_bytes_total"),
@@ -273,7 +283,7 @@ var (
 	libvirtDomainMetaInterfacesDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_interface", "meta"),
 		"Interfaces metadata. Source bridge, target device, interface uuid",
-		[]string{"domain", "source_bridge", "target_device", "virtual_interface"},
+		[]string{"domain", "source_bridge", "target_device", "virtual_interface","mac_address","mold_network_name"},
 		nil)
 	libvirtDomainInterfaceRxBytesDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_interface_stats", "receive_bytes_total"),
@@ -399,6 +409,7 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 	if err != nil {
 		return err
 	}
+
 	var desc libvirtSchema.Domain
 	err = xml.Unmarshal([]byte(xmlDesc), &desc)
 	if err != nil {
@@ -410,6 +421,16 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 	if err != nil {
 		return err
 	}
+
+	domain_mold_name := domainName
+	vm_user_name := "N/A"
+	for _, val := range domainMetaInfo {
+		if domainName ==  val["domain_name"] {
+			domain_mold_name = val["domain_mold_name"]
+			vm_user_name = val["vm_user_name"]
+		}
+	}
+
 	ch <- prometheus.MustNewConstMetric(
 		libvirtDomainInfoMetaDesc,
 		prometheus.GaugeValue,
@@ -423,7 +444,9 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 		desc.Metadata.NovaInstance.NovaOwner.NovaProject.ProjectName,
 		desc.Metadata.NovaInstance.NovaOwner.NovaProject.ProjectUUID,
 		desc.Metadata.NovaInstance.NovaRoot.RootType,
-		desc.Metadata.NovaInstance.NovaRoot.RootUUID)
+		desc.Metadata.NovaInstance.NovaRoot.RootUUID,
+		domain_mold_name,
+		vm_user_name)
 	ch <- prometheus.MustNewConstMetric(
 		libvirtDomainInfoMaxMemBytesDesc,
 		prometheus.GaugeValue,
@@ -520,7 +543,6 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 			if dev.Target.Device == disk.Name {
 				if disk.PathSet {
 					DiskSource = disk.Path
-
 				} else {
 					DiskSource = dev.Source.Name
 				}
@@ -529,6 +551,12 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 			}
 		}
 
+		mold_disk_name := "N/A"
+		for _, val := range diskMetaInfo {
+			if domainName ==  val["domain_name"] && strings.Contains(DiskSource, val["disk_path"]) {
+				mold_disk_name = val["mold_disk_name"]
+			}
+		}
 		ch <- prometheus.MustNewConstMetric(
 			libvirtDomainMetaBlockDesc,
 			prometheus.GaugeValue,
@@ -542,7 +570,7 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 			Device.Driver.Type,
 			Device.Driver.Cache,
 			Device.Driver.Discard,
-		)
+			mold_disk_name)
 
 		// https://libvirt.org/html/libvirt-libvirt-domain.html#virConnectGetAllDomainStats
 		if disk.RdBytesSet {
@@ -610,7 +638,7 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 				disk.Name)
 		}
 		if disk.AllocationSet {
-			
+			//rbd 디스크 사용량 
 			diskAllocation := float64(disk.Allocation)
 			
 			for _, diskUsage := range rbdImageDiskUsageResult {
@@ -817,16 +845,27 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 	// Report network interface statistics.
 	for _, iface := range stat.Net {
 		var SourceBridge string
+		var MacAddress string
 		var VirtualInterface string
 		// Additional info for ovs network
 		for _, net := range desc.Devices.Interfaces {
 			if net.Target.Device == iface.Name {
 				SourceBridge = net.Source.Bridge
 				VirtualInterface = net.Virtualport.Parameters.InterfaceID
+				MacAddress = net.Mac.Address
 				break
 			}
 		}
-		if SourceBridge != "" || VirtualInterface != "" {
+
+		if SourceBridge != "" || VirtualInterface != "" || MacAddress != "" {
+			
+			mold_network_name := "N/A"
+			for _, val := range networkMetaInfo {
+				if MacAddress ==  val["mac_addr"] && val["mold_network_name"] != "%!s(<nil>)" {
+					mold_network_name = val["mold_network_name"]
+				}
+			}
+
 			ch <- prometheus.MustNewConstMetric(
 				libvirtDomainMetaInterfacesDesc,
 				prometheus.GaugeValue,
@@ -834,7 +873,9 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 				domainName,
 				SourceBridge,
 				iface.Name,
-				VirtualInterface)
+				VirtualInterface,
+				MacAddress,
+				mold_network_name)
 		}
 		if iface.RxBytesSet {
 			ch <- prometheus.MustNewConstMetric(
@@ -1115,6 +1156,9 @@ func (e *LibvirtExporter) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect scrapes Prometheus metrics from libvirt.
 func (e *LibvirtExporter) Collect(ch chan<- prometheus.Metric) {
+	CollectRbdImageDiskUsage()
+	CollectMoldMeta()
+
 	err := CollectFromLibvirt(ch, e.uri)
 	if err == nil {
 		ch <- prometheus.MustNewConstMetric(
@@ -1130,8 +1174,7 @@ func (e *LibvirtExporter) Collect(ch chan<- prometheus.Metric) {
 	}
 }
 
-func main() {
-
+func CollectRbdImageDiskUsage() {
 	//rbd Image DiskUsage(du) information
 	cmd := exec.Command("rbd", "du", "--format", "json")
 	output, err := cmd.Output()
@@ -1146,7 +1189,188 @@ func main() {
 		}
 		rbdImageDiskUsageResult = (dat["images"].([]interface{}))		
 	}
+}
+
+func CollectMoldMeta() {
+	//conf 파일을 파싱하여 json으로 변환
+	json.Unmarshal([]byte(byteValue), &confValue)
+
+	moldDbConf := confValue["mold_db"].(map[string]interface{})
+	serverhost := moldDbConf["serverhost"].(string)
+	port := moldDbConf["port"].(string)
+	database := moldDbConf["database"].(string)
+	username := moldDbConf["username"].(string)
+	password := moldDbConf["password"].(string)
+
+	// sql.DB 객체 생성
+	db, err := sql.Open("mysql", username+":"+password+"@tcp("+serverhost+":"+port+")/"+database)
+	if err != nil {
+		log.Println(err)
+	} else {
+		defer db.Close()
+
+		// domainMetaInfoQuery query
+		domainMetaInfoQuery := " select vi.id as instance_id"
+		domainMetaInfoQuery += "  , vi.name as domain_mold_name"
+		domainMetaInfoQuery += "  , vi.instance_name as domain_name"
+		domainMetaInfoQuery += "  , a.account_name as vm_user_name"
+		domainMetaInfoQuery += " from vm_instance vi left join account a on vi.account_id = a.id"
+		domainMetaInfoQuery += " where vi.removed is null"
+		domainMetaInfoQuery += "  and a.removed is null"
+		domainMetaInfoQuery += "  and vi.type = 'User'"
+		doaminRows, doaminErr := db.Query(domainMetaInfoQuery)
+		if doaminErr != nil {
+			log.Println(doaminErr)
+		}
+
+		columns, _ := doaminRows.Columns()
+		count := len(columns)
+		values := make([]interface{}, count)
+		valuePtrs := make([]interface{}, count)
+		result_id := 0
+
+		for doaminRows.Next() {
+			for i, _ := range columns {
+				valuePtrs[i] = &values[i]
+			}
+			doaminRows.Scan(valuePtrs...)
+		
+			tmp_struct := map[string]string{}
+		
+			for i, col := range columns {
+				var v interface{}
+				val := values[i]
+				b, ok := val.([]byte)
+				if (ok) {
+					v = string(b)
+				} else {
+					v = val
+				}
+				tmp_struct[col] = fmt.Sprintf("%s",v)
+			}
+			
+			domainMetaInfo[ result_id ] = tmp_struct
+			result_id++
+		}
+		
+		//row 닫기. 안닫으면 too many connections  에러 오류 발생
+		doaminRows.Close()
+
+		// networkMetaInfoQuery query
+		networkMetaInfoQuery := " select ni.id as nic_id"
+		networkMetaInfoQuery += "  , ni.mac_address as mac_addr"
+		networkMetaInfoQuery += "  , ni.ip4_address as ip4_addr"
+		networkMetaInfoQuery += "  , replace(ni.broadcast_uri, 'vlan://', '') as vlan_id"
+		networkMetaInfoQuery += "  , nw.name as mold_network_name"
+		networkMetaInfoQuery += "  , vi.name as domain_mold_name"
+		networkMetaInfoQuery += "  , vi.instance_name as domain_name"
+		networkMetaInfoQuery += " from nics ni left join networks nw on ni.network_id = nw.id left join vm_instance vi on ni.instance_id = vi.id"
+		networkMetaInfoQuery += " where ni.removed is null"
+		networkMetaInfoQuery += "  and nw.removed is null"
+		networkMetaInfoQuery += "  and vi.removed is null"
+		networkRows, networkErr := db.Query(networkMetaInfoQuery)
+		if networkErr != nil {
+			log.Println(networkErr)
+		}
+
+		columns, _ = networkRows.Columns()
+		count = len(columns)
+		values = make([]interface{}, count)
+		valuePtrs = make([]interface{}, count)
+		result_id = 0
+
+		for networkRows.Next() {
+			for i, _ := range columns {
+				valuePtrs[i] = &values[i]
+			}
+			networkRows.Scan(valuePtrs...)
+		
+			tmp_struct := map[string]string{}
+		
+			for i, col := range columns {
+				var v interface{}
+				val := values[i]
+				b, ok := val.([]byte)
+				if (ok) {
+					v = string(b)
+				} else {
+					v = val
+				}
+				tmp_struct[col] = fmt.Sprintf("%s",v)
+			}
+			
+			networkMetaInfo[ result_id ] = tmp_struct
+			result_id++
+		}
+		
+		//row 닫기. 안닫으면 too many connections  에러 오류 발생
+		networkRows.Close()
+
+		// diskMetaInfoQuery query
+		diskMetaInfoQuery := " select v.id as disk_id"
+		diskMetaInfoQuery += "  , v.name as mold_disk_name"
+		diskMetaInfoQuery += "  , v.path as disk_path"
+		diskMetaInfoQuery += "  , vi.name as domain_mold_name"
+		diskMetaInfoQuery += "  , vi.instance_name as domain_name"
+		diskMetaInfoQuery += "  , a.account_name as user_name"
+		diskMetaInfoQuery += " from volumes v left join vm_instance vi on v.instance_id = vi.id left join account a on v.account_id = a.id"
+		diskMetaInfoQuery += " where v.removed is null"
+		diskMetaInfoQuery += "  and vi.removed is null"
+		diskMetaInfoQuery += "  and a.removed is null"
+		diskMetaInfoQuery += "  and vi.type = 'User'"
+		diskRows, diskErr := db.Query(diskMetaInfoQuery)
+		if diskErr != nil {
+			log.Println(diskErr)
+		}
+
+		columns, _ = diskRows.Columns()
+		count = len(columns)
+		values = make([]interface{}, count)
+		valuePtrs = make([]interface{}, count)
+		result_id = 0
+
+		for diskRows.Next() {
+			for i, _ := range columns {
+				valuePtrs[i] = &values[i]
+			}
+			diskRows.Scan(valuePtrs...)
+		
+			tmp_struct := map[string]string{}
+		
+			for i, col := range columns {
+				var v interface{}
+				val := values[i]
+				b, ok := val.([]byte)
+				if (ok) {
+					v = string(b)
+				} else {
+					v = val
+				}
+				tmp_struct[col] = fmt.Sprintf("%s",v)
+			}
+			
+			diskMetaInfo[ result_id ] = tmp_struct
+			result_id++
+		}
+
+		//row 닫기. 안닫으면 too many connections  에러 오류 발생
+		diskRows.Close()
+	}
+}
+
+func main() {
+	// Open config json file
+	jsonFile, err := os.Open("conf.json")
+	if err != nil {
+		fmt.Println(err)
+	}
 	
+	// defer the closing of our jsonFile so that we can parse it later on
+	defer jsonFile.Close()
+
+	val, _ := ioutil.ReadAll(jsonFile)
+	byteValue = val
+
 	var (
 		app           = kingpin.New("libvirt_exporter", "Prometheus metrics exporter for libvirt")
 		listenAddress = app.Flag("web.listen-address", "Address to listen on for web interface and telemetry.").Default(":9177").String()

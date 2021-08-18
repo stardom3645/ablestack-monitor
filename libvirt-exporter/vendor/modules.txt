@@ -5,6 +5,8 @@ github.com/alecthomas/template/parse
 github.com/alecthomas/units
 # github.com/beorn7/perks v1.0.1
 github.com/beorn7/perks/quantile
+# github.com/go-sql-driver/mysql v1.6.0
+github.com/go-sql-driver/mysql
 # github.com/golang/protobuf v1.3.2
 github.com/golang/protobuf/proto
 # github.com/matttproud/golang_protobuf_extensions v1.0.1
