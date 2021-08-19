@@ -1,0 +1,5918 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 1628490935481,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "wall"
+      ],
+      "targetBlank": false,
+      "title": "Dashboard List",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 24,
+      "panels": [],
+      "repeat": null,
+      "title": "대시보드",
+      "type": "row"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 0,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 28,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "node_time_seconds{instance=\"$host:9100\",job=\"cube\"} - node_boot_time_seconds{instance=\"$host:9100\",job=\"cube\"}",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "가동 시간",
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "OK"
+                },
+                "1": {
+                  "color": "orange",
+                  "index": 1,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 2,
+        "y": 1
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count(probe_success{pingip=~\"$host:9090\"}) - sum(probe_success{pingip=~\"$host:9090\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ],
+      "title": "Cube 상태",
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count(libvirt_domain_info_meta{domain=~\"i-.*\", instance=\"$host:9177\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "사용자 VM",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(libvirt_domain_info_meta{domain=~\"s-.*|v-.*|r-.*\", instance=\"$host:9177\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Mold VM",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(libvirt_domain_info_meta{domain=~\"ccvm|scvm\", instance=\"$host:9177\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "시스템 VM",
+          "refId": "B"
+        }
+      ],
+      "title": "실행중인 VM",
+      "type": "stat"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 8,
+        "y": 1
+      },
+      "id": 30,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count(count(node_cpu_seconds_total{instance=\"$host:9100\",job=\"cube\"}) by (cpu))",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "CPU 코어 수",
+      "type": "stat"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 75
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "평균"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 10,
+        "y": 1
+      },
+      "id": 32,
+      "links": [],
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{instance=\"$host:9100\",mode=\"idle\",job=\"cube\"}[1m])) * 100)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "CPU 사용률",
+      "type": "gauge"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 12,
+        "y": 1
+      },
+      "id": 34,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "node_memory_MemTotal_bytes{instance=\"$host:9100\",job=\"cube\"}",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "메모리 합계",
+      "type": "stat"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 75
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 14,
+        "y": 1
+      },
+      "hideTimeOverride": false,
+      "id": 38,
+      "links": [],
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "100 - ((node_memory_MemAvailable_bytes{instance=\"$host:9100\",job=\"cube\"} * 100) / node_memory_MemTotal_bytes{instance=\"$host:9100\",job=\"cube\"})",
+          "format": "time_series",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "메모리 사용률",
+      "type": "gauge"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 75
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 16,
+        "y": 1
+      },
+      "id": 40,
+      "links": [],
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "((node_memory_SwapTotal_bytes{instance=\"$host:9100\",job=\"cube\"} - node_memory_SwapFree_bytes{instance=\"$host:9100\",job=\"cube\"}) / (node_memory_SwapTotal_bytes{instance=\"$host:9100\",job=\"cube\"} )) * 100",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "SWAP 사용률",
+      "type": "gauge"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "node_filesystem_size_bytes{instance=\"$host:9100\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"}",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "전체",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "(node_filesystem_size_bytes{instance=\"$host:9100\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"}) - (node_filesystem_avail_bytes{instance=\"$host:9100\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "사용중",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "node_filesystem_avail_bytes{instance=\"$host:9100\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"}",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "사용 가능",
+          "refId": "C"
+        }
+      ],
+      "title": "Root 디스크 용량",
+      "type": "stat"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 12,
+        "y": 3
+      },
+      "id": 36,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "node_memory_SwapTotal_bytes{instance=\"$host:9100\",job=\"cube\"}",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "SWAP 합계",
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 5
+      },
+      "id": 163,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=\"map[:cloudstack-agent]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Mold 에이전트",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 4,
+        "y": 5
+      },
+      "id": 164,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=\"map[:libvirtd]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "가상화 데몬",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 8,
+        "y": 5
+      },
+      "id": 168,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=~\".*qemu-kvm.*\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "가상머신 데몬",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 12,
+        "y": 5
+      },
+      "id": 165,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=\"map[:libvirt_exporter]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "가상화 수집기",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 16,
+        "y": 5
+      },
+      "id": 166,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=\"map[:process-exporter]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "프로세스 수집기",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 5
+      },
+      "id": 167,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=\"map[:node_exporter]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "호스트 수집기",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 4,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.0.4",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum by (mode) (\n  irate(node_cpu_seconds_total{instance=\"$host:9100\", job=\"cube\", mode=~\"(irq|nice|softirq|steal|system|user|iowait)\"}[1m])\n) / scalar(\n  sum(irate(node_cpu_seconds_total{instance=\"$host:9100\", job=\"cube\"}[1m]))\n) * 100",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{mode}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "CPU 사용률",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:597",
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "$$hashKey": "object:598",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "decimals": 1,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 12,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": false,
+        "sort": "current",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.0.4",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "((node_memory_MemTotal_bytes{instance=~\"$host:9100\", job=\"cube\"}) - ((node_memory_MemFree_bytes{instance=~\"$host:9100\", job=\"cube\"}) + \n(node_memory_Cached_bytes{instance=~\"$host:9100\", job=\"cube\"}) + (node_memory_Buffers_bytes{instance=~\"$host:9100\", job=\"cube\"}) +\n(node_memory_Slab_bytes{instance=~\"$host:9100\", job=\"cube\"})))  / on (instance) group_left (nodename) node_uname_info{}",
+          "interval": "",
+          "legendFormat": "Used",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "node_memory_MemFree_bytes{instance=~\"$host:9100\", job=\"cube\"} ",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Free",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "(node_memory_Cached_bytes{instance=~\"$host:9100\", job=\"cube\"})  + \n(node_memory_Buffers_bytes{instance=~\"$host:9100\", job=\"cube\"})  +\n(node_memory_Slab_bytes{instance=~\"$host:9100\", job=\"cube\"})\n",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "buffers/cache",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "node_memory_MemTotal_bytes{instance=~\"$host:9100\", job=\"cube\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Total",
+          "refId": "D"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "메모리 사용 현황",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:436",
+          "decimals": 0,
+          "format": "bytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:437",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "hiddenSeries": false,
+      "id": 15,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "sideWidth": 200,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.0.4",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:186",
+          "alias": "/.*trans.*/",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "recv {{device}}",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "trans {{device}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "네트워크 트래픽 (bits/sec)",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:755",
+          "decimals": 0,
+          "format": "bps",
+          "label": "Trans(-) / Recv (+)",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:756",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 15
+      },
+      "hiddenSeries": false,
+      "id": 18,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.0.4",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:458",
+          "alias": "/.*Read.*/",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "irate(node_disk_reads_completed_total{instance=\"$host:9100\", job=\"cube\"}[1m])",
+          "interval": "",
+          "legendFormat": "Read {{device}}",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "irate(node_disk_writes_completed_total{instance=\"$host:9100\", job=\"cube\"}[1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Write {{device}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "디스크 IO (ops/sec)",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:430",
+          "decimals": 0,
+          "format": "iops",
+          "label": "Read (-) / Write (+)",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:431",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 26,
+      "panels": [
+        {
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "0": {
+                            "index": 1,
+                            "text": "비활성"
+                          },
+                          "1": {
+                            "index": 0,
+                            "text": "활성"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 0,
+            "y": 2
+          },
+          "id": 156,
+          "options": {
+            "colorMode": "none",
+            "graphMode": "area",
+            "justifyMode": "center",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "last"
+              ],
+              "fields": "",
+              "values": true
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "count(node_network_carrier{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
+              "format": "time_series",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "전체",
+              "refId": "A"
+            },
+            {
+              "exemplar": true,
+              "expr": "sum (node_network_carrier{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 1)",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "UP",
+              "refId": "B"
+            },
+            {
+              "exemplar": true,
+              "expr": "sum (node_network_carrier{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 0)",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "DOWN",
+              "refId": "C"
+            }
+          ],
+          "title": "NIC 상태",
+          "transformations": [],
+          "type": "stat"
+        },
+        {
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "0": {
+                            "index": 1,
+                            "text": "DOWN"
+                          },
+                          "1": {
+                            "index": 0,
+                            "text": "UP"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 6,
+            "y": 2
+          },
+          "id": 158,
+          "options": {
+            "showHeader": false
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "node_network_carrier{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
+              "format": "time_series",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "{{device}}",
+              "refId": "A"
+            }
+          ],
+          "title": "NIC 별 상태",
+          "transformations": [
+            {
+              "id": "seriesToRows",
+              "options": {}
+            },
+            {
+              "id": "filterFieldsByName",
+              "options": {
+                "include": {
+                  "names": [
+                    "Metric",
+                    "Value"
+                  ]
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "links": [],
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 12,
+            "y": 2
+          },
+          "id": 64,
+          "links": [],
+          "options": {
+            "showHeader": false
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "(node_network_carrier_up_changes_total{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
+              "format": "time_series",
+              "instant": true,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{ device }}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "NIC 연결 상태 변경 총 횟수",
+          "transformations": [
+            {
+              "id": "reduce",
+              "options": {
+                "includeTimeField": false,
+                "mode": "seriesToRows",
+                "reducers": [
+                  "last"
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 6,
+            "x": 18,
+            "y": 2
+          },
+          "id": 159,
+          "options": {
+            "showHeader": false
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "(node_network_carrier{instance=\"$host:9100\" ,job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == 1)  * on (device, instance) node_network_mtu_bytes{instance=\"$host:9100\" ,job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
+              "format": "time_series",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "{{device}}",
+              "refId": "A"
+            }
+          ],
+          "title": "활성 NIC MTU",
+          "transformations": [
+            {
+              "id": "seriesToRows",
+              "options": {}
+            },
+            {
+              "id": "filterFieldsByName",
+              "options": {
+                "include": {
+                  "names": [
+                    "Metric",
+                    "Value"
+                  ]
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "hiddenSeries": false,
+          "id": 153,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 200,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=~\"$host:9100\",device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+              "hide": false,
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 트래픽 (bits/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:755",
+              "decimals": 0,
+              "format": "bps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:756",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "hiddenSeries": false,
+          "id": 154,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 200,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 트래픽 (bits/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:755",
+              "decimals": 0,
+              "format": "bps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:756",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "receive_packets_eth0": "#7EB26D",
+            "receive_packets_lo": "#E24D42",
+            "transmit_packets_eth0": "#7EB26D",
+            "transmit_packets_lo": "#E24D42"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": 2,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 18
+          },
+          "hiddenSeries": false,
+          "id": 42,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_receive_packets_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:862",
+              "decimals": 0,
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:863",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "receive_packets_eth0": "#7EB26D",
+            "receive_packets_lo": "#E24D42",
+            "transmit_packets_eth0": "#7EB26D",
+            "transmit_packets_lo": "#E24D42"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": 2,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 18
+          },
+          "hiddenSeries": false,
+          "id": 146,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_transmit_packets_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}} ",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:862",
+              "decimals": 0,
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:863",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 28
+          },
+          "hiddenSeries": false,
+          "id": 44,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_receive_errs_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 오류 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:1155",
+              "decimals": 0,
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:1156",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 28
+          },
+          "hiddenSeries": false,
+          "id": 147,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_transmit_errs_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 오류 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:1155",
+              "decimals": 0,
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:1156",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 38
+          },
+          "hiddenSeries": false,
+          "id": 46,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_receive_drop_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 손실 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:950",
+              "decimals": 0,
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:951",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 38
+          },
+          "hiddenSeries": false,
+          "id": 148,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_transmit_drop_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 손실 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:950",
+              "decimals": 0,
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:951",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 48
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 90,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Icmp_InMsgs{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "메시지",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "ICMP 수신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4394",
+              "decimals": 0,
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4395",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "OutMsgs": "orange",
+            "메시지": "yellow"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 48
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 150,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Icmp_OutMsgs{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "메시지",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "ICMP 송신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4394",
+              "decimals": 0,
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4395",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 58
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 94,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Udp_InDatagrams{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "데이터그램",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "UDP 수신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4641",
+              "decimals": 0,
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4642",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "OutDatagrams": "orange",
+            "데이터그램": "yellow"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 58
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 151,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Udp_OutDatagrams{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "데이터그램",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "UDP 송신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4641",
+              "decimals": 0,
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4642",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 68
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 96,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Tcp_InSegs{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "세그먼트",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "TCP 수신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4726",
+              "decimals": 0,
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4727",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "OutSegs": "orange",
+            "세그먼트": "yellow"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 68
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 152,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Tcp_OutSegs{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "세그먼트",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "TCP 송신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4726",
+              "decimals": 0,
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4727",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "활성 연결": "blue"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 78
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 100,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "node_netstat_Tcp_CurrEstab{instance=\"$host:9100\",job=\"cube\"}",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "활성 연결",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "TCP 연결 수",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:469",
+              "decimals": 0,
+              "format": "short",
+              "label": "connections",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "$$hashKey": "object:470",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "네트워크 상세",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "id": 106,
+      "panels": [
+        {
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "fstype"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "타입"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 200
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "mountpoint"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "마운트 경로"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 500
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #A"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "사이즈"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "bytes"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 200
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #B"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "사용량"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "bytes"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 200
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #C"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "사용률"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "percent"
+                  },
+                  {
+                    "id": "custom.displayMode",
+                    "value": "lcd-gauge"
+                  },
+                  {
+                    "id": "max",
+                    "value": 100
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green",
+                          "value": null
+                        },
+                        {
+                          "color": "#EAB839",
+                          "value": 75
+                        },
+                        {
+                          "color": "red",
+                          "value": 85
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #D"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "장치 에러"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 200
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 3
+          },
+          "id": 161,
+          "options": {
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "사용률"
+              }
+            ]
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "node_filesystem_size_bytes{instance=\"$host:9100\", job=\"cube\"}",
+              "format": "table",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            },
+            {
+              "exemplar": true,
+              "expr": "node_filesystem_size_bytes{instance=\"$host:9100\", job=\"cube\"} - node_filesystem_free_bytes{instance=\"$host:9100\", job=\"cube\"}",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "B"
+            },
+            {
+              "exemplar": true,
+              "expr": "100 - (node_filesystem_free_bytes{instance=\"$host:9100\", job=\"cube\"} / node_filesystem_size_bytes{instance=\"$host:9100\", job=\"cube\"} * 100)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "C"
+            },
+            {
+              "exemplar": true,
+              "expr": "node_filesystem_device_error{instance=\"$host:9100\", job=\"cube\"}",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "D"
+            }
+          ],
+          "title": "파일시스템 정보",
+          "transformations": [
+            {
+              "id": "filterFieldsByName",
+              "options": {
+                "include": {
+                  "names": [
+                    "fstype",
+                    "mountpoint",
+                    "Value #A",
+                    "Value #B",
+                    "Value #C",
+                    "Value #D"
+                  ]
+                }
+              }
+            },
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "field": "mountpoint"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 13
+          },
+          "hiddenSeries": false,
+          "id": 108,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": true,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_reads_completed_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 읽기 (ops/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:2186",
+              "decimals": 0,
+              "format": "iops",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:2187",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 13
+          },
+          "hiddenSeries": false,
+          "id": 110,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": true,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_writes_completed_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 쓰기 (ops/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:2186",
+              "decimals": 0,
+              "format": "iops",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:2187",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 23
+          },
+          "hiddenSeries": false,
+          "id": 112,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": true,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_read_bytes_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 읽기 (bytes/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:369",
+              "decimals": 0,
+              "format": "Bps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:370",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 23
+          },
+          "hiddenSeries": false,
+          "id": 113,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": true,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_written_bytes_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 쓰기 (bytes/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:369",
+              "decimals": 0,
+              "format": "Bps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:370",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 3,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 33
+          },
+          "hiddenSeries": false,
+          "id": 115,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": true,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_read_time_seconds_total{instance=\"$host:9100\",job=\"cube\"}[1m]) / rate(node_disk_reads_completed_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 읽기 평균 지연 (sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:441",
+              "decimals": null,
+              "format": "s",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:442",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 3,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 33
+          },
+          "hiddenSeries": false,
+          "id": 117,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": true,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_write_time_seconds_total{instance=\"$host:9100\",job=\"cube\"}[1m]) / rate(node_disk_writes_completed_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 쓰기 평균 지연 (sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:441",
+              "format": "s",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:442",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "스토리지 상세",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 131,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 4
+          },
+          "hiddenSeries": false,
+          "id": 133,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"libvirtd\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상화 데몬",
+              "metric": "process_namegroup_num_procs",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"qemu-kvm\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상머신 데몬",
+              "metric": "process_namegroup_num_procs",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"sshd\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "process_namegroup_num_procs",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "(namedprocess_namegroup_num_procs{exebase=\"java\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "mold agent",
+              "metric": "process_namegroup_num_procs",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "(namedprocess_namegroup_num_procs{exebase=\"node_exporter\", instance=\"$host:9256\"}) + on (instance) (namedprocess_namegroup_num_procs{exebase=\"libvirt_exporter\", instance=\"$host:9256\"}) + on (instance) (namedprocess_namegroup_num_procs{exebase=\"process-exporter\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "process_namegroup_num_procs",
+              "refId": "E",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "프로세스 수",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "transformations": [],
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:243",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:244",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 4
+          },
+          "hiddenSeries": false,
+          "id": 135,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"libvirtd\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상화 데몬",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"qemu-kvm\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상머신 데몬",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"sshd\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"java\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "mold agent",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": " (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"node_exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"libvirt_exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"process-exporter\", instance=\"$host:9256\"}[1m])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "E",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "CPU 사용 시간",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 2,
+            "value_type": "cumulative"
+          },
+          "transformations": [],
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:57",
+              "format": "s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:58",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 12
+          },
+          "hiddenSeries": false,
+          "id": 137,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"libvirtd\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상화 데몬",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"qemu-kvm\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상머신 데몬",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"sshd\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"java\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "mold agent",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"node_exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"libvirt_exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"process-exporter\", instance=\"$host:9256\"}[1m])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "E",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "읽기 작업 (bytes/sec)",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:326",
+              "decimals": 0,
+              "format": "Bps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:327",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 12
+          },
+          "hiddenSeries": false,
+          "id": 139,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"libvirtd\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상화 데몬",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"qemu-kvm\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상머신 데몬",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"sshd\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"java\", instance=\"$host:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "mold agent",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"node_exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"libvirt_exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"process-exporter\", instance=\"$host:9256\"}[1m])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "E",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "쓰기 작업 (bytes/sec)",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:409",
+              "decimals": 0,
+              "format": "Bps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:410",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 20
+          },
+          "hiddenSeries": false,
+          "id": 143,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirtd\", memtype=\"virtual\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상화 데몬",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"qemu-kvm\", memtype=\"virtual\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상머신 데몬",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"virtual\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"java\", memtype=\"virtual\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "mold agent",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"virtual\", instance=\"$host:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirt_exporter\", memtype=\"virtual\", instance=\"$host:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"virtual\", instance=\"$host:9256\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "E",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "가상 메모리",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:575",
+              "decimals": 0,
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:576",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 20
+          },
+          "hiddenSeries": false,
+          "id": 141,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirtd\", memtype=\"resident\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상화 데몬",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"qemu-kvm\", memtype=\"resident\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "가상머신 데몬",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"resident\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"java\", memtype=\"resident\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "mold agnet",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"resident\", instance=\"$host:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirt_exporter\", memtype=\"resident\", instance=\"$host:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"resident\", instance=\"$host:9256\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "E",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "사용 메모리",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:492",
+              "decimals": 0,
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:493",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 28
+          },
+          "hiddenSeries": false,
+          "id": 145,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "hideEmpty": true,
+            "hideZero": true,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"qemu-kvm\", instance=\"$host:9256\", mode=\"user\"}[1m])",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{groupname}}",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "A",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "가상머신 CPU 사용 시간",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 2,
+            "value_type": "cumulative"
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "(.*guest=)(.*)(,debug.*)",
+                "renamePattern": "$2"
+              }
+            }
+          ],
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:57",
+              "decimals": null,
+              "format": "s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:58",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 28
+          },
+          "hiddenSeries": false,
+          "id": 157,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "hideEmpty": true,
+            "hideZero": true,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "(namedprocess_namegroup_memory_bytes{exebase=\"qemu-kvm\", memtype=\"resident\", instance=\"$host:9256\"})",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{groupname}}",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "A",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "가상머신 사용 메모리",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "(.*guest=)(.*)(,debug.*)",
+                "renamePattern": "$2"
+              }
+            }
+          ],
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:492",
+              "decimals": 0,
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:493",
+              "decimals": null,
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "프로세스 상세",
+      "type": "row"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": [
+    "wall"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "10.10.1.3",
+          "value": "10.10.1.3"
+        },
+        "datasource": "Wall",
+        "definition": "label_values(node_uname_info{job=\"cube\"},instance)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Host",
+        "multi": false,
+        "name": "host",
+        "options": [],
+        "query": {
+          "query": "label_values(node_uname_info{job=\"cube\"},instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "(.*):.*",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "3. 호스트 상세 현황",
+  "uid": "host_details",
+  "version": 1
+}

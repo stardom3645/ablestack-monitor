@@ -1,0 +1,6670 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 1628491181412,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "wall"
+      ],
+      "targetBlank": false,
+      "title": "Dashboard List",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 24,
+      "panels": [],
+      "title": "대시보드",
+      "type": "row"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 0,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 28,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "node_time_seconds{instance=\"$scvm:9101\", job=\"scvm\"} - node_boot_time_seconds{instance=\"$scvm:9101\", job=\"scvm\"}",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "가동 시간",
+      "type": "stat"
+    },
+    {
+      "datasource": "Glue",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "DOWN"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "OUT"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "UP"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "IN"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 2,
+        "y": 1
+      },
+      "id": 138,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(ceph_osd_up{} / on (ceph_daemon) group_left(hostname) ceph_osd_metadata{hostname=~\"($ceph_hosts).*\"})",
+          "interval": "",
+          "legendFormat": "UP",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(ceph_osd_up{} / on (ceph_daemon) group_left(hostname) ceph_osd_metadata{hostname=~\"($ceph_hosts).*\"} == bool 0)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "DOWN",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(ceph_osd_in{} / on (ceph_daemon) group_left(hostname) ceph_osd_metadata{hostname=~\"($ceph_hosts).*\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "IN",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(ceph_osd_in{} / on (ceph_daemon) group_left(hostname) ceph_osd_metadata{hostname=~\"($ceph_hosts).*\"} == bool 0)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "OUT",
+          "refId": "D"
+        }
+      ],
+      "title": "Glue 스토리지 디바이스 상태",
+      "type": "stat"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 7,
+        "y": 1
+      },
+      "id": 30,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count(count(node_cpu_seconds_total{instance=\"$scvm:9101\", job=\"scvm\"}) by (cpu))",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "vCPU 수",
+      "type": "stat"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 75
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "평균"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 9,
+        "y": 1
+      },
+      "id": 32,
+      "links": [],
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{instance=\"$scvm:9101\", mode=\"idle\", job=\"scvm\"}[1m])) * 100)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "vCPU 사용률",
+      "type": "gauge"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 11,
+        "y": 1
+      },
+      "id": 34,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "node_memory_MemTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"}",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "메모리 합계",
+      "type": "stat"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 75
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 13,
+        "y": 1
+      },
+      "hideTimeOverride": false,
+      "id": 38,
+      "links": [],
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "100 - ((node_memory_MemAvailable_bytes{instance=\"$scvm:9101\", job=\"scvm\"} * 100) / node_memory_MemTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"})",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "메모리 사용률",
+      "type": "gauge"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 15,
+        "y": 1
+      },
+      "id": 36,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "node_memory_SwapTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"}",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "SWAP 합계",
+      "type": "stat"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 75
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 17,
+        "y": 1
+      },
+      "id": 40,
+      "links": [],
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "((node_memory_SwapTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"} - node_memory_SwapFree_bytes{instance=\"$scvm:9101\", job=\"scvm\"}) / (node_memory_SwapTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"} )) * 100",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "SWAP 사용률",
+      "type": "gauge"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 19,
+        "y": 1
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "node_filesystem_size_bytes{instance=\"$scvm:9101\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "전체",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "(node_filesystem_size_bytes{instance=\"$scvm:9101\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}) - (node_filesystem_avail_bytes{instance=\"$scvm:9101\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"})",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "사용중",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "node_filesystem_avail_bytes{instance=\"$scvm:9101\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "사용 가능",
+          "refId": "C"
+        }
+      ],
+      "title": "Root 디스크 용량",
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 5
+      },
+      "id": 242,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:9256\", matches=\"map[:ceph-mon]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Glue mon 데몬",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 2,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 3,
+        "y": 5
+      },
+      "id": 241,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:9256\", matches=\"map[:ceph-mgr]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Glue mgr 데몬",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 2,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 6,
+        "y": 5
+      },
+      "id": 237,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:9256\", matches=\"map[:ceph-mds]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Glue mds 데몬",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 2,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 9,
+        "y": 5
+      },
+      "id": 239,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:9256\", matches=\"map[:rgw]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Glue rgw 데몬",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 12,
+        "y": 5
+      },
+      "id": 251,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:9256\", exebase=\"ganesha.nfsd\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "NFS 데몬",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 15,
+        "y": 5
+      },
+      "id": 240,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:9256\", matches=\"map[:tcmu-runner]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "iSCSI 데몬",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 18,
+        "y": 5
+      },
+      "id": 236,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:9256\", matches=\"map[:node_exporter]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "호스트 수집기",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "WARN"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                },
+                "to": 9999
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 21,
+        "y": 5
+      },
+      "id": 250,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:9256\", matches=\"map[:process-exporter]\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "프로세스 수집기",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 140,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.0.4",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum by (mode) (\n  irate(node_cpu_seconds_total{instance=\"$scvm:9101\", job=\"scvm\", mode=~\"(irq|nice|softirq|steal|system|user|iowait)\"}[1m])\n) / scalar(\n  sum(irate(node_cpu_seconds_total{instance=\"$scvm:9101\", job=\"scvm\", }[1m]))\n) * 100",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{mode}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "vCPU 사용률",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:597",
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "$$hashKey": "object:598",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "decimals": 1,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 142,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": false,
+        "sort": "current",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.0.4",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "((node_memory_MemTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"}) - ((node_memory_MemFree_bytes{instance=\"$scvm:9101\", job=\"scvm\"}) + \n(node_memory_Cached_bytes{instance=\"$scvm:9101\", job=\"scvm\"}) + (node_memory_Buffers_bytes{instance=\"$scvm:9101\", job=\"scvm\"}) +\n(node_memory_Slab_bytes{instance=\"$scvm:9101\", job=\"scvm\"})))  / on (instance) group_left (nodename) node_uname_info{}",
+          "interval": "",
+          "legendFormat": "Used",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "node_memory_MemFree_bytes{instance=\"$scvm:9101\", job=\"scvm\"} ",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Free",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "(node_memory_Cached_bytes{instance=\"$scvm:9101\", job=\"scvm\"})  + \n(node_memory_Buffers_bytes{instance=\"$scvm:9101\", job=\"scvm\"})  +\n(node_memory_Slab_bytes{instance=\"$scvm:9101\", job=\"scvm\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "buffers/cache",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "node_memory_MemTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Total",
+          "refId": "D"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "메모리 사용 현황",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:436",
+          "decimals": 0,
+          "format": "bytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:437",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "hiddenSeries": false,
+      "id": 144,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "sideWidth": 200,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.0.4",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:186",
+          "alias": "/.*trans.*/",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "recv {{device}}",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "trans {{device}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "네트워크 트래픽 (bits/sec)",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:755",
+          "format": "bps",
+          "label": "Trans(-) / Recv (+)",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:756",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 15
+      },
+      "hiddenSeries": false,
+      "id": 146,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.0.4",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:458",
+          "alias": "/.*Read.*/",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "irate(node_disk_reads_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+          "interval": "",
+          "legendFormat": "Read {{device}}",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "irate(node_disk_writes_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Write {{device}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "디스크 IO (ops/sec)",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:430",
+          "format": "iops",
+          "label": "Read (-) / Write (+)",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:431",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 178,
+      "panels": [
+        {
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "0": {
+                            "index": 1,
+                            "text": "비활성"
+                          },
+                          "1": {
+                            "index": 0,
+                            "text": "활성"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 2
+          },
+          "id": 224,
+          "options": {
+            "colorMode": "none",
+            "graphMode": "none",
+            "justifyMode": "center",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "last"
+              ],
+              "fields": "",
+              "values": true
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "count(node_network_carrier{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
+              "format": "time_series",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "전체",
+              "refId": "A"
+            },
+            {
+              "exemplar": true,
+              "expr": "sum (node_network_carrier{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 1)",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "UP",
+              "refId": "B"
+            },
+            {
+              "exemplar": true,
+              "expr": "sum (node_network_carrier{instance=\"$scvm:9101\", job=\"scvm\",  device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 0)",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "DOWN",
+              "refId": "C"
+            }
+          ],
+          "title": "NIC 상태",
+          "transformations": [],
+          "type": "stat"
+        },
+        {
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Max"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "0": {
+                            "index": 1,
+                            "text": "DOWN"
+                          },
+                          "1": {
+                            "index": 0,
+                            "text": "UP"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 2
+          },
+          "id": 226,
+          "options": {
+            "showHeader": false
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "node_network_carrier{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
+              "format": "time_series",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "{{device}}",
+              "refId": "A"
+            }
+          ],
+          "title": "NIC 별 상태",
+          "transformations": [
+            {
+              "id": "reduce",
+              "options": {}
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "links": [],
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 12,
+            "y": 2
+          },
+          "id": 228,
+          "links": [],
+          "options": {
+            "showHeader": false
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "(node_network_carrier_up_changes_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
+              "format": "time_series",
+              "instant": true,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{ device }}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "NIC 연결 상태 변경 총 횟수",
+          "transformations": [
+            {
+              "id": "reduce",
+              "options": {
+                "includeTimeField": false,
+                "mode": "seriesToRows",
+                "reducers": [
+                  "last"
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "links": [],
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 18,
+            "y": 2
+          },
+          "id": 230,
+          "links": [],
+          "options": {
+            "showHeader": false
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "(node_network_carrier{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == 1)  * on (device, instance) node_network_mtu_bytes{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
+              "format": "time_series",
+              "instant": true,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{ device }}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "활성 NIC MTU",
+          "transformations": [
+            {
+              "id": "reduce",
+              "options": {
+                "includeTimeField": false,
+                "mode": "seriesToRows",
+                "reducers": [
+                  "last"
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 6
+          },
+          "hiddenSeries": false,
+          "id": 176,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 200,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+              "hide": false,
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 트래픽 (bits/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:755",
+              "format": "bps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:756",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 6
+          },
+          "hiddenSeries": false,
+          "id": 174,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 200,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 트래픽 (bits/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:755",
+              "format": "bps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:756",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "receive_packets_eth0": "#7EB26D",
+            "receive_packets_lo": "#E24D42",
+            "transmit_packets_eth0": "#7EB26D",
+            "transmit_packets_lo": "#E24D42"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": 2,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 16
+          },
+          "hiddenSeries": false,
+          "id": 172,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_receive_packets_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:862",
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:863",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "receive_packets_eth0": "#7EB26D",
+            "receive_packets_lo": "#E24D42",
+            "transmit_packets_eth0": "#7EB26D",
+            "transmit_packets_lo": "#E24D42"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": 2,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 16
+          },
+          "hiddenSeries": false,
+          "id": 170,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_transmit_packets_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}} ",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:862",
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:863",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 26
+          },
+          "hiddenSeries": false,
+          "id": 168,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_receive_errs_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 오류 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:1155",
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:1156",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 26
+          },
+          "hiddenSeries": false,
+          "id": 166,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_transmit_errs_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 오류 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:1155",
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:1156",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 36
+          },
+          "hiddenSeries": false,
+          "id": 164,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_receive_drop_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 손실 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:950",
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:951",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 36
+          },
+          "hiddenSeries": false,
+          "id": 162,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_network_transmit_drop_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 손실 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:950",
+              "format": "pps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:951",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 46
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 160,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Icmp_InMsgs{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "메시지",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "ICMP 수신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4394",
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4395",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "OutMsgs": "orange",
+            "메시지": "yellow"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 46
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 158,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Icmp_OutMsgs{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "메시지",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "ICMP 송신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4394",
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4395",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 56
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 156,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Udp_InDatagrams{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "데이터그램",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "UDP 수신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4641",
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4642",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "OutDatagrams": "orange",
+            "데이터그램": "yellow"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 56
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 154,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Udp_OutDatagrams{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "데이터그램",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "UDP 송신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4641",
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4642",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 66
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 152,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Tcp_InSegs{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "세그먼트",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "TCP 수신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4726",
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4727",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "OutSegs": "orange",
+            "세그먼트": "yellow"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "decimals": null,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 66
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 150,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_netstat_Tcp_OutSegs{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "세그먼트",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "TCP 송신",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4726",
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4727",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "활성 연결": "blue"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 76
+          },
+          "height": "",
+          "hiddenSeries": false,
+          "id": 148,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 12,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "node_netstat_Tcp_CurrEstab{instance=\"$scvm:9101\", job=\"scvm\"}",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "활성 연결",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "TCP 연결 수",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:469",
+              "format": "short",
+              "label": "connections",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "$$hashKey": "object:470",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "네트워크 상세",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "id": 196,
+      "panels": [
+        {
+          "datasource": "Wall",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "fstype"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "타입"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 200
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "mountpoint"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "마운트 경로"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 500
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #A"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "사이즈"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "bytes"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 200
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #B"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "사용량"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "bytes"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 200
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #C"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "사용률"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "percent"
+                  },
+                  {
+                    "id": "custom.displayMode",
+                    "value": "lcd-gauge"
+                  },
+                  {
+                    "id": "max",
+                    "value": 100
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green",
+                          "value": null
+                        },
+                        {
+                          "color": "#EAB839",
+                          "value": 75
+                        },
+                        {
+                          "color": "red",
+                          "value": 85
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #D"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "장치 에러"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 200
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 3
+          },
+          "id": 244,
+          "options": {
+            "showHeader": true,
+            "sortBy": []
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "node_filesystem_size_bytes{instance=\"$scvm:9101\", job=\"scvm\"}",
+              "format": "table",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            },
+            {
+              "exemplar": true,
+              "expr": "node_filesystem_size_bytes{instance=\"$scvm:9101\", job=\"scvm\"} - node_filesystem_free_bytes{instance=\"$scvm:9101\", job=\"scvm\"}",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "B"
+            },
+            {
+              "exemplar": true,
+              "expr": "100 - (node_filesystem_free_bytes{instance=\"$scvm:9101\", job=\"scvm\"} / node_filesystem_size_bytes{instance=\"$scvm:9101\", job=\"scvm\"} * 100)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "C"
+            },
+            {
+              "exemplar": true,
+              "expr": "node_filesystem_device_error{instance=\"$scvm:9101\", job=\"scvm\"}",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "D"
+            }
+          ],
+          "title": "파일시스템 정보",
+          "transformations": [
+            {
+              "id": "filterFieldsByName",
+              "options": {
+                "include": {
+                  "names": [
+                    "fstype",
+                    "mountpoint",
+                    "Value #A",
+                    "Value #B",
+                    "Value #C",
+                    "Value #D"
+                  ]
+                }
+              }
+            },
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": true,
+                    "field": "Value #C"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 13
+          },
+          "hiddenSeries": false,
+          "id": 192,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_reads_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 읽기 (ops/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:2186",
+              "format": "iops",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:2187",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 13
+          },
+          "hiddenSeries": false,
+          "id": 194,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_writes_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 쓰기 (ops/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:2186",
+              "format": "iops",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:2187",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 23
+          },
+          "hiddenSeries": false,
+          "id": 188,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_read_bytes_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 읽기 (bytes/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:369",
+              "format": "Bps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:370",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 2,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 23
+          },
+          "hiddenSeries": false,
+          "id": 190,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_written_bytes_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 쓰기 (bytes/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:369",
+              "format": "Bps",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:370",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 3,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 33
+          },
+          "hiddenSeries": false,
+          "id": 184,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_read_time_seconds_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m]) / rate(node_disk_reads_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 읽기 평균 지연 (sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:441",
+              "format": "s",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:442",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 3,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 33
+          },
+          "hiddenSeries": false,
+          "id": 186,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": 500,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "maxPerRow": 6,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(node_disk_write_time_seconds_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m]) / rate(node_disk_writes_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{device}}",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 쓰기 평균 지연 (sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:441",
+              "format": "s",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:442",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "스토리지 상세",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 136,
+      "panels": [
+        {
+          "datasource": "Glue",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "center",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "mappings": [],
+              "max": 100,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 75
+                  },
+                  {
+                    "color": "red",
+                    "value": 85
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #A"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "전체 용량"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "bytes"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #B"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "사용 용량"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "bytes"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #C"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "사용률"
+                  },
+                  {
+                    "id": "custom.displayMode",
+                    "value": "lcd-gauge"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "ceph_daemon"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "디바이스"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 4
+          },
+          "id": 246,
+          "options": {
+            "showHeader": true
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "ceph_osd_stat_bytes / on (ceph_daemon) group_left (instance)  ceph_disk_occupation{instance=\"$ceph_hosts\"}",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            },
+            {
+              "exemplar": true,
+              "expr": "ceph_osd_stat_bytes_used / on (ceph_daemon) group_left (instance)  ceph_disk_occupation{instance=\"$ceph_hosts\"}",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "B"
+            },
+            {
+              "exemplar": true,
+              "expr": "ceph_osd_stat_bytes_used{} / ceph_osd_stat_bytes{} / on (ceph_daemon) group_left (instance)  ceph_disk_occupation{instance=\"$ceph_hosts\"}",
+              "format": "table",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "C"
+            }
+          ],
+          "title": "Glue 스토리지 디바이스 사용률",
+          "transformations": [
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "filterFieldsByName",
+              "options": {
+                "include": {
+                  "names": [
+                    "ceph_daemon",
+                    "Value #A",
+                    "Value #B",
+                    "Value #C"
+                  ]
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": "Glue",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Field"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "디바이스"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Last"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "PG 개수"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 4
+          },
+          "id": 249,
+          "options": {
+            "showHeader": true
+          },
+          "pluginVersion": "8.0.4",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "ceph_osd_numpg{} / on (ceph_daemon) group_left (instance)  ceph_disk_occupation{instance=\"$ceph_hosts\"}",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "{{ceph_daemon}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Glue 스토리지 디바이스 별 PG 개수",
+          "transformations": [
+            {
+              "id": "reduce",
+              "options": {
+                "reducers": [
+                  "last"
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Glue",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 12
+          },
+          "hiddenSeries": false,
+          "id": 131,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "$$hashKey": "object:359",
+              "alias": "/.*reads/",
+              "transform": "negative-Y"
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "label_replace(\n  (\n    irate(node_disk_writes_completed{instance=~\"($ceph_hosts).*\"}[5m]) or\n    irate(node_disk_writes_completed_total{instance=~\"($ceph_hosts).*\"}[5m])\n  ),\n  \"instance\",\n  \"$1\",\n  \"instance\",\n  \"([^:.]*).*\"\n)\n* on(instance, device) group_left(ceph_daemon)\n  label_replace(\n    label_replace(\n      ceph_disk_occupation,\n      \"device\",\n      \"$1\",\n      \"device\",\n      \"/dev/(.*)\"\n    ),\n    \"instance\",\n    \"$1\",\n    \"instance\",\n    \"([^:.]*).*\"\n  )",
+              "interval": "",
+              "legendFormat": "{{device}}({{ceph_daemon}}) writes",
+              "refId": "A"
+            },
+            {
+              "exemplar": true,
+              "expr": "label_replace(\n    (irate(node_disk_reads_completed{instance=~\"($ceph_hosts).*\"}[5m]) or irate(node_disk_reads_completed_total{instance=~\"($ceph_hosts).*\"}[5m])),\n    \"instance\",\n    \"$1\",\n    \"instance\",\n    \"([^:.]*).*\"\n)\n* on(instance, device) group_left(ceph_daemon)\n  label_replace(\n    label_replace(\n      ceph_disk_occupation,\n      \"device\",\n      \"$1\",\n      \"device\",\n      \"/dev/(.*)\"\n    ),\n    \"instance\",\n    \"$1\",\n    \"instance\",\n    \"([^:.]*).*\"\n  )",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{device}}({{ceph_daemon}}) reads",
+              "refId": "B"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 IOPS (ops/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:111",
+              "format": "iops",
+              "label": "Read (-) / Write (+)",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:112",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Glue",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 12
+          },
+          "hiddenSeries": false,
+          "id": 132,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "$$hashKey": "object:359",
+              "alias": "/.*read/",
+              "transform": "negative-Y"
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "label_replace((irate(node_disk_bytes_written{instance=~\"($ceph_hosts).*\"}[5m]) or irate(node_disk_written_bytes_total{instance=~\"($ceph_hosts).*\"}[5m])), \"instance\", \"$1\", \"instance\", \"([^:.]*).*\") * on(instance, device) group_left(ceph_daemon) label_replace(label_replace(ceph_disk_occupation, \"device\", \"$1\", \"device\", \"/dev/(.*)\"), \"instance\", \"$1\", \"instance\", \"([^:.]*).*\")",
+              "interval": "",
+              "legendFormat": "{{device}}({{ceph_daemon}}) write",
+              "refId": "A"
+            },
+            {
+              "exemplar": true,
+              "expr": "label_replace((irate(node_disk_bytes_read{instance=~\"($ceph_hosts).*\"}[5m]) or irate(node_disk_read_bytes_total{instance=~\"($ceph_hosts).*\"}[5m])), \"instance\", \"$1\", \"instance\", \"([^:.]*).*\") * on(instance, device) group_left(ceph_daemon) label_replace(label_replace(ceph_disk_occupation, \"device\", \"$1\", \"device\", \"/dev/(.*)\"), \"instance\", \"$1\", \"instance\", \"([^:.]*).*\")",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{device}}({{ceph_daemon}}) read",
+              "refId": "B"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 처리량 (bytes)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:111",
+              "decimals": null,
+              "format": "bytes",
+              "label": "Read (-) / Write (+)",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:112",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Glue",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 20
+          },
+          "hiddenSeries": false,
+          "id": 133,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "max by(instance,device) (label_replace((irate(node_disk_write_time_seconds_total{ instance=~\"($ceph_hosts).*\"}[5m]) )  / clamp_min(irate(node_disk_writes_completed_total{ instance=~\"($ceph_hosts).*\"}[5m]), 0.001) or   (irate(node_disk_read_time_seconds_total{ instance=~\"($ceph_hosts).*\"}[5m]) )  / clamp_min(irate(node_disk_reads_completed_total{ instance=~\"($ceph_hosts).*\"}[5m]), 0.001), \"instance\", \"$1\", \"instance\", \"([^:.]*).*\")) *  on(instance,device) group_left(ceph_daemon) label_replace(label_replace(ceph_disk_occupation{instance=~\"($ceph_hosts).*\"}, \"device\", \"$1\", \"device\", \"/dev/(.*)\"), \"instance\", \"$1\", \"instance\", \"([^:.]*).*\")",
+              "interval": "",
+              "legendFormat": "{{device}}({{ceph_daemon}})",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 읽기 쓰기 최대 지연 (sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:111",
+              "format": "s",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:112",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "atasource": "Glue",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 20
+          },
+          "hiddenSeries": false,
+          "id": 134,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "label_replace(((irate(node_disk_io_time_ms{instance=~\"($ceph_hosts).*\"}[5m]) / 10 ) or  irate(node_disk_io_time_seconds_total{instance=~\"($ceph_hosts).*\"}[5m]) * 100), \"instance\", \"$1\", \"instance\", \"([^:.]*).*\") * on(instance, device) group_left(ceph_daemon) label_replace(label_replace(ceph_disk_occupation{instance=~\"($ceph_hosts).*\"}, \"device\", \"$1\", \"device\", \"/dev/(.*)\"), \"instance\", \"$1\", \"instance\", \"([^:.]*).*\")",
+              "interval": "",
+              "legendFormat": "{{device}}({{ceph_daemon}})",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "디스크 사용률",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:111",
+              "format": "percent",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "$$hashKey": "object:112",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "Glue 스토리지 디바이스 상세",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 210,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 5
+          },
+          "hiddenSeries": false,
+          "id": 212,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"sshd\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "process_namegroup_num_procs",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-mon\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mon",
+              "metric": "process_namegroup_num_procs",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-mgr\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mgr",
+              "metric": "process_namegroup_num_procs",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-mds\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mds",
+              "metric": "process_namegroup_num_procs",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-osd\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-osd",
+              "metric": "process_namegroup_num_procs",
+              "refId": "E",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"radosgw\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "process_namegroup_num_procs",
+              "refId": "F",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "count(namedprocess_namegroup_num_procs{exebase=\"node_exporter\", instance=\"$scvm:9256\"}) +\ncount(namedprocess_namegroup_num_procs{exebase=\"process-exporter\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "process_namegroup_num_procs",
+              "refId": "G",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "프로세스 수",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "transformations": [],
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:243",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:244",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 5
+          },
+          "hiddenSeries": false,
+          "id": 214,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "hideEmpty": true,
+            "hideZero": true,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"sshd\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-mon\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mon",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-mgr\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mgr",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-mds\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mds",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-osd\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-osd",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "E",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"radosgw\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "F",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "(sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"node_exporter\", instance=\"$scvm:9256\"}[1m]))) + on (instance) (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"process-exporter\", instance=\"$scvm:9256\"}[1m])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "process_namegroup_cpu_seconds_total",
+              "refId": "G",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "CPU 사용 시간",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 2,
+            "value_type": "cumulative"
+          },
+          "transformations": [],
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:57",
+              "format": "s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:58",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 13
+          },
+          "hiddenSeries": false,
+          "id": 216,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"sshd\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-mon\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mon",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-mgr\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mgr",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-mds\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mds",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-osd\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-osd",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "E",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"radosgw\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "F",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"node_exporter\", instance=\"$scvm:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"process-exporter\", instance=\"$scvm:9256\"}[1m])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "G",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "읽기 작업 (bytes/sec)",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:326",
+              "format": "Bps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:327",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 13
+          },
+          "hiddenSeries": false,
+          "id": 218,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"sshd\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-mon\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mon",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-mgr\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mgr",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-mds\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mds",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-osd\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-osd",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "E",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"radosgw\", instance=\"$scvm:9256\"}[1m]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "F",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"node_exporter\", instance=\"$scvm:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"process-exporter\", instance=\"$scvm:9256\"}[1m])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "namedprocess_namegroup_read_bytes_total",
+              "refId": "G",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "쓰기 작업 (bytes/sec)",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:409",
+              "format": "Bps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:410",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 21
+          },
+          "hiddenSeries": false,
+          "id": 220,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mon\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mon",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mgr\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mgr",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mds\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mds",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-osd\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-osd",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "E",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"radosgw\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "F",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"virtual\", instance=\"$scvm:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"virtual\", instance=\"$scvm:9256\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "G",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "가상 메모리",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:575",
+              "decimals": 0,
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:576",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "fillGradient": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 21
+          },
+          "hiddenSeries": false,
+          "id": 222,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.4",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mon\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mon",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mgr\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mgr",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "C",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mds\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-mds",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "D",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-osd\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "glue-osd",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "E",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"radosgw\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{exebase}}",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "F",
+              "step": 10
+            },
+            {
+              "exemplar": true,
+              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"resident\", instance=\"$scvm:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"resident\", instance=\"$scvm:9256\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "monitoring agent",
+              "metric": "namedprocess_namegroup_memory_bytes",
+              "refId": "G",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "사용 메모리",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:492",
+              "decimals": 0,
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:493",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "프로세스 상세",
+      "type": "row"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": [
+    "wall"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "10.10.1.11",
+          "value": "10.10.1.11"
+        },
+        "datasource": "Wall",
+        "definition": "label_values(node_uname_info{job=\"scvm\"},instance)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "scvm",
+        "multi": false,
+        "name": "scvm",
+        "options": [],
+        "query": {
+          "query": "label_values(node_uname_info{job=\"scvm\"},instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "(.*):.*",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "scvm1",
+          "value": "scvm1"
+        },
+        "datasource": "Wall",
+        "definition": "label_values(node_uname_info{instance=\"$scvm:9101\", job=\"scvm\"},nodename)",
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": "ceph_hosts",
+        "multi": false,
+        "name": "ceph_hosts",
+        "options": [],
+        "query": {
+          "query": "label_values(node_uname_info{instance=\"$scvm:9101\", job=\"scvm\"},nodename)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "4. 스토리지센터 가상머신 상세 현황",
+  "uid": "scvm_details",
+  "version": 1
+}
