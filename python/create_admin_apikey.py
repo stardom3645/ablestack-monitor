@@ -5,6 +5,11 @@ import requests
 import json
 import sys
 
+'''
+함수명 : createApiKey
+이 함수는 wallvm의 ip와 api key 이름을 입력받아 api key를 생성합니다.
+'''
+
 
 def createApiKey():
     wall_ip = sys.argv[1]

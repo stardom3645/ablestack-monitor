@@ -5,6 +5,12 @@ import requests
 import json
 import sys
 
+'''
+함수명 : updateNotification
+이 함수는 notification.json 파일을 이용하여 새로운 notification channel을 생성합니다.
+이 함수가 정상적으로 실행되기 위해서는 ../properties/notification.json 파일이 생성되어 있어야합니다.
+'''
+
 
 def updateNotification():
     with open("../properties/api.key") as apikey:
