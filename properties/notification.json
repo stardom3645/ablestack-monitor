@@ -1,6 +1,6 @@
 {
-    "uid": "ablecloud-admin2",
-    "name": "wall-notification2",
+    "uid": "ablecloud-admin",
+    "name": "wall-notification",
     "type": "email",
     "isDefault": false,
     "sendReminder": true,
