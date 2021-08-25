@@ -29,10 +29,11 @@ import (
 	"strings"
 	"io/ioutil"
 	"database/sql"
-	_ "reflect"
+	"crypto/aes"
+	"crypto/cipher"
+	"encoding/base64"
 
 	_ "github.com/go-sql-driver/mysql"
-
 	"github.com/AlexZzz/libvirt-exporter/libvirtSchema"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -46,11 +47,26 @@ var byteValue []uint8
 var domainMetaInfo = map[int]map[string]string{}
 var networkMetaInfo = map[int]map[string]string{}
 var diskMetaInfo = map[int]map[string]string{}
+var password = ""
+
+type AESCipher struct {
+	block cipher.Block
+}
 
 var (
 	libvirtUpDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "", "up"),
 		"Whether scraping libvirt's metrics was successful.",
+		nil,
+		nil)
+	libvirtRbdCollectDesc = prometheus.NewDesc(
+		prometheus.BuildFQName("libvirt", "rbd_collect", "up"),
+		"Whether scraping rbd image disk usage metrics was successful.",
+		nil,
+		nil)
+	libvirtMoldCollectDesc = prometheus.NewDesc(
+		prometheus.BuildFQName("libvirt", "mold_collect", "up"),
+		"Whether scraping mold meta  metrics was successful.",
 		nil,
 		nil)
 	libvirtVersionsInfoDesc = prometheus.NewDesc(
@@ -61,7 +77,7 @@ var (
 	libvirtDomainInfoMetaDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_info", "meta"),
 		"Domain metadata",
-		[]string{"domain", "uuid", "instance_name", "flavor", "user_name", "user_uuid", "project_name", "project_uuid", "root_type", "root_uuid","domain_mold_name","vm_user_name"},
+		[]string{"domain", "uuid", "instance_name", "flavor", "user_name", "user_uuid", "project_name", "project_uuid", "root_type", "root_uuid","domain_mold_name","vm_user_name","display_mold_name"},
 		nil)
 	libvirtDomainInfoMaxMemBytesDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_info", "maximum_memory_bytes"),
@@ -123,7 +139,7 @@ var (
 	libvirtDomainMetaBlockDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_block", "meta"),
 		"Block device metadata info. Device name, source file, serial.",
-		[]string{"domain", "target_device", "source_file", "serial", "bus", "disk_type", "driver_type", "cache", "discard","mold_disk_name"},
+		[]string{"domain", "target_device", "source_file", "serial", "bus", "disk_type", "driver_type", "cache", "discard","mold_disk_name","display_volume_name","mold_volume_type"},
 		nil)
 	libvirtDomainBlockRdBytesDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_block_stats", "read_bytes_total"),
@@ -423,10 +439,12 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 	}
 
 	domain_mold_name := domainName
+	display_mold_name := domainName
 	vm_user_name := "N/A"
 	for _, val := range domainMetaInfo {
 		if domainName ==  val["domain_name"] {
 			domain_mold_name = val["domain_mold_name"]
+			display_mold_name = display_mold_name + " ( "+domain_mold_name+" )"
 			vm_user_name = val["vm_user_name"]
 		}
 	}
@@ -446,7 +464,8 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 		desc.Metadata.NovaInstance.NovaRoot.RootType,
 		desc.Metadata.NovaInstance.NovaRoot.RootUUID,
 		domain_mold_name,
-		vm_user_name)
+		vm_user_name,
+		display_mold_name)
 	ch <- prometheus.MustNewConstMetric(
 		libvirtDomainInfoMaxMemBytesDesc,
 		prometheus.GaugeValue,
@@ -552,9 +571,13 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 		}
 
 		mold_disk_name := "N/A"
+		display_volume_name := disk.Name
+		mold_volume_type := "N/A"
 		for _, val := range diskMetaInfo {
 			if domainName ==  val["domain_name"] && strings.Contains(DiskSource, val["disk_path"]) {
 				mold_disk_name = val["mold_disk_name"]
+				display_volume_name = display_volume_name + " ( "+mold_disk_name+" )"
+				mold_volume_type = val["volume_type"]
 			}
 		}
 		ch <- prometheus.MustNewConstMetric(
@@ -570,7 +593,9 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 			Device.Driver.Type,
 			Device.Driver.Cache,
 			Device.Driver.Discard,
-			mold_disk_name)
+			mold_disk_name,
+			display_volume_name,
+			mold_volume_type)
 
 		// https://libvirt.org/html/libvirt-libvirt-domain.html#virConnectGetAllDomainStats
 		if disk.RdBytesSet {
@@ -1101,6 +1126,8 @@ func NewLibvirtExporter(uri string) (*LibvirtExporter, error) {
 func (e *LibvirtExporter) Describe(ch chan<- *prometheus.Desc) {
 	// Status and versions
 	ch <- libvirtUpDesc
+	ch <- libvirtRbdCollectDesc
+	ch <- libvirtMoldCollectDesc
 	ch <- libvirtVersionsInfoDesc
 
 	// Domain info
@@ -1156,8 +1183,8 @@ func (e *LibvirtExporter) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect scrapes Prometheus metrics from libvirt.
 func (e *LibvirtExporter) Collect(ch chan<- prometheus.Metric) {
-	CollectRbdImageDiskUsage()
-	CollectMoldMeta()
+	CollectRbdImageDiskUsage(ch)
+	CollectMoldMeta(ch)
 
 	err := CollectFromLibvirt(ch, e.uri)
 	if err == nil {
@@ -1174,24 +1201,61 @@ func (e *LibvirtExporter) Collect(ch chan<- prometheus.Metric) {
 	}
 }
 
-func CollectRbdImageDiskUsage() {
+func CollectRbdImageDiskUsage(ch chan<- prometheus.Metric) {
 	//rbd Image DiskUsage(du) information
 	cmd := exec.Command("rbd", "du", "--format", "json")
 	output, err := cmd.Output()
+	statusVal := 1.0
 
 	if err != nil {
-		fmt.Println(err)
+		log.Println("rbd image disk usage 정보를 수집할 수 없습니다.")
+		log.Println(err)
+		statusVal = 0.0
 	} else {
-
 		var dat map[string]interface{}
 		if err := json.Unmarshal([]byte(output), &dat); err != nil {
 			fmt.Println(err)
 		}
 		rbdImageDiskUsageResult = (dat["images"].([]interface{}))		
 	}
+
+	ch <- prometheus.MustNewConstMetric(
+		libvirtRbdCollectDesc,
+		prometheus.GaugeValue,
+		statusVal)
 }
 
-func CollectMoldMeta() {
+func NewAesCipher(key []byte) (*AESCipher, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	return &AESCipher{block}, nil
+}
+
+func (a *AESCipher) DecryptString(base64String string) string {
+
+	b, _ := base64.URLEncoding.DecodeString(base64String)
+	byteString := []byte(b)
+
+	decryptByteArray := make([]byte, len(byteString))
+	iv := byteString[:aes.BlockSize]
+
+	stream := cipher.NewCFBDecrypter(a.block, iv)
+	stream.XORKeyStream(decryptByteArray, byteString[aes.BlockSize:])
+
+	decPw := ""
+	//byte 배열에 담긴 ascii 코드를 확인하여 32 (공백) 이상이면서 127(delete) 문자일 경우에 정상 문자로 인식
+	for i, _ := range decryptByteArray {
+		if decryptByteArray[i] > 31 && decryptByteArray[i] < 127 {
+				decPw += string(decryptByteArray[i])
+		}
+	}
+
+	return decPw
+}
+
+func CollectMoldMeta(ch chan<- prometheus.Metric) {
 	//conf 파일을 파싱하여 json으로 변환
 	json.Unmarshal([]byte(byteValue), &confValue)
 
@@ -1200,7 +1264,16 @@ func CollectMoldMeta() {
 	port := moldDbConf["port"].(string)
 	database := moldDbConf["database"].(string)
 	username := moldDbConf["username"].(string)
-	password := moldDbConf["password"].(string)
+	statusVal := 1.0
+	enpw := moldDbConf["password"].(string) // pw_encryption.go 파일로 암호화시킨 비밀번호
+	
+	//키는 16, 24, 32만 가능합니다
+	var key = []byte("ablestackwallkey") // pw_encryption.go 에서 암호화 한 방식과 동일한 key
+	
+	if password == "" {
+		a, _ := NewAesCipher(key)
+		password = a.DecryptString(enpw)
+	}
 
 	// sql.DB 객체 생성
 	db, err := sql.Open("mysql", username+":"+password+"@tcp("+serverhost+":"+port+")/"+database)
@@ -1220,41 +1293,43 @@ func CollectMoldMeta() {
 		domainMetaInfoQuery += "  and vi.type = 'User'"
 		doaminRows, doaminErr := db.Query(domainMetaInfoQuery)
 		if doaminErr != nil {
+			log.Println("domainMetaInfoQuery 정보를 수집할 수 없습니다.")
 			log.Println(doaminErr)
-		}
-
-		columns, _ := doaminRows.Columns()
-		count := len(columns)
-		values := make([]interface{}, count)
-		valuePtrs := make([]interface{}, count)
-		result_id := 0
-
-		for doaminRows.Next() {
-			for i, _ := range columns {
-				valuePtrs[i] = &values[i]
-			}
-			doaminRows.Scan(valuePtrs...)
-		
-			tmp_struct := map[string]string{}
-		
-			for i, col := range columns {
-				var v interface{}
-				val := values[i]
-				b, ok := val.([]byte)
-				if (ok) {
-					v = string(b)
-				} else {
-					v = val
+			statusVal = 0.0
+		} else {
+			columns, _ := doaminRows.Columns()
+			count := len(columns)
+			values := make([]interface{}, count)
+			valuePtrs := make([]interface{}, count)
+			result_id := 0
+	
+			for doaminRows.Next() {
+				for i, _ := range columns {
+					valuePtrs[i] = &values[i]
 				}
-				tmp_struct[col] = fmt.Sprintf("%s",v)
+				doaminRows.Scan(valuePtrs...)
+			
+				tmp_struct := map[string]string{}
+			
+				for i, col := range columns {
+					var v interface{}
+					val := values[i]
+					b, ok := val.([]byte)
+					if (ok) {
+						v = string(b)
+					} else {
+						v = val
+					}
+					tmp_struct[col] = fmt.Sprintf("%s",v)
+				}
+				
+				domainMetaInfo[ result_id ] = tmp_struct
+				result_id++
 			}
 			
-			domainMetaInfo[ result_id ] = tmp_struct
-			result_id++
+			//row 닫기. 안닫으면 too many connections  에러 오류 발생
+			doaminRows.Close()
 		}
-		
-		//row 닫기. 안닫으면 too many connections  에러 오류 발생
-		doaminRows.Close()
 
 		// networkMetaInfoQuery query
 		networkMetaInfoQuery := " select ni.id as nic_id"
@@ -1270,46 +1345,49 @@ func CollectMoldMeta() {
 		networkMetaInfoQuery += "  and vi.removed is null"
 		networkRows, networkErr := db.Query(networkMetaInfoQuery)
 		if networkErr != nil {
+			log.Println("networkMetaInfoQuery 정보를 수집할 수 없습니다.")
 			log.Println(networkErr)
-		}
-
-		columns, _ = networkRows.Columns()
-		count = len(columns)
-		values = make([]interface{}, count)
-		valuePtrs = make([]interface{}, count)
-		result_id = 0
-
-		for networkRows.Next() {
-			for i, _ := range columns {
-				valuePtrs[i] = &values[i]
-			}
-			networkRows.Scan(valuePtrs...)
-		
-			tmp_struct := map[string]string{}
-		
-			for i, col := range columns {
-				var v interface{}
-				val := values[i]
-				b, ok := val.([]byte)
-				if (ok) {
-					v = string(b)
-				} else {
-					v = val
+			statusVal = 0.0
+		} else {
+			columns, _ := networkRows.Columns()
+			count := len(columns)
+			values := make([]interface{}, count)
+			valuePtrs := make([]interface{}, count)
+			result_id := 0
+	
+			for networkRows.Next() {
+				for i, _ := range columns {
+					valuePtrs[i] = &values[i]
 				}
-				tmp_struct[col] = fmt.Sprintf("%s",v)
+				networkRows.Scan(valuePtrs...)
+			
+				tmp_struct := map[string]string{}
+			
+				for i, col := range columns {
+					var v interface{}
+					val := values[i]
+					b, ok := val.([]byte)
+					if (ok) {
+						v = string(b)
+					} else {
+						v = val
+					}
+					tmp_struct[col] = fmt.Sprintf("%s",v)
+				}
+				
+				networkMetaInfo[ result_id ] = tmp_struct
+				result_id++
 			}
 			
-			networkMetaInfo[ result_id ] = tmp_struct
-			result_id++
+			//row 닫기. 안닫으면 too many connections  에러 오류 발생
+			networkRows.Close()
 		}
-		
-		//row 닫기. 안닫으면 too many connections  에러 오류 발생
-		networkRows.Close()
 
 		// diskMetaInfoQuery query
 		diskMetaInfoQuery := " select v.id as disk_id"
 		diskMetaInfoQuery += "  , v.name as mold_disk_name"
 		diskMetaInfoQuery += "  , v.path as disk_path"
+		diskMetaInfoQuery += "  , v.volume_type as volume_type"
 		diskMetaInfoQuery += "  , vi.name as domain_mold_name"
 		diskMetaInfoQuery += "  , vi.instance_name as domain_name"
 		diskMetaInfoQuery += "  , a.account_name as user_name"
@@ -1320,51 +1398,58 @@ func CollectMoldMeta() {
 		diskMetaInfoQuery += "  and vi.type = 'User'"
 		diskRows, diskErr := db.Query(diskMetaInfoQuery)
 		if diskErr != nil {
+			log.Println("networkMetaInfoQuery 정보를 수집할 수 없습니다.")
 			log.Println(diskErr)
-		}
-
-		columns, _ = diskRows.Columns()
-		count = len(columns)
-		values = make([]interface{}, count)
-		valuePtrs = make([]interface{}, count)
-		result_id = 0
-
-		for diskRows.Next() {
-			for i, _ := range columns {
-				valuePtrs[i] = &values[i]
-			}
-			diskRows.Scan(valuePtrs...)
-		
-			tmp_struct := map[string]string{}
-		
-			for i, col := range columns {
-				var v interface{}
-				val := values[i]
-				b, ok := val.([]byte)
-				if (ok) {
-					v = string(b)
-				} else {
-					v = val
+			statusVal = 0.0
+		} else {
+			columns, _ := diskRows.Columns()
+			count := len(columns)
+			values := make([]interface{}, count)
+			valuePtrs := make([]interface{}, count)
+			result_id := 0
+	
+			for diskRows.Next() {
+				for i, _ := range columns {
+					valuePtrs[i] = &values[i]
 				}
-				tmp_struct[col] = fmt.Sprintf("%s",v)
-			}
+				diskRows.Scan(valuePtrs...)
 			
-			diskMetaInfo[ result_id ] = tmp_struct
-			result_id++
+				tmp_struct := map[string]string{}
+			
+				for i, col := range columns {
+					var v interface{}
+					val := values[i]
+					b, ok := val.([]byte)
+					if (ok) {
+						v = string(b)
+					} else {
+						v = val
+					}
+					tmp_struct[col] = fmt.Sprintf("%s",v)
+				}
+				
+				diskMetaInfo[ result_id ] = tmp_struct
+				result_id++
+			}
+	
+			//row 닫기. 안닫으면 too many connections  에러 오류 발생
+			diskRows.Close()
 		}
-
-		//row 닫기. 안닫으면 too many connections  에러 오류 발생
-		diskRows.Close()
 	}
+
+	ch <- prometheus.MustNewConstMetric(
+		libvirtMoldCollectDesc,
+		prometheus.GaugeValue,
+		statusVal)
 }
 
 func main() {
 	// Open config json file
-	jsonFile, err := os.Open("conf.json")
+	jsonFile, err := os.Open("/root/conf.json")
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
-	
+
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer jsonFile.Close()
 
