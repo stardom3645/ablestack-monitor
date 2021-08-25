@@ -55,21 +55,21 @@ def libvirt_config(cube_ip):
     return cube
 
 
-def cube_config(cube_ip):
+def cube_node_config(cube_ip):
     cube = cube_ip.copy()
     for i in range(len(cube)):
         cube[i] = cube[i] + node_exporter_port
     return cube
 
 
-def scvm_config(scvm_ip):
+def scvm_node_config(scvm_ip):
     scvm = scvm_ip.copy()
     for i in range(len(scvm)):
         scvm[i] = scvm[i] + node_exporter_port
     return scvm
 
 
-def ccvm_config(ccvm_ip):
+def ccvm_node_config(ccvm_ip):
     ccvm = ccvm_ip.copy()
     for i in range(len(ccvm)):
         ccvm[i] = ccvm[i] + node_exporter_port
@@ -89,21 +89,21 @@ def configYaml(cube, scvm, ccvm):
                   ['static_configs'][0]['targets'])
 
         elif i == 1:
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cube_config(
+            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cube_node_config(
                 cube)
 
             print(prometheus_org['scrape_configs'][1]
                   ['static_configs'][0]['targets'])
 
         elif i == 2:
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvm_config(
+            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvm_node_config(
                 scvm)
 
             print(prometheus_org['scrape_configs'][2]
                   ['static_configs'][0]['targets'])
 
         elif i == 3:
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvm_config(
+            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvm_node_config(
                 ccvm)
 
             print(prometheus_org['scrape_configs'][3]

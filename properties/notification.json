@@ -1,0 +1,12 @@
+{
+    "uid": "ablecloud-admin2",
+    "name": "wall-notification2",
+    "type": "email",
+    "isDefault": false,
+    "sendReminder": true,
+    "uploadImage": true,
+    "frequency": "1m",
+    "settings": {
+        "addresses": "ablecloud@ablecloud.io"
+    }
+}
