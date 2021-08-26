@@ -40,7 +40,7 @@ cp -r /root/ablestack-monitor $RPM_BUILD_ROOT/usr/share/ablestack/ablestack-wall
 
 %post
 #echo 'ABLESTACK-Wall script'
-/usr/share/ablestack/ablestack-wall/tools/make-rpm/ablestack-wall.sh&
+/usr/share/ablestack/ablestack-wall/tools/make-rpms/ablestack-wall.sh&
 #echo 'ABLESTACK-Wall complete!'
 
 %clean
