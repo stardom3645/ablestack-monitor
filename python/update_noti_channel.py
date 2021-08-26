@@ -1,3 +1,9 @@
+'''
+Copyright (c) 2021 ABLECLOUD Co. Ltd
+이 파일은 notification channel의 수신 이메일을 업데이트 하는 프로그램입니다.
+최초 작성일 : 2021. 08. 25
+'''
+
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 

@@ -1,3 +1,9 @@
+'''
+Copyright (c) 2021 ABLECLOUD Co. Ltd
+이 파일은 notification channel을 업데이트하기 위해 필요한 json 설정 파일을 구성하는 프로그램입니다.
+최초 작성일 : 2021. 08. 25
+'''
+
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 

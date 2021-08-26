@@ -1,3 +1,9 @@
+'''
+Copyright (c) 2021 ABLECLOUD Co. Ltd
+이 파일은 wall 대시보드의 admin api key를 생성하는 프로그램입니다.
+최초 작성일 : 2021. 08. 25
+'''
+
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
