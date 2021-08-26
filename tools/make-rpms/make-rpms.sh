@@ -8,7 +8,7 @@ export PATH
 
 VER="1.0"
 
-BUILD_PATH="/root/ablestack-monitor/tools/make-rpm"
+BUILD_PATH="/root/ablestack-monitor/tools/make-rpms"
 mkdir -p $BUILD_PATH/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 cd $BUILD_PATH/rpmbuild/SOURCES
 mkdir -p ablestack-wall-$VER
