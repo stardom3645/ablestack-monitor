@@ -23,7 +23,6 @@ chmod 644 $ABLESTACK_PATH/ablestack-wall/*
 return
 }
 
-
 # 함수명 : default
 # 프로세스 종료
 default(){

@@ -35,7 +35,7 @@ ablestack-wall package
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/share/ablestack/ablestack-wall
-cp -r /root/ablestack-monitor $RPM_BUILD_ROOT/usr/share/ablestack/ablestack-wall
+cp -r /root/ablestack-monitor/* $RPM_BUILD_ROOT/usr/share/ablestack/ablestack-wall
 
 
 %post
