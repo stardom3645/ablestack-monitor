@@ -154,29 +154,17 @@ def configYaml(cube, scvm, ccvm):
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = libvirtConfig(
                 cube)
 
-            print(prometheus_org['scrape_configs'][i]
-                  ['static_configs'][0]['targets'])
-
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeNodeConfig(
                 cube)
-
-            print(prometheus_org['scrape_configs'][i]
-                  ['static_configs'][0]['targets'])
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmNodeConfig(
                 scvm)
 
-            print(prometheus_org['scrape_configs'][i]
-                  ['static_configs'][0]['targets'])
-
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmNodeConfig(
                 ccvm)
-
-            print(prometheus_org['scrape_configs'][i]
-                  ['static_configs'][0]['targets'])
 
         # elif prometheus_org['scrape_configs'][i]['job_name'] == 'prometheus':
         #     prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = prometheusConfig(
@@ -189,50 +177,29 @@ def configYaml(cube, scvm, ccvm):
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeProcessConfig(
                 cube)
 
-            print(prometheus_org['scrape_configs'][i]
-                  ['static_configs'][0]['targets'])
-
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm-process-exporter':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmProcessConfig(
                 scvm)
-
-            print(prometheus_org['scrape_configs'][i]
-                  ['static_configs'][0]['targets'])
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm-process-exporter':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmProcessConfig(
                 ccvm)
 
-            print(prometheus_org['scrape_configs'][i]
-                  ['static_configs'][0]['targets'])
-
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube-blackbox':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeBlackboxConfig(
                 cube)
-
-            print(prometheus_org['scrape_configs'][i]
-                  ['static_configs'][0]['targets'])
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm-blackbox':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmBlackboxConfig(
                 scvm)
 
-            print(prometheus_org['scrape_configs'][i]
-                  ['static_configs'][0]['targets'])
-
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm-blackbox':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmBlackboxConfig(
                 ccvm)
 
-            print(prometheus_org['scrape_configs'][i]
-                  ['static_configs'][0]['targets'])
-
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'blackbox-tcp':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeServiceConfig(cube) + moldServiceConfig(ccvm) + moldDBConfig(ccvm) + libvirtConfig(cube) + cubeNodeConfig(cube) + scvmNodeConfig(scvm) + ccvmNodeConfig(
                 ccvm) + cubeProcessConfig(cube) + scvmProcessConfig(scvm) + ccvmProcessConfig(ccvm) + cubeBlackboxConfig(cube) + scvmBlackboxConfig(scvm) + ccvmBlackboxConfig(ccvm)
-
-            print(prometheus_org['scrape_configs'][i]
-                  ['static_configs'][0]['targets'])
 
         with open(prometheus_yml_path, 'w') as yaml_file:
             yaml_file.write(
