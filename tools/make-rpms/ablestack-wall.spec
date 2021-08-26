@@ -4,11 +4,11 @@
 
 %define _topdir %(echo $PWD)/rpmbuild
 
-Name: ablestack-monitor
+Name: ablestack-wall
 Version: %{?version}%{!?version:1.0}
 Release: %{?release}%{!?release:1.el8.noarch}
 Source0: %{name}-%{version}.tar.gz
-Summary: ablestack-monitor package
+Summary: ablestack-wall package
 
 Group: ABLECLOUD
 License: None
@@ -18,7 +18,7 @@ BuildRequires: /bin/bash, /bin/mkdir, /bin/cp
 Requires: /bin/bash, /bin/mkdir, /bin/cp
 
 %description
-ablestack-monitor package
+ablestack-wall package
 
 %define debug_package %{nil}
 %define _unpackaged_files_terminate_build 0
