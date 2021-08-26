@@ -9,7 +9,7 @@
 # PATH 정의
 conf(){
 ABLESTACK_PATH="/usr/share/ablestack"
-RPM_PATH="$ABLESTACK_PATH/ablestack-wall/tools/makerpm/rpmbuild"
+RPM_PATH="$ABLESTACK_PATH/ablestack-wall/tools/make-rpms/rpmbuild"
 return
 }
 
@@ -30,7 +30,7 @@ default(){
 settingFile
 startCockpit
 echo "====================End of All process"
-pkill -9 -f /usr/share/ablestack/ablestack-wall/tools/make-rpm/ablestack-wall.sh
+pkill -9 -f /usr/share/ablestack/ablestack-wall/tools/make-rpms/ablestack-wall.sh
 }
 
 # 스크립트 실행

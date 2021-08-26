@@ -8,14 +8,14 @@ export PATH
 
 VER="1.0"
 
-BUILD_PATH="/root/ablestack-monitor/tools/make-rpm/ablestack-wall.sh&"
+BUILD_PATH="/root/ablestack-monitor/tools/make-rpm"
 mkdir -p $BUILD_PATH/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 cd $BUILD_PATH/rpmbuild/SOURCES
 mkdir -p ablestack-wall-$VER
 if [ -d ablestack-wall-$VER ]; then
-tar -cvf ablestack-$VER.tar.gz ablestack-$VER
+tar -cvf ablestack-wall-$VER.tar.gz ablestack-wall-$VER
 fi
-rm -rf ablestack-$VER
+rm -rf ablestack-wall-$VER
 
 cp -f $BUILD_PATH/ablestack-wall.spec $BUILD_PATH/rpmbuild/SPECS/
 
