@@ -27,7 +27,6 @@ return
 # 프로세스 종료
 default(){
 settingFile
-startCockpit
 echo "====================End of All process"
 pkill -9 -f /usr/share/ablestack/ablestack-wall/tools/make-rpms/ablestack-wall.sh
 }
