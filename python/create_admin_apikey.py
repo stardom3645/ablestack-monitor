@@ -27,7 +27,6 @@ def createApiKey():
                'Content-Type': 'application/json'}
 
     data = '{"name":' + '"'+key_name+'"' + ', "role": "Admin"}'
-    print(data)
 
     res = requests.post(url, data=data, headers=headers)
     print(str(res.status_code) + "|" + res.text)
@@ -51,7 +50,6 @@ def main():
             print('Update failed', e)
 
     else:
-        print(len(sys.argv))
         print("wallvm_ip, apikey_name are required.")
         sys.exit()
 
