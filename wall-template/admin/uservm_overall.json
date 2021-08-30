@@ -8,6 +8,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -23,10 +29,10 @@
       "includeVars": false,
       "keepTime": true,
       "tags": [
-        "wall"
+        "admin"
       ],
       "targetBlank": false,
-      "title": "Dashboard List",
+      "title": "대시보드 목록",
       "tooltip": "",
       "type": "dashboards",
       "url": ""
@@ -129,7 +135,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "datasource": "__expr__",
@@ -320,7 +326,7 @@
           "titleSize": 13
         }
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "exemplar": true,
@@ -335,7 +341,7 @@
         },
         {
           "exemplar": true,
-          "expr": "topk(1, rate(libvirt_domain_info_cpu_time_seconds_total{domain=~\"i-.*\"}[1m]) / on (domain, instance) count(libvirt_domain_vcpu_cpu{}) by (instance, domain) * 100)",
+          "expr": "topk(1, rate(libvirt_domain_info_cpu_time_seconds_total{domain=~\"i-.*\"}[1m]) / on (domain, instance) count(libvirt_domain_vcpu_cpu{}) by (instance, domain) * 100) / on (domain) group_left (domain_mold_name, vm_user_name) libvirt_domain_info_meta{domain=~\"i-.*\"}",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -386,7 +392,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "domain"
+              "options": "display_mold_name"
             },
             "properties": [
               {
@@ -398,19 +404,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "instance"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "CUBE 호스트"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "target_device"
+              "options": "display_volume_name"
             },
             "properties": [
               {
@@ -428,6 +422,10 @@
               {
                 "id": "displayName",
                 "value": "사용율"
+              },
+              {
+                "id": "custom.width",
+                "value": 130
               }
             ]
           }
@@ -443,18 +441,13 @@
       "options": {
         "frameIndex": 0,
         "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "사용률"
-          }
-        ]
+        "sortBy": []
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(10,libvirt_domain_block_stats_allocation{domain=~\"i-.*\"} / libvirt_domain_block_stats_capacity_bytes{domain=~\"i-.*\"} * 100)",
+          "expr": "topk(10,libvirt_domain_block_stats_allocation{domain=~\"i-.*\"} / libvirt_domain_block_stats_capacity_bytes{domain=~\"i-.*\"} * 100) / on (domain) group_left (domain_mold_name, display_mold_name, vm_user_name) libvirt_domain_info_meta{domain=~\"i-.*\"} / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=~\"i-.*\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -469,9 +462,9 @@
           "options": {
             "include": {
               "names": [
-                "domain",
-                "target_device",
-                "Value"
+                "Value",
+                "display_mold_name",
+                "display_volume_name"
               ]
             }
           }
@@ -523,7 +516,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "domain"
+              "options": "display_mold_name"
             },
             "properties": [
               {
@@ -535,7 +528,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "target_device"
+              "options": "display_volume_name"
             },
             "properties": [
               {
@@ -553,6 +546,10 @@
               {
                 "id": "displayName",
                 "value": "지연 시간"
+              },
+              {
+                "id": "custom.width",
+                "value": 130
               }
             ]
           }
@@ -575,11 +572,11 @@
           }
         ]
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(10,irate(libvirt_domain_block_stats_write_time_seconds_total{domain=~\"i-.+\"}[1m]) + on (domain, target_device) irate(libvirt_domain_block_stats_read_time_seconds_total{domain=~\"i-.+\"}[1m]))",
+          "expr": "topk(10,irate(libvirt_domain_block_stats_write_time_seconds_total{domain=~\"i-.+\"}[1m]) + on (domain, target_device) irate(libvirt_domain_block_stats_read_time_seconds_total{domain=~\"i-.+\"}[1m])) / on (domain) group_left (domain_mold_name, display_mold_name, vm_user_name) libvirt_domain_info_meta{domain=~\"i-.*\"} / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=~\"i-.*\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -594,10 +591,9 @@
           "options": {
             "include": {
               "names": [
-                "instance",
-                "domain",
                 "Value",
-                "target_device"
+                "display_mold_name",
+                "display_volume_name"
               ]
             }
           }
@@ -703,7 +699,7 @@
           "titleSize": 13
         }
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "exemplar": true,
@@ -717,7 +713,7 @@
         },
         {
           "exemplar": true,
-          "expr": "topk(1, libvirt_domain_memory_stats_used_percent{domain=~\"i-.*\"})",
+          "expr": "topk(1, libvirt_domain_memory_stats_used_percent{domain=~\"i-.*\"}) / on (domain) group_left (domain_mold_name, vm_user_name) libvirt_domain_info_meta{domain=~\"i-.*\"}",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -769,7 +765,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -780,9 +776,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(libvirt_domain_info_cpu_time_seconds_total{domain=~\"i-.*\"}[1m]) / on (domain, instance, job) count(libvirt_domain_vcpu_cpu{}) by (instance, domain, job) * 100",
+          "expr": "rate(libvirt_domain_info_cpu_time_seconds_total{domain=~\"i-.*\"}[1m]) / on (domain, instance, job) count(libvirt_domain_vcpu_cpu{}) by (instance, domain, job) * 100 / on (domain) group_left (display_mold_name) libvirt_domain_info_meta{domain=~\"i-.*\"}",
           "interval": "",
-          "legendFormat": "{{domain}} ",
+          "legendFormat": "{{display_mold_name}}",
           "refId": "A"
         }
       ],
@@ -862,7 +858,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -873,9 +869,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "libvirt_domain_memory_stats_used_percent{domain=~\"i-.*\", job=\"libvirt\"}",
+          "expr": "libvirt_domain_memory_stats_used_percent{domain=~\"i-.*\", job=\"libvirt\"} / on (domain) group_left (display_mold_name, vm_user_name) libvirt_domain_info_meta{domain=~\"i-.*\"}",
           "interval": "",
-          "legendFormat": "{{domain}}",
+          "legendFormat": "{{display_mold_name}}",
           "refId": "A"
         }
       ],
@@ -955,7 +951,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -972,16 +968,16 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(libvirt_domain_interface_stats_transmit_bytes_total{domain=~\"i-.*\"}[1m])",
+          "expr": "irate(libvirt_domain_interface_stats_transmit_bytes_total{domain=~\"i-.*\"}[1m]) / on (domain) group_left (domain_mold_name, vm_user_name) libvirt_domain_info_meta{domain=~\"i-.*\"} / on (domain,target_device) group_left (mac_address,mold_network_name) libvirt_domain_interface_meta{domain=~\"i-.*\"}",
           "interval": "",
-          "legendFormat": "{{domain}} - transmit",
+          "legendFormat": "transmit : {{domain}} ( {{target_device}} - {{mac_address}} - {{mold_network_name}} )",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "irate(libvirt_domain_interface_stats_receive_bytes_total{domain=~\"i-.*\"}[1m])",
+          "expr": "irate(libvirt_domain_interface_stats_receive_bytes_total{domain=~\"i-.*\"}[1m]) / on (domain) group_left (domain_mold_name, vm_user_name) libvirt_domain_info_meta{domain=~\"i-.*\"} / on (domain) group_left (domain_mold_name, vm_user_name) libvirt_domain_info_meta{domain=~\"i-.*\"} / on (domain,target_device) group_left (mac_address,mold_network_name) libvirt_domain_interface_meta{domain=~\"i-.*\"}",
           "interval": "",
-          "legendFormat": "{{ domain }} - receive",
+          "legendFormat": "receive : {{domain}} ( {{target_device}} - {{mac_address}} - {{mold_network_name}} )",
           "refId": "B"
         }
       ],
@@ -1070,7 +1066,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1087,22 +1083,22 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(libvirt_domain_block_stats_read_bytes_total{domain=~\"i-.*\"}[1m])",
+          "expr": "irate(libvirt_domain_block_stats_read_bytes_total{domain=~\"i-.*\"}[1m]) / on (domain) group_left (domain_mold_name, vm_user_name) libvirt_domain_info_meta{domain=~\"i-.*\"} / on (domain,target_device) group_left (mold_disk_name) libvirt_domain_block_meta{domain=~\"i-.*\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "Read : {{domain}}",
+          "legendFormat": "Read : {{domain}} ( {{target_device}} - {{mold_disk_name}} )",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "irate(libvirt_domain_block_stats_write_bytes_total{domain=~\"i-.*\"}[1m])",
+          "expr": "irate(libvirt_domain_block_stats_write_bytes_total{domain=~\"i-.*\"}[1m]) / on (domain) group_left (domain_mold_name, vm_user_name) libvirt_domain_info_meta{domain=~\"i-.*\"} / on (domain,target_device) group_left (mold_disk_name) libvirt_domain_block_meta{domain=~\"i-.*\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "Write : {{domain}}",
+          "legendFormat": "Write : {{domain}} ( {{target_device}} - {{mold_disk_name}} )",
           "refId": "B"
         }
       ],
@@ -1150,11 +1146,12 @@
       }
     }
   ],
-  "refresh": "10s",
+  "refresh": false,
   "schemaVersion": 30,
   "style": "dark",
   "tags": [
-    "wall"
+    "wall",
+    "admin"
   ],
   "templating": {
     "list": []
