@@ -34,7 +34,7 @@ def parseArgs():
 
 
 def configSmtp(host, user, password):
-    ini_file = '../properties/grafana.ini'
+    ini_file = '/usr/share/ablestack/ablestack-wall/grafana/conf'
     config = configparser.ConfigParser()
 
     config.read(ini_file)
