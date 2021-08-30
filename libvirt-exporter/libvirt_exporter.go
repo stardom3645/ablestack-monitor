@@ -1444,8 +1444,20 @@ func CollectMoldMeta(ch chan<- prometheus.Metric) {
 }
 
 func main() {
+	var (
+		app           = kingpin.New("libvirt_exporter", "Prometheus metrics exporter for libvirt")
+		confPath      = app.Flag("conf.path", "confing path.").Default("./conf.json").String()
+		listenAddress = app.Flag("web.listen-address", "Address to listen on for web interface and telemetry.").Default(":3002").String()
+		metricsPath   = app.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
+		libvirtURI    = app.Flag("libvirt.uri", "Libvirt URI from which to extract metrics.").Default("qemu:///system").String()
+	)
+
+	kingpin.MustParse(app.Parse(os.Args[1:]))
+	
+	errorsMap = make(map[string]struct{})
+	
 	// Open config json file
-	jsonFile, err := os.Open("/root/conf.json")
+	jsonFile, err := os.Open(*confPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -1455,15 +1467,6 @@ func main() {
 
 	val, _ := ioutil.ReadAll(jsonFile)
 	byteValue = val
-
-	var (
-		app           = kingpin.New("libvirt_exporter", "Prometheus metrics exporter for libvirt")
-		listenAddress = app.Flag("web.listen-address", "Address to listen on for web interface and telemetry.").Default(":9177").String()
-		metricsPath   = app.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
-		libvirtURI    = app.Flag("libvirt.uri", "Libvirt URI from which to extract metrics.").Default("qemu:///system").String()
-	)
-	kingpin.MustParse(app.Parse(os.Args[1:]))
-	errorsMap = make(map[string]struct{})
 
 	exporter, err := NewLibvirtExporter(*libvirtURI)
 	if err != nil {
