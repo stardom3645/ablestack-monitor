@@ -706,11 +706,13 @@
           "exemplar": true,
           "expr": "avg(libvirt_domain_memory_stats_used_percent{domain=~\"i-.*\"})",
           "hide": false,
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "평균",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         },
         {
           "exemplar": true,
@@ -1165,5 +1167,5 @@
   "timezone": "",
   "title": "6. 사용자 가상머신 종합 현황",
   "uid": "uservm_overall",
-  "version": 1
+  "version": 0
 }

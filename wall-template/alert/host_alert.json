@@ -1818,13 +1818,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"cube-process-exporter\", matches=\"map[:node-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"cube-process-exporter\", matches=\"map[:node_exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "",
           "legendFormat": "{{instance}}",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "thresholds": [

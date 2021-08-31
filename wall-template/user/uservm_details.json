@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630309947578,
+  "iteration": 1630375934651,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -97,11 +97,13 @@
         {
           "exemplar": true,
           "expr": "libvirt_domain_info_virtual_cpus{domain=\"$vm\"}",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "vCPU 수",
@@ -335,22 +337,26 @@
           "expr": "100",
           "format": "time_series",
           "hide": true,
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "libvirt_domain_memory_stats_used_percent{domain=\"$vm\"}",
           "format": "time_series",
           "hide": false,
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "B",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "메모리 사용률",
@@ -405,27 +411,31 @@
           "exemplar": true,
           "expr": "libvirt_domain_block_stats_capacity_bytes{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"}",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "전체",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "libvirt_domain_block_stats_allocation{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"}",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "사용중",
-          "refId": "B"
+          "refId": "B",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "(libvirt_domain_block_stats_capacity_bytes{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"})\n-\n(libvirt_domain_block_stats_allocation{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"})",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "사용 가능",
-          "refId": "C"
+          "refId": "C",
+          "stepMode": "min"
         }
       ],
       "title": "Root 디스크 용량",
@@ -1008,7 +1018,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 22
+            "y": 2
           },
           "hiddenSeries": false,
           "id": 104,
@@ -1105,7 +1115,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 22
+            "y": 2
           },
           "hiddenSeries": false,
           "id": 127,
@@ -1198,7 +1208,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 30
+            "y": 10
           },
           "hiddenSeries": false,
           "id": 128,
@@ -1295,7 +1305,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 30
+            "y": 10
           },
           "hiddenSeries": false,
           "id": 102,
@@ -1388,7 +1398,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 38
+            "y": 18
           },
           "hiddenSeries": false,
           "id": 98,
@@ -1485,7 +1495,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 38
+            "y": 18
           },
           "hiddenSeries": false,
           "id": 129,
@@ -1578,7 +1588,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 46
+            "y": 26
           },
           "hiddenSeries": false,
           "id": 100,
@@ -1675,7 +1685,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 46
+            "y": 26
           },
           "hiddenSeries": false,
           "id": 130,
@@ -1783,7 +1793,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 55
+            "y": 3
           },
           "hiddenSeries": false,
           "id": 80,
@@ -1880,7 +1890,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 55
+            "y": 3
           },
           "hiddenSeries": false,
           "id": 86,
@@ -1974,7 +1984,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 63
+            "y": 11
           },
           "hiddenSeries": false,
           "id": 90,
@@ -2071,7 +2081,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 63
+            "y": 11
           },
           "hiddenSeries": false,
           "id": 131,
@@ -2165,7 +2175,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 71
+            "y": 19
           },
           "hiddenSeries": false,
           "id": 132,
@@ -2267,7 +2277,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 71
+            "y": 19
           },
           "hiddenSeries": false,
           "id": 92,
@@ -2366,7 +2376,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 79
+            "y": 27
           },
           "hiddenSeries": false,
           "id": 94,
@@ -2468,7 +2478,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 79
+            "y": 27
           },
           "hiddenSeries": false,
           "id": 133,
@@ -2567,7 +2577,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 87
+            "y": 35
           },
           "hiddenSeries": false,
           "id": 84,

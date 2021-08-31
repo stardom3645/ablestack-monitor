@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630309451435,
+  "iteration": 1630375849655,
   "links": [
     {
       "asDropdown": true,
@@ -275,12 +275,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{job=\"ccvm-process-exporter\", matches=\"map[:node-exporter]\"})",
+          "expr": "sum(namedprocess_namegroup_states{job=\"ccvm-process-exporter\", matches=\"map[:node_exporter]\"})",
           "format": "time_series",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "호스트 수집기",
@@ -367,10 +368,11 @@
           "exemplar": true,
           "expr": "sum(namedprocess_namegroup_states{job=\"ccvm-process-exporter\", matches=\"map[:process-exporter]\"})",
           "format": "time_series",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "프로세스 수집기",
@@ -455,12 +457,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{job=\"ccvm-process-exporter\", matches=\"map[:blackbox-exporter]\"})",
+          "expr": "sum(namedprocess_namegroup_states{job=\"ccvm-process-exporter\", matches=\"map[:blackbox_exporter]\"})",
           "format": "time_series",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "블랙박스 수집기",
@@ -533,11 +536,13 @@
         {
           "exemplar": true,
           "expr": "count(count(node_cpu_seconds_total{job=\"ccvm\"}) by (cpu))",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "vCPU 수",
@@ -696,11 +701,13 @@
         {
           "exemplar": true,
           "expr": "node_memory_MemTotal_bytes{job=\"ccvm\"}",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "메모리 합계",
@@ -769,22 +776,26 @@
           "expr": "((node_memory_MemTotal_bytes{job=\"ccvm\"} - node_memory_MemFree_bytes{job=\"ccvm\"}) / (node_memory_MemTotal_bytes{job=\"ccvm\"} )) * 100",
           "format": "time_series",
           "hide": true,
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "100 - ((node_memory_MemAvailable_bytes{job=\"ccvm\"} * 100) / node_memory_MemTotal_bytes{job=\"ccvm\"})",
           "format": "time_series",
           "hide": false,
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "B",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "메모리 사용률",
@@ -860,11 +871,13 @@
         {
           "exemplar": true,
           "expr": "((node_memory_SwapTotal_bytes{job=\"ccvm\"} - node_memory_SwapFree_bytes{job=\"ccvm\"}) / (node_memory_SwapTotal_bytes{job=\"ccvm\"} )) * 100",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "SWAP 사용률",
@@ -919,27 +932,31 @@
           "exemplar": true,
           "expr": "node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"ccvm\"}",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "전체",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "(node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"ccvm\"}) - (node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"ccvm\"})",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "사용중",
-          "refId": "B"
+          "refId": "B",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"ccvm\"}",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "사용 가능",
-          "refId": "C"
+          "refId": "C",
+          "stepMode": "min"
         }
       ],
       "title": "Root 디스크 용량",
@@ -1003,11 +1020,13 @@
         {
           "exemplar": true,
           "expr": "node_memory_SwapTotal_bytes{job=\"ccvm\"}",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "SWAP 합계",
@@ -1495,21 +1514,7 @@
                 "properties": [
                   {
                     "id": "mappings",
-                    "value": [
-                      {
-                        "options": {
-                          "0": {
-                            "index": 1,
-                            "text": "비활성"
-                          },
-                          "1": {
-                            "index": 0,
-                            "text": "활성"
-                          }
-                        },
-                        "type": "value"
-                      }
-                    ]
+                    "value": []
                   }
                 ]
               }
@@ -1519,7 +1524,7 @@
             "h": 4,
             "w": 6,
             "x": 0,
-            "y": 2
+            "y": 22
           },
           "id": 145,
           "options": {
@@ -1547,7 +1552,8 @@
               "instant": true,
               "interval": "",
               "legendFormat": "전체",
-              "refId": "A"
+              "refId": "A",
+              "stepMode": "min"
             },
             {
               "exemplar": true,
@@ -1628,7 +1634,7 @@
             "h": 4,
             "w": 6,
             "x": 6,
-            "y": 2
+            "y": 22
           },
           "id": 153,
           "options": {
@@ -1685,7 +1691,7 @@
             "h": 4,
             "w": 6,
             "x": 12,
-            "y": 2
+            "y": 22
           },
           "id": 156,
           "links": [],
@@ -1753,7 +1759,7 @@
             "h": 4,
             "w": 6,
             "x": 18,
-            "y": 2
+            "y": 22
           },
           "id": 149,
           "links": [],
@@ -1803,7 +1809,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 6
+            "y": 26
           },
           "hiddenSeries": false,
           "id": 121,
@@ -1903,7 +1909,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 6
+            "y": 26
           },
           "hiddenSeries": false,
           "id": 119,
@@ -2011,7 +2017,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 16
+            "y": 36
           },
           "hiddenSeries": false,
           "id": 117,
@@ -2125,7 +2131,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 16
+            "y": 36
           },
           "hiddenSeries": false,
           "id": 129,
@@ -2231,7 +2237,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 26
+            "y": 46
           },
           "hiddenSeries": false,
           "id": 131,
@@ -2343,7 +2349,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 26
+            "y": 46
           },
           "hiddenSeries": false,
           "id": 115,
@@ -2452,7 +2458,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 36
+            "y": 56
           },
           "hiddenSeries": false,
           "id": 113,
@@ -2564,7 +2570,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 36
+            "y": 56
           },
           "hiddenSeries": false,
           "id": 111,
@@ -2674,7 +2680,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 46
+            "y": 66
           },
           "height": "",
           "hiddenSeries": false,
@@ -2789,7 +2795,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 46
+            "y": 66
           },
           "height": "",
           "hiddenSeries": false,
@@ -2900,7 +2906,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 56
+            "y": 76
           },
           "height": "",
           "hiddenSeries": false,
@@ -3015,7 +3021,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 56
+            "y": 76
           },
           "height": "",
           "hiddenSeries": false,
@@ -3126,7 +3132,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 66
+            "y": 86
           },
           "height": "",
           "hiddenSeries": false,
@@ -3242,7 +3248,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 66
+            "y": 86
           },
           "height": "",
           "hiddenSeries": false,
@@ -3355,7 +3361,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 76
+            "y": 96
           },
           "height": "",
           "hiddenSeries": false,
@@ -3627,7 +3633,7 @@
             "h": 10,
             "w": 24,
             "x": 0,
-            "y": 3
+            "y": 23
           },
           "id": 171,
           "options": {
@@ -3730,7 +3736,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 13
+            "y": 33
           },
           "hiddenSeries": false,
           "id": 91,
@@ -3838,7 +3844,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 13
+            "y": 33
           },
           "hiddenSeries": false,
           "id": 89,
@@ -3946,7 +3952,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 23
+            "y": 43
           },
           "hiddenSeries": false,
           "id": 87,
@@ -4054,7 +4060,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 23
+            "y": 43
           },
           "hiddenSeries": false,
           "id": 85,
@@ -4162,7 +4168,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 33
+            "y": 53
           },
           "hiddenSeries": false,
           "id": 83,
@@ -4273,7 +4279,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 33
+            "y": 53
           },
           "hiddenSeries": false,
           "id": 81,
@@ -4394,7 +4400,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 4
+            "y": 24
           },
           "hiddenSeries": false,
           "id": 141,
@@ -4534,7 +4540,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 4
+            "y": 24
           },
           "hiddenSeries": false,
           "id": 143,
@@ -4677,7 +4683,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 12
+            "y": 32
           },
           "hiddenSeries": false,
           "id": 137,
@@ -4815,7 +4821,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 12
+            "y": 32
           },
           "hiddenSeries": false,
           "id": 139,
@@ -4952,7 +4958,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 20
+            "y": 40
           },
           "hiddenSeries": false,
           "id": 133,
@@ -5090,7 +5096,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 20
+            "y": 40
           },
           "hiddenSeries": false,
           "id": 135,
@@ -5263,5 +5269,5 @@
   "timezone": "",
   "title": "5. 클라우드센터 가상머신 상세 현황",
   "uid": "ccvm_details",
-  "version": 1
+  "version": 0
 }

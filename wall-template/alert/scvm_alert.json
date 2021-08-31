@@ -1237,9 +1237,11 @@
         {
           "exemplar": true,
           "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:ceph-mon]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "instant": false,
           "interval": "",
           "legendFormat": "{{instance}}",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "thresholds": [
@@ -2058,13 +2060,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:node-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:node_exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "",
           "legendFormat": "{{instance}}",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "thresholds": [

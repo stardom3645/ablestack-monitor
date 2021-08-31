@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630309404269,
+  "iteration": 1630375819991,
   "links": [
     {
       "asDropdown": true,
@@ -516,25 +516,31 @@
           "exemplar": true,
           "expr": "count(probe_success{pingip=~\"$hostips\"}) + 1",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "전체",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "sum(libvirt_domain_info_meta{domain=\"ccvm\"}) + sum(libvirt_domain_info_meta{domain=~\"scvm\"})",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "실행",
-          "refId": "B"
+          "refId": "B",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "(count(probe_success{pingip=~\"$hostips\"}) + 1) - (sum(libvirt_domain_info_meta{domain=\"ccvm\"}) + sum(libvirt_domain_info_meta{domain=\"scvm\"}))",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "정지",
-          "refId": "C"
+          "refId": "C",
+          "stepMode": "min"
         }
       ],
       "title": "시스템 VM 현황",
@@ -742,33 +748,41 @@
         {
           "exemplar": true,
           "expr": "sum(ceph_osd_up)",
+          "instant": true,
           "interval": "",
           "legendFormat": "UP",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "sum(ceph_osd_up == bool 0)",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "DOWN",
-          "refId": "C"
+          "refId": "C",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "sum(ceph_osd_in)",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "IN",
-          "refId": "B"
+          "refId": "B",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "sum(ceph_osd_in == bool 0)",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "OUT",
-          "refId": "D"
+          "refId": "D",
+          "stepMode": "min"
         }
       ],
       "title": "Glue 스토리지 디바이스 상태",
@@ -862,7 +876,8 @@
           "intervalFactor": 1,
           "legendFormat": "평균",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "호스트 CPU 평균",
@@ -2098,11 +2113,13 @@
           "exemplar": true,
           "expr": "avg(libvirt_domain_memory_stats_used_percent{domain=~\"i-.*\"})",
           "hide": false,
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "평균",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         },
         {
           "exemplar": true,
@@ -2308,5 +2325,5 @@
   "timezone": "",
   "title": "1. 종합 대시보드",
   "uid": "overall",
-  "version": 1
+  "version": 0
 }
