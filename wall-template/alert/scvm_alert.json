@@ -8,6 +8,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -17,6 +23,7 @@
   "graphTooltip": 0,
   "id": null,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -27,9 +34,9 @@
         "x": 0,
         "y": 0
       },
-      "id": 27,
+      "id": 19,
       "panels": [],
-      "title": "클라우드 센터 알람",
+      "title": "스토리지 센터 알람",
       "type": "row"
     },
     {
@@ -66,11 +73,7 @@
         "handler": 1,
         "name": "CPU 사용현황 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -93,7 +96,7 @@
         "y": 1
       },
       "hiddenSeries": false,
-      "id": 28,
+      "id": 22,
       "legend": {
         "alignAsTable": false,
         "avg": false,
@@ -111,7 +114,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -122,7 +125,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\",job=\"ccvm\"}[1m])) * 100)) / on (instance) group_left (nodename) node_uname_info{}",
+          "expr": "(100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\",job=\"scvm\"}[1m])) * 100)) / on (instance) group_left (nodename) node_uname_info{}",
           "hide": false,
           "interval": "",
           "legendFormat": "{{nodename}}",
@@ -216,11 +219,7 @@
         "handler": 1,
         "name": "메모리 사용률 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -243,7 +242,7 @@
         "y": 1
       },
       "hiddenSeries": false,
-      "id": 29,
+      "id": 23,
       "legend": {
         "alignAsTable": false,
         "avg": false,
@@ -261,7 +260,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -272,7 +271,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "100 - ((node_memory_MemAvailable_bytes{job=\"ccvm\"} * 100) / node_memory_MemTotal_bytes{job=\"ccvm\"}) / on (instance) group_left (nodename) node_uname_info{}",
+          "expr": "100 - ((node_memory_MemAvailable_bytes{job=\"scvm\"} * 100) / node_memory_MemTotal_bytes{job=\"scvm\"}) / on (instance) group_left (nodename) node_uname_info{}",
           "interval": "",
           "legendFormat": "{{nodename}}",
           "refId": "A"
@@ -338,7 +337,7 @@
           {
             "evaluator": {
               "params": [
-                10000000
+                1000000000
               ],
               "type": "gt"
             },
@@ -365,11 +364,7 @@
         "handler": 1,
         "name": "네트워크  트래픽 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -391,7 +386,7 @@
         "y": 1
       },
       "hiddenSeries": false,
-      "id": 53,
+      "id": 25,
       "legend": {
         "alignAsTable": false,
         "avg": false,
@@ -409,7 +404,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -420,7 +415,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "((sum by(instance) (\n  (\n  irate(node_network_receive_bytes_total{job=\"ccvm\",device!=\"lo\"}[1m])\n  ) +\n  (\n  irate(node_network_transmit_bytes_total{job=\"ccvm\",device!=\"lo\"}[1m])\n  ))\n  )\n  / on (instance) group_left (nodename) node_uname_info{}\n)",
+          "expr": "((sum by(instance) (\n  (\n  irate(node_network_receive_bytes_total{job=\"scvm\",device!=\"lo\"}[1m])\n  ) +\n  (\n  irate(node_network_transmit_bytes_total{job=\"scvm\",device!=\"lo\"}[1m])\n  ))\n  )\n  / on (instance) group_left (nodename) node_uname_info{}\n)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{nodename}}",
@@ -433,7 +428,7 @@
           "fill": true,
           "line": true,
           "op": "gt",
-          "value": 10000000,
+          "value": 1000000000,
           "visible": true
         }
       ],
@@ -513,11 +508,7 @@
         "handler": 1,
         "name": "디스크 읽기 지연 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -533,12 +524,10 @@
         "y": 1
       },
       "hiddenSeries": false,
-      "id": 51,
+      "id": 49,
       "legend": {
         "avg": false,
         "current": false,
-        "hideEmpty": false,
-        "hideZero": false,
         "max": false,
         "min": false,
         "show": false,
@@ -552,7 +541,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -563,8 +552,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(node_disk_read_time_seconds_total{job=\"ccvm\"}[1m]) / rate(node_disk_reads_completed_total{job=\"ccvm\"}[1m])",
+          "expr": "rate(node_disk_read_time_seconds_total{job=\"scvm\"}[1m]) / rate(node_disk_reads_completed_total{job=\"scvm\"}[1m])",
           "interval": "",
+          "intervalFactor": 1,
           "legendFormat": "{{instance}}-{{device}}",
           "refId": "A"
         }
@@ -580,17 +570,7 @@
         }
       ],
       "timeFrom": null,
-      "timeRegions": [
-        {
-          "$$hashKey": "object:8108",
-          "colorMode": "background6",
-          "fill": true,
-          "fillColor": "rgba(234, 112, 112, 0.12)",
-          "line": false,
-          "lineColor": "rgba(237, 46, 24, 0.60)",
-          "op": "time"
-        }
-      ],
+      "timeRegions": [],
       "timeShift": null,
       "title": "디스크 읽기 지연",
       "tooltip": {
@@ -623,7 +603,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": false
+          "show": true
         }
       ],
       "yaxis": {
@@ -665,11 +645,7 @@
         "handler": 1,
         "name": "디스크 쓰기 지연 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -685,7 +661,7 @@
         "y": 1
       },
       "hiddenSeries": false,
-      "id": 52,
+      "id": 50,
       "legend": {
         "avg": false,
         "current": false,
@@ -702,7 +678,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -713,7 +689,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(node_disk_write_time_seconds_total{job=\"ccvm\"}[1m]) / rate(node_disk_writes_completed_total{job=\"ccvm\"}[1m])",
+          "expr": "rate(node_disk_write_time_seconds_total{job=\"scvm\"}[1m]) / rate(node_disk_writes_completed_total{job=\"scvm\"}[1m])",
           "interval": "",
           "legendFormat": "{{instance}}-{{device}}",
           "refId": "A"
@@ -805,11 +781,7 @@
         "handler": 1,
         "name": "Root 디스크 사용률 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -825,7 +797,7 @@
         "y": 1
       },
       "hiddenSeries": false,
-      "id": 41,
+      "id": 40,
       "legend": {
         "avg": false,
         "current": false,
@@ -842,7 +814,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -853,7 +825,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "100 - ((node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"ccvm\"} * 100) / node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"ccvm\"}) / on (instance) group_left (nodename) node_uname_info{}",
+          "expr": "100 - ((node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"scvm\"} * 100) / node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"scvm\"}) / on (instance) group_left (nodename) node_uname_info{}",
           "interval": "",
           "legendFormat": "{{nodename}}",
           "refId": "A"
@@ -919,6 +891,280 @@
           {
             "evaluator": {
               "params": [
+                0.75
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "Glue 스토리지 사용률 alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Glue",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 18,
+        "y": 1
+      },
+      "hiddenSeries": false,
+      "id": 43,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.0-pre",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(ceph_osd_stat_bytes_used{})/sum(ceph_osd_stat_bytes{})",
+          "interval": "",
+          "legendFormat": "{{name}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 0.75,
+          "visible": true
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Glue 스토리지 사용률",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:3146",
+          "decimals": 0,
+          "format": "percentunit",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:3147",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "Glue 상태 alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Glue",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 1
+      },
+      "hiddenSeries": false,
+      "id": 45,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.0-pre",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "ceph_health_status{}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 1,
+          "visible": true
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Glue 상태",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:3761",
+          "decimals": 0,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": "2",
+          "min": "0",
+          "show": true
+        },
+        {
+          "$$hashKey": "object:3762",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
                 1
               ],
               "type": "lt"
@@ -944,20 +1190,15 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "Mold 상태 alert",
+        "name": "Glue mon 데몬 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "Wall",
-      "description": "",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -967,12 +1208,10 @@
         "y": 5
       },
       "hiddenSeries": false,
-      "id": 68,
+      "id": 60,
       "legend": {
         "avg": false,
         "current": false,
-        "hideEmpty": false,
-        "hideZero": false,
         "max": false,
         "min": false,
         "show": false,
@@ -986,7 +1225,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -997,13 +1236,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n  probe_success{pingip=~\".*:8080\"}\n),\n \"pingip\",\n \"$1\",\n \"pingip\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"ccvm-blackbox\"}",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:ceph-mon]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{pingip}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -1020,7 +1255,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Mold 상태",
+      "title": "Glue mon 데몬",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1036,17 +1271,702 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:1706",
+          "$$hashKey": "object:3761",
           "decimals": 0,
           "format": "short",
           "label": "",
           "logBase": 1,
-          "max": "1",
+          "max": null,
           "min": "0",
           "show": true
         },
         {
-          "$$hashKey": "object:1707",
+          "$$hashKey": "object:3762",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "Glue mgr 데몬 alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 3,
+        "y": 5
+      },
+      "hiddenSeries": false,
+      "id": 61,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.0-pre",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:ceph-mgr]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 1,
+          "visible": true
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Glue mgr 데몬",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:3761",
+          "decimals": 0,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "$$hashKey": "object:3762",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "Glue mds 데몬 alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 6,
+        "y": 5
+      },
+      "hiddenSeries": false,
+      "id": 62,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.0-pre",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:ceph-mds]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 1,
+          "visible": true
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Glue mds 데몬",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:3761",
+          "decimals": 0,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "$$hashKey": "object:3762",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "Glue rgw 데몬 alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 9,
+        "y": 5
+      },
+      "hiddenSeries": false,
+      "id": 63,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.0-pre",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:rgw]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 1,
+          "visible": true
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Glue rgw 데몬",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:3761",
+          "decimals": 0,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "$$hashKey": "object:3762",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "NFS 데몬 alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 12,
+        "y": 5
+      },
+      "hiddenSeries": false,
+      "id": 64,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.0-pre",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", exebase=\"ganesha.nfsd\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 1,
+          "visible": true
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "NFS 데몬",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:3761",
+          "decimals": 0,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "$$hashKey": "object:3762",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "iSCSI 데몬 alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 15,
+        "y": 5
+      },
+      "hiddenSeries": false,
+      "id": 65,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.0-pre",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:tcmu-runner]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 1,
+          "visible": true
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "iSCSI 데몬",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:3761",
+          "decimals": 0,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "$$hashKey": "object:3762",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1094,11 +2014,7 @@
         "handler": 1,
         "name": "호스트 수집기 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1110,11 +2026,11 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 3,
+        "x": 18,
         "y": 5
       },
       "hiddenSeries": false,
-      "id": 69,
+      "id": 66,
       "legend": {
         "avg": false,
         "current": false,
@@ -1131,7 +2047,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1142,7 +2058,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"ccvm-process-exporter\", matches=\"map[:node_exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"ccvm-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:node-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1238,11 +2154,7 @@
         "handler": 1,
         "name": "프로세스 수집기 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1254,11 +2166,11 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 6,
+        "x": 21,
         "y": 5
       },
       "hiddenSeries": false,
-      "id": 70,
+      "id": 67,
       "legend": {
         "avg": false,
         "current": false,
@@ -1275,7 +2187,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1286,7 +2198,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"ccvm-process-exporter\", matches=\"map[:process-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"ccvm-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:process-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1382,11 +2294,7 @@
         "handler": 1,
         "name": "가동 상태 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1403,7 +2311,7 @@
         "y": 9
       },
       "hiddenSeries": false,
-      "id": 75,
+      "id": 74,
       "legend": {
         "avg": false,
         "current": false,
@@ -1422,7 +2330,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1433,7 +2341,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "probe_success{pingip=~\".*\", job=\"ccvm-blackbox\"}",
+          "expr": "probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1510,7 +2418,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "클라우드 센터 알람 대시보드",
-  "uid": "ccvm_alert",
+  "title": "스토리지 센터 알람 대시보드",
+  "uid": "scvm_alert",
   "version": 1
 }

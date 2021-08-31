@@ -8,31 +8,23 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
-  "editable": true,
+  "editable": false,
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1628491665873,
-  "links": [
-    {
-      "asDropdown": true,
-      "icon": "external link",
-      "includeVars": false,
-      "keepTime": true,
-      "tags": [
-        "wall"
-      ],
-      "targetBlank": false,
-      "title": "Dashboard List",
-      "tooltip": "",
-      "type": "dashboards",
-      "url": ""
-    }
-  ],
+  "iteration": 1630309947578,
+  "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -100,7 +92,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "exemplar": true,
@@ -195,7 +187,7 @@
           "titleSize": 13
         }
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "exemplar": true,
@@ -265,7 +257,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "exemplar": true,
@@ -336,7 +328,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "exemplar": true,
@@ -407,11 +399,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "exemplar": true,
-          "expr": "node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"ccvm\"}",
+          "expr": "libvirt_domain_block_stats_capacity_bytes{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "전체",
@@ -419,7 +411,7 @@
         },
         {
           "exemplar": true,
-          "expr": "(node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"ccvm\"}) - (node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"ccvm\"})",
+          "expr": "libvirt_domain_block_stats_allocation{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"}",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -428,7 +420,7 @@
         },
         {
           "exemplar": true,
-          "expr": "node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"rootfs\", job=\"ccvm\"}",
+          "expr": "(libvirt_domain_block_stats_capacity_bytes{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"})\n-\n(libvirt_domain_block_stats_allocation{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"})",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -476,31 +468,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "domain"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "가상머신"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "instance"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "CUBE 호스트"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "target_device"
+              "options": "display_volume_name"
             },
             "properties": [
               {
@@ -540,11 +508,11 @@
           }
         ]
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5,libvirt_domain_block_stats_allocation{domain=~\"$vm\"} / libvirt_domain_block_stats_capacity_bytes{domain=~\"$vm\"} * 100)",
+          "expr": "topk(5,libvirt_domain_block_stats_allocation{domain=~\"$vm\"} / libvirt_domain_block_stats_capacity_bytes{domain=~\"$vm\"} * 100) / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=~\"i-.*\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -559,8 +527,8 @@
           "options": {
             "include": {
               "names": [
-                "target_device",
-                "Value"
+                "Value",
+                "display_volume_name"
               ]
             }
           }
@@ -581,6 +549,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Wall",
+      "decimals": 2,
       "fieldConfig": {
         "defaults": {
           "unit": "percent"
@@ -614,7 +583,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -681,6 +650,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Wall",
+      "decimals": 2,
       "description": "",
       "fill": 0,
       "fillGradient": 0,
@@ -708,7 +678,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -726,7 +696,7 @@
         },
         {
           "exemplar": true,
-          "expr": "libvirt_domain_info_memory_usage_bytes{domain=\"$vm\"} - libvirt_domain_memory_stats_available_bytes{domain=\"$vm\"}",
+          "expr": "libvirt_domain_info_memory_usage_bytes{domain=\"$vm\"} * libvirt_domain_memory_stats_used_percent{domain=\"$vm\"} / 100",
           "hide": false,
           "interval": "",
           "legendFormat": "Used",
@@ -791,6 +761,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Wall",
+      "decimals": null,
       "description": "",
       "fill": 1,
       "fillGradient": 0,
@@ -818,7 +789,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -835,16 +806,16 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(libvirt_domain_interface_stats_receive_bytes_total{domain=\"$vm\"}[1m])",
+          "expr": "irate(libvirt_domain_interface_stats_receive_bytes_total{domain=\"$vm\"}[1m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
           "interval": "",
-          "legendFormat": "recv {{target_device}}",
+          "legendFormat": "recv ( {{target_device}} - {{mac_address}} - {{mold_network_name}} )",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "irate(libvirt_domain_interface_stats_transmit_bytes_total{domain=\"$vm\"}[1m])",
+          "expr": "irate(libvirt_domain_interface_stats_transmit_bytes_total{domain=\"$vm\"}[1m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
           "interval": "",
-          "legendFormat": "trans {{target_device}}",
+          "legendFormat": "trans ( {{target_device}} - {{mac_address}} - {{mold_network_name}} )",
           "refId": "B"
         }
       ],
@@ -934,7 +905,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -951,22 +922,22 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(libvirt_domain_block_stats_read_bytes_total{domain=\"$vm\"}[1m])",
+          "expr": "irate(libvirt_domain_block_stats_read_bytes_total{domain=\"$vm\"}[1m]) / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=~\"i-.*\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "Read {{target_device}}",
+          "legendFormat": "Read ( {{target_device}} - {{mold_disk_name}} )",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "irate(libvirt_domain_block_stats_write_bytes_total{domain=\"$vm\"}[1m])",
+          "expr": "irate(libvirt_domain_block_stats_write_bytes_total{domain=\"$vm\"}[1m]) / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=~\"i-.*\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "Write {{target_device}}",
+          "legendFormat": "Write ( {{target_device}} - {{mold_disk_name}} )",
           "refId": "B"
         }
       ],
@@ -1037,7 +1008,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 2
+            "y": 22
           },
           "hiddenSeries": false,
           "id": 104,
@@ -1057,7 +1028,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1068,9 +1039,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "irate(libvirt_domain_interface_stats_receive_bytes_total{domain=~\"$vm\"}[5m])",
+              "expr": "irate(libvirt_domain_interface_stats_receive_bytes_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
               "refId": "A"
             }
           ],
@@ -1119,6 +1090,8 @@
         },
         {
           "aliasColors": {
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
             "vnet8": "orange"
           },
           "bars": false,
@@ -1132,7 +1105,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 2
+            "y": 22
           },
           "hiddenSeries": false,
           "id": 127,
@@ -1152,7 +1125,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1163,9 +1136,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "irate(libvirt_domain_interface_stats_transmit_bytes_total{domain=~\"$vm\"}[5m])",
+              "expr": "irate(libvirt_domain_interface_stats_transmit_bytes_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
               "refId": "A"
             }
           ],
@@ -1225,7 +1198,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 10
+            "y": 30
           },
           "hiddenSeries": false,
           "id": 128,
@@ -1245,7 +1218,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1256,9 +1229,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(libvirt_domain_interface_stats_receive_packets_total{domain=~\"$vm\"}[5m])",
+              "expr": "rate(libvirt_domain_interface_stats_receive_packets_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
               "refId": "A"
             }
           ],
@@ -1307,6 +1280,8 @@
         },
         {
           "aliasColors": {
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
             "vnet8": "orange"
           },
           "bars": false,
@@ -1320,7 +1295,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 10
+            "y": 30
           },
           "hiddenSeries": false,
           "id": 102,
@@ -1340,7 +1315,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1351,9 +1326,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(libvirt_domain_interface_stats_transmit_packets_total{domain=~\"$vm\"}[5m])",
+              "expr": "rate(libvirt_domain_interface_stats_transmit_packets_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
               "refId": "A"
             }
           ],
@@ -1413,7 +1388,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 18
+            "y": 38
           },
           "hiddenSeries": false,
           "id": 98,
@@ -1433,7 +1408,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1444,9 +1419,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(libvirt_domain_interface_stats_receive_errors_total{domain=~\"$vm\"}[5m])",
+              "expr": "rate(libvirt_domain_interface_stats_receive_errors_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
               "refId": "A"
             }
           ],
@@ -1495,6 +1470,8 @@
         },
         {
           "aliasColors": {
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
             "vnet8": "orange"
           },
           "bars": false,
@@ -1508,7 +1485,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 18
+            "y": 38
           },
           "hiddenSeries": false,
           "id": 129,
@@ -1528,7 +1505,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1539,9 +1516,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(libvirt_domain_interface_stats_transmit_errors_total{domain=~\"$vm\"}[5m])",
+              "expr": "rate(libvirt_domain_interface_stats_transmit_errors_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
               "refId": "A"
             }
           ],
@@ -1601,7 +1578,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 26
+            "y": 46
           },
           "hiddenSeries": false,
           "id": 100,
@@ -1621,7 +1598,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1632,9 +1609,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(libvirt_domain_interface_stats_receive_drops_total{domain=~\"$vm\"}[5m])",
+              "expr": "rate(libvirt_domain_interface_stats_receive_drops_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
               "refId": "B"
             }
           ],
@@ -1683,6 +1660,8 @@
         },
         {
           "aliasColors": {
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
             "vnet8": "orange"
           },
           "bars": false,
@@ -1696,7 +1675,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 26
+            "y": 46
           },
           "hiddenSeries": false,
           "id": 130,
@@ -1716,7 +1695,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1727,9 +1706,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(libvirt_domain_interface_stats_transmit_drops_total{domain=~\"$vm\"}[5m])",
+              "expr": "rate(libvirt_domain_interface_stats_transmit_drops_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
               "refId": "A"
             }
           ],
@@ -1804,7 +1783,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 3
+            "y": 55
           },
           "hiddenSeries": false,
           "id": 80,
@@ -1824,7 +1803,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1835,9 +1814,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "libvirt_domain_block_stats_capacity_bytes{domain=~\"$vm\"}",
+              "expr": "libvirt_domain_block_stats_capacity_bytes{domain=~\"$vm\"} / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{display_volume_name}}",
               "refId": "A"
             }
           ],
@@ -1887,7 +1866,8 @@
         },
         {
           "aliasColors": {
-            "vda": "orange"
+            "vda": "orange",
+            "vda ( ROOT-50 ) ": "yellow"
           },
           "bars": false,
           "dashLength": 10,
@@ -1900,7 +1880,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 3
+            "y": 55
           },
           "hiddenSeries": false,
           "id": 86,
@@ -1920,7 +1900,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1931,9 +1911,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "libvirt_domain_block_stats_physicalsize_bytes{domain=~\"$vm\"}",
+              "expr": "libvirt_domain_block_stats_allocation{domain=~\"$vm\"} / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{display_volume_name}}",
               "refId": "A"
             }
           ],
@@ -1941,10 +1921,10 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "디스크 물리 할당 크기 (bytes)",
+          "title": "디스크 사용량 (bytes)",
           "tooltip": {
             "shared": true,
-            "sort": 0,
+            "sort": 2,
             "value_type": "individual"
           },
           "type": "graph",
@@ -1994,7 +1974,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 11
+            "y": 63
           },
           "hiddenSeries": false,
           "id": 90,
@@ -2014,7 +1994,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2025,9 +2005,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "irate(libvirt_domain_block_stats_read_bytes_total{domain=~\"$vm\"}[5m])",
+              "expr": "irate(libvirt_domain_block_stats_read_bytes_total{domain=~\"$vm\"}[5m]) / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{display_volume_name}}",
               "refId": "A"
             }
           ],
@@ -2077,7 +2057,8 @@
         },
         {
           "aliasColors": {
-            "vda": "orange"
+            "vda": "orange",
+            "vda ( ROOT-50 ) ": "yellow"
           },
           "bars": false,
           "dashLength": 10,
@@ -2090,7 +2071,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 11
+            "y": 63
           },
           "hiddenSeries": false,
           "id": 131,
@@ -2110,7 +2091,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2121,9 +2102,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "irate(libvirt_domain_block_stats_write_bytes_total{domain=~\"$vm\"}[5m])",
+              "expr": "irate(libvirt_domain_block_stats_write_bytes_total{domain=~\"$vm\"}[5m]) / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{display_volume_name}}",
               "refId": "A"
             }
           ],
@@ -2184,7 +2165,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 19
+            "y": 71
           },
           "hiddenSeries": false,
           "id": 132,
@@ -2204,7 +2185,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2221,9 +2202,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "irate(libvirt_domain_block_stats_read_time_seconds_total{domain=~\"$vm\"}[5m])",
+              "expr": "irate(libvirt_domain_block_stats_read_time_seconds_total{domain=~\"$vm\"}[5m]) / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{display_volume_name}}",
               "refId": "A"
             }
           ],
@@ -2272,7 +2253,8 @@
         },
         {
           "aliasColors": {
-            "vda": "orange"
+            "vda": "orange",
+            "vda ( ROOT-50 ) ": "yellow"
           },
           "bars": false,
           "dashLength": 10,
@@ -2285,7 +2267,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 19
+            "y": 71
           },
           "hiddenSeries": false,
           "id": 92,
@@ -2305,7 +2287,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2322,9 +2304,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "irate(libvirt_domain_block_stats_write_time_seconds_total{domain=~\"$vm\"}[5m])",
+              "expr": "irate(libvirt_domain_block_stats_write_time_seconds_total{domain=~\"$vm\"}[5m]) / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{display_volume_name}}",
               "refId": "A"
             }
           ],
@@ -2384,7 +2366,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 27
+            "y": 79
           },
           "hiddenSeries": false,
           "id": 94,
@@ -2404,7 +2386,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2421,9 +2403,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "irate(libvirt_domain_block_stats_read_requests_total{domain=~\"$vm\"}[5m])",
+              "expr": "irate(libvirt_domain_block_stats_read_requests_total{domain=~\"$vm\"}[5m]) / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{display_volume_name}}",
               "refId": "A"
             }
           ],
@@ -2472,7 +2454,8 @@
         },
         {
           "aliasColors": {
-            "vda": "orange"
+            "vda": "orange",
+            "vda ( ROOT-50 ) ": "yellow"
           },
           "bars": false,
           "dashLength": 10,
@@ -2485,7 +2468,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 27
+            "y": 79
           },
           "hiddenSeries": false,
           "id": 133,
@@ -2505,7 +2488,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2522,9 +2505,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "irate(libvirt_domain_block_stats_write_requests_total{domain=~\"$vm\"}[5m])",
+              "expr": "irate(libvirt_domain_block_stats_write_requests_total{domain=~\"$vm\"}[5m]) / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{display_volume_name}}",
               "refId": "A"
             }
           ],
@@ -2584,7 +2567,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 35
+            "y": 87
           },
           "hiddenSeries": false,
           "id": 84,
@@ -2604,7 +2587,7 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "8.0.4",
+          "pluginVersion": "8.1.0-pre",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2615,9 +2598,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "irate(libvirt_domain_block_stats_flush_time_seconds_total{domain=~\"$vm\"}[5m])",
+              "expr": "irate(libvirt_domain_block_stats_flush_time_seconds_total{domain=~\"$vm\"}[5m]) / on (domain,target_device) group_left (display_volume_name, mold_disk_name) libvirt_domain_block_meta{domain=\"$vm\"}",
               "interval": "",
-              "legendFormat": "{{target_device}}",
+              "legendFormat": "{{display_volume_name}}",
               "refId": "A"
             }
           ],
@@ -2628,7 +2611,7 @@
           "title": "캐시 플러시 시간 (sec)",
           "tooltip": {
             "shared": true,
-            "sort": 0,
+            "sort": 2,
             "value_type": "individual"
           },
           "type": "graph",
@@ -2673,7 +2656,7 @@
   "schemaVersion": 30,
   "style": "dark",
   "tags": [
-    "wall"
+    "viewer"
   ],
   "templating": {
     "list": [
@@ -2681,21 +2664,48 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "i-12-50-VM",
-          "value": "i-12-50-VM"
+          "text": "7a98709a-e67c-4519-ad99-b630909c8411",
+          "value": "7a98709a-e67c-4519-ad99-b630909c8411"
         },
         "datasource": "Wall",
-        "definition": "label_values(libvirt_domain_info_meta{domain=~\"i-.*\"},domain)",
+        "definition": "label_values(libvirt_domain_info_meta{domain=~\"i-.*\"},uuid)",
         "description": "",
         "error": null,
-        "hide": 0,
+        "hide": 2,
+        "includeAll": false,
+        "label": "vm_uuid",
+        "multi": false,
+        "name": "vm_uuid",
+        "options": [],
+        "query": {
+          "query": "label_values(libvirt_domain_info_meta{domain=~\"i-.*\"},uuid)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "i-12-198-VM",
+          "value": "i-12-198-VM"
+        },
+        "datasource": "Wall",
+        "definition": "label_values(libvirt_domain_info_meta{uuid=\"$vm_uuid\"},domain)",
+        "description": "",
+        "error": null,
+        "hide": 2,
         "includeAll": false,
         "label": "vm",
         "multi": false,
         "name": "vm",
         "options": [],
         "query": {
-          "query": "label_values(libvirt_domain_info_meta{domain=~\"i-.*\"},domain)",
+          "query": "label_values(libvirt_domain_info_meta{uuid=\"$vm_uuid\"},domain)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -2710,9 +2720,23 @@
     "from": "now-1h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "hidden": false,
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
   "timezone": "",
-  "title": "7. 사용자 가상머신 별 상세 현황",
+  "title": "가상머신 상세 현황",
   "uid": "uservm_details",
   "version": 1
 }

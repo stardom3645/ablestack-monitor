@@ -8,6 +8,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -17,6 +23,7 @@
   "graphTooltip": 0,
   "id": null,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -66,11 +73,7 @@
         "handler": 1,
         "name": "CPU 사용률 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -111,7 +114,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -216,11 +219,7 @@
         "handler": 1,
         "name": "메모리 사용률 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -261,7 +260,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -365,11 +364,7 @@
         "handler": 1,
         "name": "네트워크  트래픽 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -409,7 +404,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -513,11 +508,7 @@
         "handler": 1,
         "name": "디스크 쓰기 지연 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -550,7 +541,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -653,11 +644,7 @@
         "handler": 1,
         "name": "디스크 읽기 지연 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -690,7 +677,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -793,11 +780,7 @@
         "handler": 1,
         "name": "Root 디스크 사용률 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -830,7 +813,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -934,11 +917,7 @@
         "handler": 1,
         "name": "CPU 온도 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -980,7 +959,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1089,11 +1068,7 @@
         "handler": 1,
         "name": "Cube 상태 (ablecube1) alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1129,7 +1104,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1237,11 +1212,7 @@
         "handler": 1,
         "name": "Mold 에이전트 (ablecube1) alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1274,7 +1245,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1285,7 +1256,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"cube-process-exporter\", matches=\"map[:cloudstack-agent]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"cube-process-exporter\", matches=\"map[:cloudstack-agent]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1381,11 +1352,7 @@
         "handler": 1,
         "name": "가상화 데몬 (ablecube1) alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1418,7 +1385,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1429,7 +1396,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"cube-process-exporter\", matches=\"map[:libvirtd]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"cube-process-exporter\", matches=\"map[:libvirtd]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1525,11 +1492,7 @@
         "handler": 1,
         "name": "가상머신 데몬 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1562,7 +1525,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1573,13 +1536,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"cube-process-exporter\", matches=~\".*qemu-kvm.*\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"cube-process-exporter\", matches=~\".*qemu-kvm.*\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "",
           "legendFormat": "{{instance}}",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "thresholds": [
@@ -1669,11 +1633,7 @@
         "handler": 1,
         "name": "가상화 수집기 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1706,7 +1666,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1717,13 +1677,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"cube-process-exporter\", matches=\"map[:libvirt_exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"cube-process-exporter\", matches=\"map[:libvirt-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "",
           "legendFormat": "{{instance}}",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "thresholds": [
@@ -1813,11 +1774,7 @@
         "handler": 1,
         "name": "호스트 수집기 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1850,7 +1807,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1861,7 +1818,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"cube-process-exporter\", matches=\"map[:node_exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"cube-process-exporter\", matches=\"map[:node-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1957,11 +1914,7 @@
         "handler": 1,
         "name": "프로세스 수집기 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1994,7 +1947,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2005,7 +1958,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"cube-process-exporter\", matches=\"map[:process-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"cube-process-exporter\", matches=\"map[:process-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -2101,11 +2054,7 @@
         "handler": 1,
         "name": "호스트 상태 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -2141,7 +2090,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2202,6 +2151,147 @@
         },
         {
           "$$hashKey": "object:1707",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "B",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "가상머신 수집기 상태 alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Wall",
+      "decimals": 0,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 3,
+        "y": 9
+      },
+      "hiddenSeries": false,
+      "id": 75,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.0-pre",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count(probe_success{job=\"cube-blackbox\"}) * 3 - sum(libvirt_up{job=\"libvirt\"} + libvirt_rbd_collect_up{job=\"libvirt\"} + libvirt_mold_collect_up{job=\"libvirt\"})",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "정지",
+          "refId": "B",
+          "stepMode": "min"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 1,
+          "visible": true
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "가상머신 수집기 상태",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:1200",
+          "decimals": 0,
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:1201",
           "format": "short",
           "label": null,
           "logBase": 1,

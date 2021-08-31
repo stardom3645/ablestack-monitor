@@ -84,6 +84,7 @@ type DiskTarget struct {
 }
 
 type Interface struct {
+	Mac	InterfaceMacAddress	`xml:"mac"`
 	Source      InterfaceSource      `xml:"source"`
 	Target      InterfaceTarget      `xml:"target"`
 	Virtualport InterfaceVirtualPort `xml:"virtualport"`
@@ -94,6 +95,10 @@ type InterfaceVirtualPort struct {
 }
 type InterfaceVirtualPortParam struct {
 	InterfaceID string `xml:"interfaceid,attr"`
+}
+
+type InterfaceMacAddress struct {
+	Address string `xml:"address,attr"`
 }
 
 type InterfaceSource struct {
