@@ -9,6 +9,9 @@ Copyright (c) 2021 ABLECLOUD Co. Ltd
 
 import configparser
 import argparse
+import json
+from ablestack import *
+
 
 '''
 함수명: parseArgs
@@ -34,7 +37,7 @@ def parseArgs():
 
 
 def configSmtp(host, user, password):
-    ini_file = '/usr/share/ablestack/ablestack-wall/grafana/conf'
+    ini_file = '/usr/share/ablestack/ablestack-wall/grafana/conf/defaults.ini'
     config = configparser.ConfigParser()
 
     config.read(ini_file)
@@ -55,6 +58,11 @@ def main():
 
     if (args.action) == 'config':
         configSmtp(args.host, args.user, args.password)
+
+    ret = createReturn(code=200, val="update smtp")
+    print(json.dumps(json.loads(ret), indent=4))
+
+    return ret
 
 
 if __name__ == "__main__":

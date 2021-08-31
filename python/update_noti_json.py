@@ -9,6 +9,7 @@ Copyright (c) 2021 ABLECLOUD Co. Ltd
 
 import json
 import sys
+from ablestack import *
 
 '''
 함수명 : updateJson
@@ -26,6 +27,10 @@ def updateJson():
 
     with open("../properties/notification.json", "w") as notificationJsonFile:
         json.dump(data, notificationJsonFile)
+
+    ret = createReturn(code=200, val="update notification json file")
+    print(json.dumps(json.loads(ret), indent=4))
+    return ret
 
 
 def main():

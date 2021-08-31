@@ -10,6 +10,8 @@ Copyright (c) 2021 ABLECLOUD Co. Ltd
 import requests
 import json
 import sys
+from ablestack import *
+
 
 '''
 함수명 : createApiKey
@@ -29,7 +31,9 @@ def createApiKey():
     data = '{"name":' + '"'+key_name+'"' + ', "role": "Admin"}'
 
     res = requests.post(url, data=data, headers=headers)
-    print(str(res.status_code) + "|" + res.text)
+    # print(str(res.status_code) + "|" + res.text)
+    ret = createReturn(code=res.status_code, val=res.text)
+    print(json.dumps(json.loads(ret), indent=4))
     if str(res.status_code) == '200':
 
         with open("../properties/api.json", "w") as apiJsonFile:
@@ -40,12 +44,14 @@ def createApiKey():
         key = data["key"]
         with open("../properties/api.key", "w") as apiKey:
             apiKey.write(key)
+    return ret
 
 
 def main():
     if len(sys.argv) == 3:
         try:
             createApiKey()
+
         except Exception as e:
             print('Update failed', e)
 

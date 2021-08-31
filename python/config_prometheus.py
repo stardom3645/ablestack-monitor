@@ -9,6 +9,8 @@ Copyright (c) 2021 ABLECLOUD Co. Ltd
 
 import yaml
 import argparse
+import json
+from ablestack import *
 
 
 # prometheus에서 수집하는 exporter 및 서비스 포트
@@ -188,18 +190,26 @@ def configYaml(cube, scvm, ccvm):
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube-blackbox':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeBlackboxConfig(
                 cube)
+            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
+                ccvm)
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm-blackbox':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmBlackboxConfig(
                 scvm)
+            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
+                ccvm)
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm-blackbox':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmBlackboxConfig(
+                ccvm)
+            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
                 ccvm)
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'blackbox-tcp':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeServiceConfig(cube) + moldServiceConfig(ccvm) + moldDBConfig(ccvm) + libvirtConfig(cube) + cubeNodeConfig(cube) + scvmNodeConfig(scvm) + ccvmNodeConfig(
                 ccvm) + cubeProcessConfig(cube) + scvmProcessConfig(scvm) + ccvmProcessConfig(ccvm) + cubeBlackboxConfig(cube) + scvmBlackboxConfig(scvm) + ccvmBlackboxConfig(ccvm)
+            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
+                ccvm)
 
         with open(prometheus_yml_path, 'w') as yaml_file:
             yaml_file.write(
@@ -211,6 +221,11 @@ def main():
 
     if (args.action) == 'config':
         configYaml(args.cube, args.scvm, args.ccvm)
+
+    ret = createReturn(code=200, val="update prometheus")
+    print(json.dumps(json.loads(ret), indent=4))
+
+    return ret
 
 
 if __name__ == "__main__":
