@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630283970792,
+  "iteration": 1630309404269,
   "links": [
     {
       "asDropdown": true,
@@ -39,6 +39,7 @@
       "url": ""
     }
   ],
+  "liveNow": false,
   "panels": [
     {
       "datasource": null,

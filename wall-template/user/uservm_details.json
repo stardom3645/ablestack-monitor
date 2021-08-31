@@ -22,8 +22,9 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630283790344,
+  "iteration": 1630309947578,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,

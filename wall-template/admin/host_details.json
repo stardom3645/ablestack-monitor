@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630283990672,
+  "iteration": 1630309439774,
   "links": [
     {
       "asDropdown": true,
@@ -39,6 +39,7 @@
       "url": ""
     }
   ],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -113,7 +114,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "node_time_seconds{instance=\"$host:9100\",job=\"cube\"} - node_boot_time_seconds{instance=\"$host:9100\",job=\"cube\"}",
+          "expr": "node_time_seconds{instance=\"$host:3003\",job=\"cube\"} - node_boot_time_seconds{instance=\"$host:3003\",job=\"cube\"}",
           "instant": true,
           "interval": "",
           "intervalFactor": 1,
@@ -249,7 +250,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(libvirt_domain_info_meta{domain=~\"i-.*\", instance=\"$host:9177\"})",
+          "expr": "count(libvirt_domain_info_meta{domain=~\"i-.*\", instance=\"$host:3002\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "사용자 VM",
@@ -257,7 +258,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(libvirt_domain_info_meta{domain=~\"s-.*|v-.*|r-.*\", instance=\"$host:9177\"})",
+          "expr": "count(libvirt_domain_info_meta{domain=~\"s-.*|v-.*|r-.*\", instance=\"$host:3002\"})",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -266,7 +267,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(libvirt_domain_info_meta{domain=~\"ccvm|scvm\", instance=\"$host:9177\"})",
+          "expr": "count(libvirt_domain_info_meta{domain=~\"ccvm|scvm\", instance=\"$host:3002\"})",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -333,7 +334,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(count(node_cpu_seconds_total{instance=\"$host:9100\",job=\"cube\"}) by (cpu))",
+          "expr": "count(count(node_cpu_seconds_total{instance=\"$host:3003\",job=\"cube\"}) by (cpu))",
           "instant": true,
           "interval": "",
           "intervalFactor": 1,
@@ -427,7 +428,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{instance=\"$host:9100\",mode=\"idle\",job=\"cube\"}[1m])) * 100)",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{instance=\"$host:3003\",mode=\"idle\",job=\"cube\"}[1m])) * 100)",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -497,7 +498,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "node_memory_MemTotal_bytes{instance=\"$host:9100\",job=\"cube\"}",
+          "expr": "node_memory_MemTotal_bytes{instance=\"$host:3003\",job=\"cube\"}",
           "instant": true,
           "interval": "",
           "intervalFactor": 1,
@@ -569,7 +570,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "100 - ((node_memory_MemAvailable_bytes{instance=\"$host:9100\",job=\"cube\"} * 100) / node_memory_MemTotal_bytes{instance=\"$host:9100\",job=\"cube\"})",
+          "expr": "100 - ((node_memory_MemAvailable_bytes{instance=\"$host:3003\",job=\"cube\"} * 100) / node_memory_MemTotal_bytes{instance=\"$host:3003\",job=\"cube\"})",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -652,7 +653,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "((node_memory_SwapTotal_bytes{instance=\"$host:9100\",job=\"cube\"} - node_memory_SwapFree_bytes{instance=\"$host:9100\",job=\"cube\"}) / (node_memory_SwapTotal_bytes{instance=\"$host:9100\",job=\"cube\"} )) * 100",
+          "expr": "((node_memory_SwapTotal_bytes{instance=\"$host:3003\",job=\"cube\"} - node_memory_SwapFree_bytes{instance=\"$host:3003\",job=\"cube\"}) / (node_memory_SwapTotal_bytes{instance=\"$host:3003\",job=\"cube\"} )) * 100",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
@@ -711,7 +712,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "node_filesystem_size_bytes{instance=\"$host:9100\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"}",
+          "expr": "node_filesystem_size_bytes{instance=\"$host:3003\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"}",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -720,7 +721,7 @@
         },
         {
           "exemplar": true,
-          "expr": "(node_filesystem_size_bytes{instance=\"$host:9100\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"}) - (node_filesystem_avail_bytes{instance=\"$host:9100\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"})",
+          "expr": "(node_filesystem_size_bytes{instance=\"$host:3003\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"}) - (node_filesystem_avail_bytes{instance=\"$host:3003\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"})",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -729,7 +730,7 @@
         },
         {
           "exemplar": true,
-          "expr": "node_filesystem_avail_bytes{instance=\"$host:9100\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"}",
+          "expr": "node_filesystem_avail_bytes{instance=\"$host:3003\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"}",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -797,7 +798,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "node_memory_SwapTotal_bytes{instance=\"$host:9100\",job=\"cube\"}",
+          "expr": "node_memory_SwapTotal_bytes{instance=\"$host:3003\",job=\"cube\"}",
           "instant": true,
           "interval": "",
           "intervalFactor": 1,
@@ -878,7 +879,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=\"map[:cloudstack-agent]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:3004\", matches=\"map[:cloudstack-agent]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -968,7 +969,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=\"map[:libvirtd]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:3004\", matches=\"map[:libvirtd]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1058,7 +1059,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=~\".*qemu-kvm.*\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:3004\", matches=~\".*qemu-kvm.*\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1148,7 +1149,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=\"map[:libvirt-exporter]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:3004\", matches=\"map[:libvirt-exporter]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1238,7 +1239,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=\"map[:process-exporter]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:3004\", matches=\"map[:process-exporter]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1328,7 +1329,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:9256\", matches=\"map[:node_exporter]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$host:3004\", matches=\"map[:node-exporter]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1398,7 +1399,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (mode) (\n  irate(node_cpu_seconds_total{instance=\"$host:9100\", job=\"cube\", mode=~\"(irq|nice|softirq|steal|system|user|iowait)\"}[1m])\n) / scalar(\n  sum(irate(node_cpu_seconds_total{instance=\"$host:9100\", job=\"cube\"}[1m]))\n) * 100",
+          "expr": "sum by (mode) (\n  irate(node_cpu_seconds_total{instance=\"$host:3003\", job=\"cube\", mode=~\"(irq|nice|softirq|steal|system|user|iowait)\"}[1m])\n) / scalar(\n  sum(irate(node_cpu_seconds_total{instance=\"$host:3003\", job=\"cube\"}[1m]))\n) * 100",
           "instant": false,
           "interval": "",
           "legendFormat": "{{mode}}",
@@ -1501,14 +1502,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "((node_memory_MemTotal_bytes{instance=~\"$host:9100\", job=\"cube\"}) - ((node_memory_MemFree_bytes{instance=~\"$host:9100\", job=\"cube\"}) + \n(node_memory_Cached_bytes{instance=~\"$host:9100\", job=\"cube\"}) + (node_memory_Buffers_bytes{instance=~\"$host:9100\", job=\"cube\"}) +\n(node_memory_Slab_bytes{instance=~\"$host:9100\", job=\"cube\"})))  / on (instance) group_left (nodename) node_uname_info{}",
+          "expr": "((node_memory_MemTotal_bytes{instance=~\"$host:3003\", job=\"cube\"}) - ((node_memory_MemFree_bytes{instance=~\"$host:3003\", job=\"cube\"}) + \n(node_memory_Cached_bytes{instance=~\"$host:3003\", job=\"cube\"}) + (node_memory_Buffers_bytes{instance=~\"$host:3003\", job=\"cube\"}) +\n(node_memory_Slab_bytes{instance=~\"$host:3003\", job=\"cube\"})))  / on (instance) group_left (nodename) node_uname_info{}",
           "interval": "",
           "legendFormat": "Used",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "node_memory_MemFree_bytes{instance=~\"$host:9100\", job=\"cube\"} ",
+          "expr": "node_memory_MemFree_bytes{instance=~\"$host:3003\", job=\"cube\"} ",
           "hide": false,
           "interval": "",
           "legendFormat": "Free",
@@ -1516,7 +1517,7 @@
         },
         {
           "exemplar": true,
-          "expr": "(node_memory_Cached_bytes{instance=~\"$host:9100\", job=\"cube\"})  + \n(node_memory_Buffers_bytes{instance=~\"$host:9100\", job=\"cube\"})  +\n(node_memory_Slab_bytes{instance=~\"$host:9100\", job=\"cube\"})\n",
+          "expr": "(node_memory_Cached_bytes{instance=~\"$host:3003\", job=\"cube\"})  + \n(node_memory_Buffers_bytes{instance=~\"$host:3003\", job=\"cube\"})  +\n(node_memory_Slab_bytes{instance=~\"$host:3003\", job=\"cube\"})\n",
           "hide": false,
           "interval": "",
           "legendFormat": "buffers/cache",
@@ -1524,7 +1525,7 @@
         },
         {
           "exemplar": true,
-          "expr": "node_memory_MemTotal_bytes{instance=~\"$host:9100\", job=\"cube\"}",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"$host:3003\", job=\"cube\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "Total",
@@ -1626,7 +1627,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+          "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=~\"$host:3003\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
@@ -1635,7 +1636,7 @@
         },
         {
           "exemplar": true,
-          "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+          "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=~\"$host:3003\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
@@ -1736,14 +1737,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(node_disk_reads_completed_total{instance=\"$host:9100\", job=\"cube\"}[1m])",
+          "expr": "irate(node_disk_reads_completed_total{instance=\"$host:3003\", job=\"cube\"}[1m])",
           "interval": "",
           "legendFormat": "Read ( {{device}} )",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "irate(node_disk_writes_completed_total{instance=\"$host:9100\", job=\"cube\"}[1m])",
+          "expr": "irate(node_disk_writes_completed_total{instance=\"$host:3003\", job=\"cube\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "Write ( {{device}} )",
@@ -1878,7 +1879,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "count(node_network_carrier{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
+              "expr": "count(node_network_carrier{instance=~\"$host:3003\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
               "format": "time_series",
               "hide": false,
               "instant": true,
@@ -1888,7 +1889,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum (node_network_carrier{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 1)",
+              "expr": "sum (node_network_carrier{instance=~\"$host:3003\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 1)",
               "hide": false,
               "instant": true,
               "interval": "",
@@ -1897,7 +1898,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum (node_network_carrier{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 0)",
+              "expr": "sum (node_network_carrier{instance=~\"$host:3003\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 0)",
               "hide": false,
               "instant": true,
               "interval": "",
@@ -1975,7 +1976,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "node_network_carrier{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
+              "expr": "node_network_carrier{instance=~\"$host:3003\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
               "format": "time_series",
               "instant": true,
               "interval": "",
@@ -2044,7 +2045,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "(node_network_carrier_up_changes_total{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
+              "expr": "(node_network_carrier_up_changes_total{instance=~\"$host:3003\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
               "format": "time_series",
               "instant": true,
               "interval": "",
@@ -2110,7 +2111,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "(node_network_carrier{instance=\"$host:9100\" ,job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == 1)  * on (device, instance) node_network_mtu_bytes{instance=\"$host:9100\" ,job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
+              "expr": "(node_network_carrier{instance=\"$host:3003\" ,job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == 1)  * on (device, instance) node_network_mtu_bytes{instance=\"$host:3003\" ,job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
               "format": "time_series",
               "instant": true,
               "interval": "",
@@ -2183,7 +2184,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=~\"$host:9100\",device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+              "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=~\"$host:3003\",device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
               "hide": false,
               "instant": false,
               "interval": "",
@@ -2281,7 +2282,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=~\"$host:9100\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+              "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=~\"$host:3003\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
               "hide": false,
               "interval": "",
               "intervalFactor": 1,
@@ -2392,7 +2393,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_receive_packets_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_receive_packets_total{instance=\"$host:3003\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -2505,7 +2506,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_transmit_packets_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_transmit_packets_total{instance=\"$host:3003\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -2616,7 +2617,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_receive_errs_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_receive_errs_total{instance=\"$host:3003\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -2726,7 +2727,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_transmit_errs_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_transmit_errs_total{instance=\"$host:3003\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -2836,7 +2837,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_receive_drop_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_receive_drop_total{instance=\"$host:3003\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -2946,7 +2947,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_transmit_drop_total{instance=\"$host:9100\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_transmit_drop_total{instance=\"$host:3003\",job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3058,7 +3059,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Icmp_InMsgs{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_netstat_Icmp_InMsgs{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3174,7 +3175,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Icmp_OutMsgs{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_netstat_Icmp_OutMsgs{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3286,7 +3287,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Udp_InDatagrams{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_netstat_Udp_InDatagrams{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3402,7 +3403,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Udp_OutDatagrams{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_netstat_Udp_OutDatagrams{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3514,7 +3515,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Tcp_InSegs{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_netstat_Tcp_InSegs{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "format": "time_series",
               "instant": false,
               "interval": "",
@@ -3631,7 +3632,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Tcp_OutSegs{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_netstat_Tcp_OutSegs{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "format": "time_series",
               "instant": false,
               "interval": "",
@@ -3745,7 +3746,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "node_netstat_Tcp_CurrEstab{instance=\"$host:9100\",job=\"cube\"}",
+              "expr": "node_netstat_Tcp_CurrEstab{instance=\"$host:3003\",job=\"cube\"}",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -3995,7 +3996,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "node_filesystem_size_bytes{instance=\"$host:9100\", job=\"cube\"}",
+              "expr": "node_filesystem_size_bytes{instance=\"$host:3003\", job=\"cube\"}",
               "format": "table",
               "instant": true,
               "interval": "",
@@ -4004,7 +4005,7 @@
             },
             {
               "exemplar": true,
-              "expr": "node_filesystem_size_bytes{instance=\"$host:9100\", job=\"cube\"} - node_filesystem_free_bytes{instance=\"$host:9100\", job=\"cube\"}",
+              "expr": "node_filesystem_size_bytes{instance=\"$host:3003\", job=\"cube\"} - node_filesystem_free_bytes{instance=\"$host:3003\", job=\"cube\"}",
               "format": "table",
               "hide": false,
               "instant": true,
@@ -4014,7 +4015,7 @@
             },
             {
               "exemplar": true,
-              "expr": "100 - (node_filesystem_free_bytes{instance=\"$host:9100\", job=\"cube\"} / node_filesystem_size_bytes{instance=\"$host:9100\", job=\"cube\"} * 100)",
+              "expr": "100 - (node_filesystem_free_bytes{instance=\"$host:3003\", job=\"cube\"} / node_filesystem_size_bytes{instance=\"$host:3003\", job=\"cube\"} * 100)",
               "format": "table",
               "hide": false,
               "instant": true,
@@ -4024,7 +4025,7 @@
             },
             {
               "exemplar": true,
-              "expr": "node_filesystem_device_error{instance=\"$host:9100\", job=\"cube\"}",
+              "expr": "node_filesystem_device_error{instance=\"$host:3003\", job=\"cube\"}",
               "format": "table",
               "hide": false,
               "instant": true,
@@ -4125,7 +4126,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_reads_completed_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_disk_reads_completed_total{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "interval": "",
               "intervalFactor": 1,
               "legendFormat": "{{device}}",
@@ -4234,7 +4235,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_writes_completed_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_disk_writes_completed_total{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "interval": "",
               "intervalFactor": 1,
               "legendFormat": "{{device}}",
@@ -4342,7 +4343,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_read_bytes_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_disk_read_bytes_total{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -4451,7 +4452,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_written_bytes_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_disk_written_bytes_total{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -4562,7 +4563,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_read_time_seconds_total{instance=\"$host:9100\",job=\"cube\"}[1m]) / rate(node_disk_reads_completed_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_disk_read_time_seconds_total{instance=\"$host:3003\",job=\"cube\"}[1m]) / rate(node_disk_reads_completed_total{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "hide": false,
               "interval": "",
               "intervalFactor": 1,
@@ -4673,7 +4674,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_write_time_seconds_total{instance=\"$host:9100\",job=\"cube\"}[1m]) / rate(node_disk_writes_completed_total{instance=\"$host:9100\",job=\"cube\"}[1m])",
+              "expr": "rate(node_disk_write_time_seconds_total{instance=\"$host:3003\",job=\"cube\"}[1m]) / rate(node_disk_writes_completed_total{instance=\"$host:3003\",job=\"cube\"}[1m])",
               "hide": false,
               "interval": "",
               "intervalFactor": 1,
@@ -4787,7 +4788,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"libvirtd\", instance=\"$host:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"libvirtd\", instance=\"$host:3004\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -4798,7 +4799,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"qemu-kvm\", instance=\"$host:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"qemu-kvm\", instance=\"$host:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4810,7 +4811,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"sshd\", instance=\"$host:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"sshd\", instance=\"$host:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4822,7 +4823,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(namedprocess_namegroup_num_procs{exebase=\"java\", instance=\"$host:9256\"})",
+              "expr": "(namedprocess_namegroup_num_procs{exebase=\"java\", instance=\"$host:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4834,7 +4835,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(namedprocess_namegroup_num_procs{exebase=\"node_exporter\", instance=\"$host:9256\"}) + on (instance) (namedprocess_namegroup_num_procs{exebase=\"libvirt-exporter\", instance=\"$host:9256\"}) + on (instance) (namedprocess_namegroup_num_procs{exebase=\"process-exporter\", instance=\"$host:9256\"})",
+              "expr": "(namedprocess_namegroup_num_procs{exebase=\"node_exporter\", instance=\"$host:3004\"}) + on (instance) (namedprocess_namegroup_num_procs{exebase=\"libvirt-exporter\", instance=\"$host:3004\"}) + on (instance) (namedprocess_namegroup_num_procs{exebase=\"process-exporter\", instance=\"$host:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4940,7 +4941,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"libvirtd\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"libvirtd\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4952,7 +4953,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"qemu-kvm\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"qemu-kvm\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4964,7 +4965,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"sshd\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"sshd\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4976,7 +4977,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"java\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"java\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4988,7 +4989,7 @@
             },
             {
               "exemplar": true,
-              "expr": " (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"node_exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"libvirt-exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"process-exporter\", instance=\"$host:9256\"}[1m])))",
+              "expr": " (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"node_exporter\", instance=\"$host:3004\"}[1m]))) + on (instance) (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"libvirt-exporter\", instance=\"$host:3004\"}[1m]))) + on (instance) (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"process-exporter\", instance=\"$host:3004\"}[1m])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5091,7 +5092,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"libvirtd\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"libvirtd\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -5102,7 +5103,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"qemu-kvm\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"qemu-kvm\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5114,7 +5115,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"sshd\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"sshd\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5126,7 +5127,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"java\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"java\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5138,7 +5139,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"node_exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"libvirt-exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"process-exporter\", instance=\"$host:9256\"}[1m])))",
+              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"node_exporter\", instance=\"$host:3004\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"libvirt-exporter\", instance=\"$host:3004\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"process-exporter\", instance=\"$host:3004\"}[1m])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5241,7 +5242,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"libvirtd\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"libvirtd\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -5252,7 +5253,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"qemu-kvm\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"qemu-kvm\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5264,7 +5265,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"sshd\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"sshd\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5276,7 +5277,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"java\", instance=\"$host:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"java\", instance=\"$host:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5288,7 +5289,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"node_exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"libvirt-exporter\", instance=\"$host:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"process-exporter\", instance=\"$host:9256\"}[1m])))",
+              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"node_exporter\", instance=\"$host:3004\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"libvirt-exporter\", instance=\"$host:3004\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"process-exporter\", instance=\"$host:3004\"}[1m])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5391,7 +5392,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirtd\", memtype=\"virtual\", instance=\"$host:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirtd\", memtype=\"virtual\", instance=\"$host:3004\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -5402,7 +5403,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"qemu-kvm\", memtype=\"virtual\", instance=\"$host:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"qemu-kvm\", memtype=\"virtual\", instance=\"$host:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5414,7 +5415,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"virtual\", instance=\"$host:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"virtual\", instance=\"$host:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5426,7 +5427,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"java\", memtype=\"virtual\", instance=\"$host:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"java\", memtype=\"virtual\", instance=\"$host:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5438,7 +5439,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"virtual\", instance=\"$host:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirt-exporter\", memtype=\"virtual\", instance=\"$host:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"virtual\", instance=\"$host:9256\"}))",
+              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"virtual\", instance=\"$host:3004\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirt-exporter\", memtype=\"virtual\", instance=\"$host:3004\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"virtual\", instance=\"$host:3004\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5541,7 +5542,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirtd\", memtype=\"resident\", instance=\"$host:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirtd\", memtype=\"resident\", instance=\"$host:3004\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -5552,7 +5553,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"qemu-kvm\", memtype=\"resident\", instance=\"$host:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"qemu-kvm\", memtype=\"resident\", instance=\"$host:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5564,7 +5565,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"resident\", instance=\"$host:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"resident\", instance=\"$host:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5576,7 +5577,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"java\", memtype=\"resident\", instance=\"$host:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"java\", memtype=\"resident\", instance=\"$host:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5588,7 +5589,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"resident\", instance=\"$host:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirt-exporter\", memtype=\"resident\", instance=\"$host:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"resident\", instance=\"$host:9256\"}))",
+              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"resident\", instance=\"$host:3004\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"libvirt-exporter\", memtype=\"resident\", instance=\"$host:3004\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"resident\", instance=\"$host:3004\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5694,7 +5695,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"qemu-kvm\", instance=\"$host:9256\", mode=\"user\"}[1m])",
+              "expr": "rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"qemu-kvm\", instance=\"$host:3004\", mode=\"user\"}[1m])",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5808,7 +5809,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "(namedprocess_namegroup_memory_bytes{exebase=\"qemu-kvm\", memtype=\"resident\", instance=\"$host:9256\"})",
+              "expr": "(namedprocess_namegroup_memory_bytes{exebase=\"qemu-kvm\", memtype=\"resident\", instance=\"$host:3004\"})",
               "format": "time_series",
               "instant": false,
               "interval": "",

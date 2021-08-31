@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630284009076,
+  "iteration": 1630309451435,
   "links": [
     {
       "asDropdown": true,
@@ -39,6 +39,7 @@
       "url": ""
     }
   ],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -274,7 +275,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{job=\"ccvm-process-exporter\", matches=\"map[:node_exporter]\"})",
+          "expr": "sum(namedprocess_namegroup_states{job=\"ccvm-process-exporter\", matches=\"map[:node-exporter]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -454,7 +455,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{job=\"ccvm-process-exporter\", matches=\"map[:blackbox_exporter]\"})",
+          "expr": "sum(namedprocess_namegroup_states{job=\"ccvm-process-exporter\", matches=\"map[:blackbox-exporter]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -4426,7 +4427,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"sshd\", instance=~\"$ccvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"sshd\", instance=~\"$ccvm:3004\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -4437,7 +4438,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"mysqld\", instance=~\"$ccvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"mysqld\", instance=~\"$ccvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4449,7 +4450,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"java\", instance=~\"$ccvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"java\", instance=~\"$ccvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4461,7 +4462,7 @@
             },
             {
               "exemplar": true,
-              "expr": "count(namedprocess_namegroup_num_procs{exebase=\"node_exporter\", instance=~\"$ccvm:9256\"}) +\ncount(namedprocess_namegroup_num_procs{exebase=\"process-exporter\", instance=~\"$ccvm:9256\"})",
+              "expr": "count(namedprocess_namegroup_num_procs{exebase=\"node_exporter\", instance=~\"$ccvm:3004\"}) +\ncount(namedprocess_namegroup_num_procs{exebase=\"process-exporter\", instance=~\"$ccvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4568,7 +4569,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"sshd\", instance=~\"$ccvm:9256\"}[1m])) ",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"sshd\", instance=~\"$ccvm:3004\"}[1m])) ",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4580,7 +4581,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"mysqld\", instance=~\"$ccvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"mysqld\", instance=~\"$ccvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4592,7 +4593,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"java\", instance=~\"$ccvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"java\", instance=~\"$ccvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4604,7 +4605,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"node_exporter\", instance=~\"$ccvm:9256\"}[1m]))) + on (instance) (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"process-exporter\", instance=~\"$ccvm:9256\"}[1m])))",
+              "expr": "(sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"node_exporter\", instance=~\"$ccvm:3004\"}[1m]))) + on (instance) (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"process-exporter\", instance=~\"$ccvm:3004\"}[1m])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4708,7 +4709,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"sshd\", instance=~\"$ccvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"sshd\", instance=~\"$ccvm:3004\"}[1m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -4719,7 +4720,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"mysqld\", instance=~\"$ccvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"mysqld\", instance=~\"$ccvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4731,7 +4732,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"java\", instance=~\"$ccvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"java\", instance=~\"$ccvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4743,7 +4744,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"node_exporter\", instance=~\"$ccvm:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"process-exporter\", instance=~\"$ccvm:9256\"}[1m])))",
+              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"node_exporter\", instance=~\"$ccvm:3004\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"process-exporter\", instance=~\"$ccvm:3004\"}[1m])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4846,7 +4847,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"sshd\", instance=~\"$ccvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"sshd\", instance=~\"$ccvm:3004\"}[1m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -4857,7 +4858,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"mysqld\", instance=~\"$ccvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"mysqld\", instance=~\"$ccvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4869,7 +4870,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"java\", instance=~\"$ccvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"java\", instance=~\"$ccvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4881,7 +4882,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"node_exporter\", instance=\"10.10.1.10:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"process-exporter\", instance=\"10.10.1.10:9256\"}[1m])))",
+              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"node_exporter\", instance=\"10.10.1.10:3004\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"process-exporter\", instance=\"10.10.1.10:3004\"}[1m])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4983,7 +4984,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"virtual\", instance=~\"$ccvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"virtual\", instance=~\"$ccvm:3004\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -4994,7 +4995,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"mysqld\", memtype=\"virtual\", instance=~\"$ccvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"mysqld\", memtype=\"virtual\", instance=~\"$ccvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5006,7 +5007,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"java\", memtype=\"virtual\", instance=~\"$ccvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"java\", memtype=\"virtual\", instance=~\"$ccvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5018,7 +5019,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"virtual\", instance=~\"$ccvm:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"virtual\", instance=~\"$ccvm:9256\"}))",
+              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"virtual\", instance=~\"$ccvm:3004\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"virtual\", instance=~\"$ccvm:3004\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5121,7 +5122,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"resident\", instance=~\"$ccvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"resident\", instance=~\"$ccvm:3004\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -5132,7 +5133,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"mysqld\", memtype=\"resident\", instance=~\"$ccvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"mysqld\", memtype=\"resident\", instance=~\"$ccvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5144,7 +5145,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"java\", memtype=\"resident\", instance=~\"$ccvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"java\", memtype=\"resident\", instance=~\"$ccvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5156,7 +5157,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"resident\", instance=~\"$ccvm:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"resident\", instance=~\"$ccvm:9256\"}))",
+              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"resident\", instance=~\"$ccvm:3004\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"resident\", instance=~\"$ccvm:3004\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",

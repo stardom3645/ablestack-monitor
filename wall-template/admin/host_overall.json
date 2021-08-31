@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630283982462,
+  "iteration": 1630309432215,
   "links": [
     {
       "asDropdown": true,
@@ -39,6 +39,7 @@
       "url": ""
     }
   ],
+  "liveNow": false,
   "panels": [
     {
       "cacheTimeout": null,
@@ -316,7 +317,8 @@
           "instant": true,
           "interval": "",
           "legendFormat": "전체",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
@@ -1355,5 +1357,5 @@
   "timezone": "",
   "title": "2. 호스트 종합 현황",
   "uid": "host_overall",
-  "version": 1
+  "version": 2
 }

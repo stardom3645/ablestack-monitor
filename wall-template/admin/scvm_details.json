@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630283997675,
+  "iteration": 1630309445933,
   "links": [
     {
       "asDropdown": true,
@@ -39,6 +39,7 @@
       "url": ""
     }
   ],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -107,7 +108,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "node_time_seconds{instance=\"$scvm:9101\", job=\"scvm\"} - node_boot_time_seconds{instance=\"$scvm:9101\", job=\"scvm\"}",
+          "expr": "node_time_seconds{instance=\"$scvm:3003\", job=\"scvm\"} - node_boot_time_seconds{instance=\"$scvm:3003\", job=\"scvm\"}",
           "instant": true,
           "interval": "",
           "intervalFactor": 2,
@@ -315,7 +316,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(count(node_cpu_seconds_total{instance=\"$scvm:9101\", job=\"scvm\"}) by (cpu))",
+          "expr": "count(count(node_cpu_seconds_total{instance=\"$scvm:3003\", job=\"scvm\"}) by (cpu))",
           "instant": true,
           "interval": "",
           "intervalFactor": 1,
@@ -409,7 +410,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{instance=\"$scvm:9101\", mode=\"idle\", job=\"scvm\"}[1m])) * 100)",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{instance=\"$scvm:3003\", mode=\"idle\", job=\"scvm\"}[1m])) * 100)",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -479,7 +480,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "node_memory_MemTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"}",
+          "expr": "node_memory_MemTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"}",
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -550,7 +551,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "100 - ((node_memory_MemAvailable_bytes{instance=\"$scvm:9101\", job=\"scvm\"} * 100) / node_memory_MemTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"})",
+          "expr": "100 - ((node_memory_MemAvailable_bytes{instance=\"$scvm:3003\", job=\"scvm\"} * 100) / node_memory_MemTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"})",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -620,7 +621,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "node_memory_SwapTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"}",
+          "expr": "node_memory_SwapTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"}",
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -700,7 +701,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "((node_memory_SwapTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"} - node_memory_SwapFree_bytes{instance=\"$scvm:9101\", job=\"scvm\"}) / (node_memory_SwapTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"} )) * 100",
+          "expr": "((node_memory_SwapTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"} - node_memory_SwapFree_bytes{instance=\"$scvm:3003\", job=\"scvm\"}) / (node_memory_SwapTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"} )) * 100",
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -759,7 +760,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "node_filesystem_size_bytes{instance=\"$scvm:9101\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}",
+          "expr": "node_filesystem_size_bytes{instance=\"$scvm:3003\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "전체",
@@ -767,7 +768,7 @@
         },
         {
           "exemplar": true,
-          "expr": "(node_filesystem_size_bytes{instance=\"$scvm:9101\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}) - (node_filesystem_avail_bytes{instance=\"$scvm:9101\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"})",
+          "expr": "(node_filesystem_size_bytes{instance=\"$scvm:3003\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}) - (node_filesystem_avail_bytes{instance=\"$scvm:3003\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"})",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -776,7 +777,7 @@
         },
         {
           "exemplar": true,
-          "expr": "node_filesystem_avail_bytes{instance=\"$scvm:9101\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}",
+          "expr": "node_filesystem_avail_bytes{instance=\"$scvm:3003\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -856,7 +857,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:9256\", matches=\"map[:ceph-mon]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:3004\", matches=\"map[:ceph-mon]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -956,7 +957,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:9256\", matches=\"map[:ceph-mgr]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:3004\", matches=\"map[:ceph-mgr]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1056,7 +1057,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:9256\", matches=\"map[:ceph-mds]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:3004\", matches=\"map[:ceph-mds]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1156,7 +1157,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:9256\", matches=\"map[:rgw]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:3004\", matches=\"map[:rgw]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1246,7 +1247,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:9256\", exebase=\"ganesha.nfsd\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:3004\", exebase=\"ganesha.nfsd\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1336,7 +1337,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:9256\", matches=\"map[:tcmu-runner]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:3004\", matches=\"map[:tcmu-runner]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1426,7 +1427,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:9256\", matches=\"map[:node_exporter]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:3004\", matches=\"map[:node-exporter]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1516,7 +1517,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:9256\", matches=\"map[:process-exporter]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:3004\", matches=\"map[:process-exporter]\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1586,7 +1587,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (mode) (\n  irate(node_cpu_seconds_total{instance=\"$scvm:9101\", job=\"scvm\", mode=~\"(irq|nice|softirq|steal|system|user|iowait)\"}[1m])\n) / scalar(\n  sum(irate(node_cpu_seconds_total{instance=\"$scvm:9101\", job=\"scvm\", }[1m]))\n) * 100",
+          "expr": "sum by (mode) (\n  irate(node_cpu_seconds_total{instance=\"$scvm:3003\", job=\"scvm\", mode=~\"(irq|nice|softirq|steal|system|user|iowait)\"}[1m])\n) / scalar(\n  sum(irate(node_cpu_seconds_total{instance=\"$scvm:3003\", job=\"scvm\", }[1m]))\n) * 100",
           "instant": false,
           "interval": "",
           "legendFormat": "{{mode}}",
@@ -1689,14 +1690,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "((node_memory_MemTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"}) - ((node_memory_MemFree_bytes{instance=\"$scvm:9101\", job=\"scvm\"}) + \n(node_memory_Cached_bytes{instance=\"$scvm:9101\", job=\"scvm\"}) + (node_memory_Buffers_bytes{instance=\"$scvm:9101\", job=\"scvm\"}) +\n(node_memory_Slab_bytes{instance=\"$scvm:9101\", job=\"scvm\"})))  / on (instance) group_left (nodename) node_uname_info{}",
+          "expr": "((node_memory_MemTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"}) - ((node_memory_MemFree_bytes{instance=\"$scvm:3003\", job=\"scvm\"}) + \n(node_memory_Cached_bytes{instance=\"$scvm:3003\", job=\"scvm\"}) + (node_memory_Buffers_bytes{instance=\"$scvm:3003\", job=\"scvm\"}) +\n(node_memory_Slab_bytes{instance=\"$scvm:3003\", job=\"scvm\"})))  / on (instance) group_left (nodename) node_uname_info{}",
           "interval": "",
           "legendFormat": "Used",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "node_memory_MemFree_bytes{instance=\"$scvm:9101\", job=\"scvm\"} ",
+          "expr": "node_memory_MemFree_bytes{instance=\"$scvm:3003\", job=\"scvm\"} ",
           "hide": false,
           "interval": "",
           "legendFormat": "Free",
@@ -1704,7 +1705,7 @@
         },
         {
           "exemplar": true,
-          "expr": "(node_memory_Cached_bytes{instance=\"$scvm:9101\", job=\"scvm\"})  + \n(node_memory_Buffers_bytes{instance=\"$scvm:9101\", job=\"scvm\"})  +\n(node_memory_Slab_bytes{instance=\"$scvm:9101\", job=\"scvm\"})",
+          "expr": "(node_memory_Cached_bytes{instance=\"$scvm:3003\", job=\"scvm\"})  + \n(node_memory_Buffers_bytes{instance=\"$scvm:3003\", job=\"scvm\"})  +\n(node_memory_Slab_bytes{instance=\"$scvm:3003\", job=\"scvm\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "buffers/cache",
@@ -1712,7 +1713,7 @@
         },
         {
           "exemplar": true,
-          "expr": "node_memory_MemTotal_bytes{instance=\"$scvm:9101\", job=\"scvm\"}",
+          "expr": "node_memory_MemTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "Total",
@@ -1814,7 +1815,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+          "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
@@ -1823,7 +1824,7 @@
         },
         {
           "exemplar": true,
-          "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+          "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
@@ -1923,14 +1924,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(node_disk_reads_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+          "expr": "irate(node_disk_reads_completed_total{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
           "interval": "",
           "legendFormat": "Read ( {{device}} )",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "irate(node_disk_writes_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+          "expr": "irate(node_disk_writes_completed_total{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "Write ( {{device}} )",
@@ -2064,7 +2065,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "count(node_network_carrier{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
+              "expr": "count(node_network_carrier{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
               "format": "time_series",
               "hide": false,
               "instant": true,
@@ -2074,7 +2075,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum (node_network_carrier{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 1)",
+              "expr": "sum (node_network_carrier{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 1)",
               "hide": false,
               "instant": true,
               "interval": "",
@@ -2083,7 +2084,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum (node_network_carrier{instance=\"$scvm:9101\", job=\"scvm\",  device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 0)",
+              "expr": "sum (node_network_carrier{instance=\"$scvm:3003\", job=\"scvm\",  device=~\"e.+\", device!~\"e.+\\\\..+\"} == bool 0)",
               "hide": false,
               "instant": true,
               "interval": "",
@@ -2161,7 +2162,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "node_network_carrier{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
+              "expr": "node_network_carrier{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
               "format": "time_series",
               "instant": true,
               "interval": "",
@@ -2219,7 +2220,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "(node_network_carrier_up_changes_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
+              "expr": "(node_network_carrier_up_changes_total{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"})",
               "format": "time_series",
               "instant": true,
               "interval": "",
@@ -2287,7 +2288,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "(node_network_carrier{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == 1)  * on (device, instance) node_network_mtu_bytes{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
+              "expr": "(node_network_carrier{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"} == 1)  * on (device, instance) node_network_mtu_bytes{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}",
               "format": "time_series",
               "instant": true,
               "interval": "",
@@ -2359,7 +2360,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+              "expr": "sum by (device) (\n  irate(node_network_receive_bytes_total{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
               "hide": false,
               "instant": false,
               "interval": "",
@@ -2456,7 +2457,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
+              "expr": "sum by (device) (\n  irate(node_network_transmit_bytes_total{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n)",
               "hide": false,
               "interval": "",
               "intervalFactor": 1,
@@ -2566,7 +2567,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_receive_packets_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_receive_packets_total{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -2678,7 +2679,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_transmit_packets_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_transmit_packets_total{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -2788,7 +2789,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_receive_errs_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_receive_errs_total{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -2897,7 +2898,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_transmit_errs_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_transmit_errs_total{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3006,7 +3007,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_receive_drop_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_receive_drop_total{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3115,7 +3116,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_network_transmit_drop_total{instance=\"$scvm:9101\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
+              "expr": "rate(node_network_transmit_drop_total{instance=\"$scvm:3003\", job=\"scvm\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3226,7 +3227,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Icmp_InMsgs{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_netstat_Icmp_InMsgs{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3341,7 +3342,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Icmp_OutMsgs{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_netstat_Icmp_OutMsgs{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3452,7 +3453,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Udp_InDatagrams{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_netstat_Udp_InDatagrams{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3567,7 +3568,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Udp_OutDatagrams{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_netstat_Udp_OutDatagrams{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3678,7 +3679,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Tcp_InSegs{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_netstat_Tcp_InSegs{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "format": "time_series",
               "instant": false,
               "interval": "",
@@ -3794,7 +3795,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_netstat_Tcp_OutSegs{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_netstat_Tcp_OutSegs{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "format": "time_series",
               "instant": false,
               "interval": "",
@@ -3907,7 +3908,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "node_netstat_Tcp_CurrEstab{instance=\"$scvm:9101\", job=\"scvm\"}",
+              "expr": "node_netstat_Tcp_CurrEstab{instance=\"$scvm:3003\", job=\"scvm\"}",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -4152,7 +4153,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "node_filesystem_size_bytes{instance=\"$scvm:9101\", job=\"scvm\"}",
+              "expr": "node_filesystem_size_bytes{instance=\"$scvm:3003\", job=\"scvm\"}",
               "format": "table",
               "instant": true,
               "interval": "",
@@ -4161,7 +4162,7 @@
             },
             {
               "exemplar": true,
-              "expr": "node_filesystem_size_bytes{instance=\"$scvm:9101\", job=\"scvm\"} - node_filesystem_free_bytes{instance=\"$scvm:9101\", job=\"scvm\"}",
+              "expr": "node_filesystem_size_bytes{instance=\"$scvm:3003\", job=\"scvm\"} - node_filesystem_free_bytes{instance=\"$scvm:3003\", job=\"scvm\"}",
               "format": "table",
               "hide": false,
               "instant": true,
@@ -4171,7 +4172,7 @@
             },
             {
               "exemplar": true,
-              "expr": "100 - (node_filesystem_free_bytes{instance=\"$scvm:9101\", job=\"scvm\"} / node_filesystem_size_bytes{instance=\"$scvm:9101\", job=\"scvm\"} * 100)",
+              "expr": "100 - (node_filesystem_free_bytes{instance=\"$scvm:3003\", job=\"scvm\"} / node_filesystem_size_bytes{instance=\"$scvm:3003\", job=\"scvm\"} * 100)",
               "format": "table",
               "hide": false,
               "instant": true,
@@ -4181,7 +4182,7 @@
             },
             {
               "exemplar": true,
-              "expr": "node_filesystem_device_error{instance=\"$scvm:9101\", job=\"scvm\"}",
+              "expr": "node_filesystem_device_error{instance=\"$scvm:3003\", job=\"scvm\"}",
               "format": "table",
               "hide": false,
               "instant": true,
@@ -4283,7 +4284,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_reads_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_disk_reads_completed_total{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "interval": "",
               "intervalFactor": 1,
               "legendFormat": "{{device}}",
@@ -4391,7 +4392,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_writes_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_disk_writes_completed_total{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "interval": "",
               "intervalFactor": 1,
               "legendFormat": "{{device}}",
@@ -4498,7 +4499,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_read_bytes_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_disk_read_bytes_total{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -4606,7 +4607,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_written_bytes_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_disk_written_bytes_total{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -4716,7 +4717,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_read_time_seconds_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m]) / rate(node_disk_reads_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_disk_read_time_seconds_total{instance=\"$scvm:3003\", job=\"scvm\"}[1m]) / rate(node_disk_reads_completed_total{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "hide": false,
               "interval": "",
               "intervalFactor": 1,
@@ -4826,7 +4827,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "rate(node_disk_write_time_seconds_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m]) / rate(node_disk_writes_completed_total{instance=\"$scvm:9101\", job=\"scvm\"}[1m])",
+              "expr": "rate(node_disk_write_time_seconds_total{instance=\"$scvm:3003\", job=\"scvm\"}[1m]) / rate(node_disk_writes_completed_total{instance=\"$scvm:3003\", job=\"scvm\"}[1m])",
               "hide": false,
               "interval": "",
               "intervalFactor": 1,
@@ -5600,7 +5601,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"sshd\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"sshd\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -5611,7 +5612,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-mon\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-mon\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5623,7 +5624,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-mgr\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-mgr\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5635,7 +5636,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-mds\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-mds\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5647,7 +5648,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-osd\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"ceph-osd\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5659,7 +5660,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"radosgw\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_num_procs{exebase=\"radosgw\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5671,7 +5672,7 @@
             },
             {
               "exemplar": true,
-              "expr": "count(namedprocess_namegroup_num_procs{exebase=\"node_exporter\", instance=\"$scvm:9256\"}) +\ncount(namedprocess_namegroup_num_procs{exebase=\"process-exporter\", instance=\"$scvm:9256\"})",
+              "expr": "count(namedprocess_namegroup_num_procs{exebase=\"node_exporter\", instance=\"$scvm:3004\"}) +\ncount(namedprocess_namegroup_num_procs{exebase=\"process-exporter\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5777,7 +5778,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"sshd\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"sshd\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5789,7 +5790,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-mon\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-mon\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5801,7 +5802,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-mgr\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-mgr\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5813,7 +5814,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-mds\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-mds\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5825,7 +5826,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-osd\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"ceph-osd\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5837,7 +5838,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"radosgw\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"radosgw\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5849,7 +5850,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"node_exporter\", instance=\"$scvm:9256\"}[1m]))) + on (instance) (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"process-exporter\", instance=\"$scvm:9256\"}[1m])))",
+              "expr": "(sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"node_exporter\", instance=\"$scvm:3004\"}[1m]))) + on (instance) (sum by (exebase, instance) (rate(namedprocess_namegroup_cpu_seconds_total{exebase=\"process-exporter\", instance=\"$scvm:3004\"}[1m])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5952,7 +5953,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"sshd\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"sshd\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -5963,7 +5964,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-mon\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-mon\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5975,7 +5976,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-mgr\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-mgr\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5987,7 +5988,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-mds\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-mds\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5999,7 +6000,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-osd\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"ceph-osd\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6011,7 +6012,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"radosgw\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"radosgw\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6023,7 +6024,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"node_exporter\", instance=\"$scvm:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"process-exporter\", instance=\"$scvm:9256\"}[1m])))",
+              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"node_exporter\", instance=\"$scvm:3004\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_read_bytes_total{exebase=\"process-exporter\", instance=\"$scvm:3004\"}[1m])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6125,7 +6126,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"sshd\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"sshd\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -6136,7 +6137,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-mon\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-mon\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6148,7 +6149,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-mgr\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-mgr\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6160,7 +6161,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-mds\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-mds\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6172,7 +6173,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-osd\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"ceph-osd\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6184,7 +6185,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"radosgw\", instance=\"$scvm:9256\"}[1m]))",
+              "expr": "sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"radosgw\", instance=\"$scvm:3004\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6196,7 +6197,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"node_exporter\", instance=\"$scvm:9256\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"process-exporter\", instance=\"$scvm:9256\"}[1m])))",
+              "expr": "(sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"node_exporter\", instance=\"$scvm:3004\"}[1m]))) + on (instance) (sum by (exebase) (rate(namedprocess_namegroup_write_bytes_total{exebase=\"process-exporter\", instance=\"$scvm:3004\"}[1m])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6298,7 +6299,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"virtual\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -6309,7 +6310,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mon\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mon\", memtype=\"virtual\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6321,7 +6322,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mgr\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mgr\", memtype=\"virtual\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6333,7 +6334,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mds\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mds\", memtype=\"virtual\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6345,7 +6346,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-osd\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-osd\", memtype=\"virtual\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6357,7 +6358,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"radosgw\", memtype=\"virtual\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"radosgw\", memtype=\"virtual\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6369,7 +6370,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"virtual\", instance=\"$scvm:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"virtual\", instance=\"$scvm:9256\"}))",
+              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"virtual\", instance=\"$scvm:3004\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"virtual\", instance=\"$scvm:3004\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6472,7 +6473,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"sshd\", memtype=\"resident\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -6483,7 +6484,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mon\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mon\", memtype=\"resident\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6495,7 +6496,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mgr\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mgr\", memtype=\"resident\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6507,7 +6508,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mds\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-mds\", memtype=\"resident\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6519,7 +6520,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-osd\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"ceph-osd\", memtype=\"resident\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6531,7 +6532,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"radosgw\", memtype=\"resident\", instance=\"$scvm:9256\"})",
+              "expr": "sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"radosgw\", memtype=\"resident\", instance=\"$scvm:3004\"})",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6543,7 +6544,7 @@
             },
             {
               "exemplar": true,
-              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"resident\", instance=\"$scvm:9256\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"resident\", instance=\"$scvm:9256\"}))",
+              "expr": "(sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"node_exporter\", memtype=\"resident\", instance=\"$scvm:3004\"})) + on (instance) (sum by (exebase) (namedprocess_namegroup_memory_bytes{exebase=\"process-exporter\", memtype=\"resident\", instance=\"$scvm:3004\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6648,7 +6649,7 @@
           "value": "scvm1"
         },
         "datasource": "Wall",
-        "definition": "label_values(node_uname_info{instance=\"$scvm:9101\", job=\"scvm\"},nodename)",
+        "definition": "label_values(node_uname_info{instance=\"$scvm:3003\", job=\"scvm\"},nodename)",
         "description": null,
         "error": null,
         "hide": 2,
@@ -6658,7 +6659,7 @@
         "name": "ceph_hosts",
         "options": [],
         "query": {
-          "query": "label_values(node_uname_info{instance=\"$scvm:9101\", job=\"scvm\"},nodename)",
+          "query": "label_values(node_uname_info{instance=\"$scvm:3003\", job=\"scvm\"},nodename)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

@@ -8,6 +8,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -15,8 +21,9 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 79,
+  "id": null,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -66,11 +73,7 @@
         "handler": 1,
         "name": "CPU 사용현황 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -111,7 +114,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -216,11 +219,7 @@
         "handler": 1,
         "name": "메모리 사용률 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -261,7 +260,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -365,11 +364,7 @@
         "handler": 1,
         "name": "네트워크  트래픽 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -409,7 +404,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -513,11 +508,7 @@
         "handler": 1,
         "name": "디스크 읽기 지연 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -550,7 +541,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -654,11 +645,7 @@
         "handler": 1,
         "name": "디스크 쓰기 지연 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -691,7 +678,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -794,11 +781,7 @@
         "handler": 1,
         "name": "Root 디스크 사용률 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -831,7 +814,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -935,11 +918,7 @@
         "handler": 1,
         "name": "Glue 스토리지 사용률 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -972,7 +951,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1076,11 +1055,7 @@
         "handler": 1,
         "name": "Glue 상태 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1113,7 +1088,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1217,11 +1192,7 @@
         "handler": 1,
         "name": "Glue mon 데몬 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1254,7 +1225,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1265,7 +1236,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"scvm-process-exporter\", matches=\"map[:ceph-mon]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:ceph-mon]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1358,11 +1329,7 @@
         "handler": 1,
         "name": "Glue mgr 데몬 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1395,7 +1362,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1406,7 +1373,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"scvm-process-exporter\", matches=\"map[:ceph-mgr]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:ceph-mgr]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1499,11 +1466,7 @@
         "handler": 1,
         "name": "Glue mds 데몬 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1536,7 +1499,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1547,7 +1510,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"scvm-process-exporter\", matches=\"map[:ceph-mds]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:ceph-mds]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1640,11 +1603,7 @@
         "handler": 1,
         "name": "Glue rgw 데몬 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1677,7 +1636,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1688,7 +1647,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"scvm-process-exporter\", matches=\"map[:rgw]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:rgw]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1781,11 +1740,7 @@
         "handler": 1,
         "name": "NFS 데몬 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1818,7 +1773,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1829,7 +1784,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"scvm-process-exporter\", exebase=\"ganesha.nfsd\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", exebase=\"ganesha.nfsd\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1922,11 +1877,7 @@
         "handler": 1,
         "name": "iSCSI 데몬 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -1959,7 +1910,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1970,7 +1921,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"scvm-process-exporter\", matches=\"map[:tcmu-runner]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:tcmu-runner]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -2063,11 +2014,7 @@
         "handler": 1,
         "name": "호스트 수집기 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -2100,7 +2047,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2111,7 +2058,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"scvm-process-exporter\", matches=\"map[:node_exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:node-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -2207,11 +2154,7 @@
         "handler": 1,
         "name": "프로세스 수집기 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -2244,7 +2187,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2255,7 +2198,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:9256\", job=\"scvm-process-exporter\", matches=\"map[:process-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
+          "expr": "label_replace(\n(\n sum by (instance)\n  (namedprocess_namegroup_states{instance=~\".*:3004\", job=\"scvm-process-exporter\", matches=\"map[:process-exporter]\"})\n),\n \"pingip\",\n \"$1\",\n \"instance\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"scvm-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -2351,11 +2294,7 @@
         "handler": 1,
         "name": "가동 상태 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -2391,7 +2330,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",

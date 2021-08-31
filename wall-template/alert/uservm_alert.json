@@ -8,6 +8,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -17,6 +23,7 @@
   "graphTooltip": 0,
   "id": null,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -66,11 +73,7 @@
         "handler": 1,
         "name": "CPU 사용현황 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -111,7 +114,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -216,11 +219,7 @@
         "handler": 1,
         "name": "메모리 사용률 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -261,7 +260,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -365,11 +364,7 @@
         "handler": 1,
         "name": "네트워크  트래픽 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -409,7 +404,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -513,11 +508,7 @@
         "handler": 1,
         "name": "볼륨 사용률 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -558,7 +549,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -662,11 +653,7 @@
         "handler": 1,
         "name": "디스크 지연 시간 alert",
         "noDataState": "no_data",
-        "notifications": [
-          {
-            "uid": "ablestack-admin"
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -701,7 +688,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.0-pre",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
