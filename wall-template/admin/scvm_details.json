@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630309445933,
+  "iteration": 1630375843810,
   "links": [
     {
       "asDropdown": true,
@@ -228,33 +228,41 @@
         {
           "exemplar": true,
           "expr": "sum(ceph_osd_up{} / on (ceph_daemon) group_left(hostname) ceph_osd_metadata{hostname=~\"($ceph_hosts).*\"})",
+          "instant": true,
           "interval": "",
           "legendFormat": "UP",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "sum(ceph_osd_up{} / on (ceph_daemon) group_left(hostname) ceph_osd_metadata{hostname=~\"($ceph_hosts).*\"} == bool 0)",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "DOWN",
-          "refId": "C"
+          "refId": "C",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "sum(ceph_osd_in{} / on (ceph_daemon) group_left(hostname) ceph_osd_metadata{hostname=~\"($ceph_hosts).*\"})",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "IN",
-          "refId": "B"
+          "refId": "B",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "sum(ceph_osd_in{} / on (ceph_daemon) group_left(hostname) ceph_osd_metadata{hostname=~\"($ceph_hosts).*\"} == bool 0)",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "OUT",
-          "refId": "D"
+          "refId": "D",
+          "stepMode": "min"
         }
       ],
       "title": "Glue 스토리지 디바이스 상태",
@@ -481,11 +489,13 @@
         {
           "exemplar": true,
           "expr": "node_memory_MemTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"}",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "메모리 합계",
@@ -554,11 +564,13 @@
           "expr": "100 - ((node_memory_MemAvailable_bytes{instance=\"$scvm:3003\", job=\"scvm\"} * 100) / node_memory_MemTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"})",
           "format": "time_series",
           "hide": false,
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "메모리 사용률",
@@ -622,11 +634,13 @@
         {
           "exemplar": true,
           "expr": "node_memory_SwapTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"}",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "SWAP 합계",
@@ -702,11 +716,13 @@
         {
           "exemplar": true,
           "expr": "((node_memory_SwapTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"} - node_memory_SwapFree_bytes{instance=\"$scvm:3003\", job=\"scvm\"}) / (node_memory_SwapTotal_bytes{instance=\"$scvm:3003\", job=\"scvm\"} )) * 100",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "SWAP 사용률",
@@ -762,27 +778,31 @@
           "exemplar": true,
           "expr": "node_filesystem_size_bytes{instance=\"$scvm:3003\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "전체",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "(node_filesystem_size_bytes{instance=\"$scvm:3003\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}) - (node_filesystem_avail_bytes{instance=\"$scvm:3003\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"})",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "사용중",
-          "refId": "B"
+          "refId": "B",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "node_filesystem_avail_bytes{instance=\"$scvm:3003\", job=\"scvm\", mountpoint=\"/\",fstype!=\"rootfs\"}",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "사용 가능",
-          "refId": "C"
+          "refId": "C",
+          "stepMode": "min"
         }
       ],
       "title": "Root 디스크 용량",
@@ -859,10 +879,11 @@
           "exemplar": true,
           "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:3004\", matches=\"map[:ceph-mon]\"})",
           "format": "time_series",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "Glue mon 데몬",
@@ -959,10 +980,11 @@
           "exemplar": true,
           "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:3004\", matches=\"map[:ceph-mgr]\"})",
           "format": "time_series",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "Glue mgr 데몬",
@@ -1059,10 +1081,11 @@
           "exemplar": true,
           "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:3004\", matches=\"map[:ceph-mds]\"})",
           "format": "time_series",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "Glue mds 데몬",
@@ -1207,6 +1230,16 @@
                 "to": 9999
               },
               "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 2,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
           "thresholds": {
@@ -1249,10 +1282,11 @@
           "exemplar": true,
           "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:3004\", exebase=\"ganesha.nfsd\"})",
           "format": "time_series",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "NFS 데몬",
@@ -1297,6 +1331,16 @@
                 "to": 9999
               },
               "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 2,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
           "thresholds": {
@@ -1339,10 +1383,11 @@
           "exemplar": true,
           "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:3004\", matches=\"map[:tcmu-runner]\"})",
           "format": "time_series",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "iSCSI 데몬",
@@ -1427,12 +1472,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:3004\", matches=\"map[:node-exporter]\"})",
+          "expr": "sum(namedprocess_namegroup_states{instance=~\"$scvm:3004\", matches=\"map[:node_exporter]\"})",
           "format": "time_series",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "호스트 수집기",
@@ -1519,10 +1565,11 @@
           "exemplar": true,
           "expr": "sum(namedprocess_namegroup_states{instance=\"$scvm:3004\", matches=\"map[:process-exporter]\"})",
           "format": "time_series",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "프로세스 수집기",
@@ -2010,40 +2057,13 @@
                 ]
               }
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Value"
-                },
-                "properties": [
-                  {
-                    "id": "mappings",
-                    "value": [
-                      {
-                        "options": {
-                          "0": {
-                            "index": 1,
-                            "text": "비활성"
-                          },
-                          "1": {
-                            "index": 0,
-                            "text": "활성"
-                          }
-                        },
-                        "type": "value"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
             "h": 4,
             "w": 6,
             "x": 0,
-            "y": 2
+            "y": 23
           },
           "id": 224,
           "options": {
@@ -2152,7 +2172,7 @@
             "h": 4,
             "w": 6,
             "x": 6,
-            "y": 2
+            "y": 23
           },
           "id": 226,
           "options": {
@@ -2209,7 +2229,7 @@
             "h": 4,
             "w": 6,
             "x": 12,
-            "y": 2
+            "y": 23
           },
           "id": 228,
           "links": [],
@@ -2277,7 +2297,7 @@
             "h": 4,
             "w": 6,
             "x": 18,
-            "y": 2
+            "y": 23
           },
           "id": 230,
           "links": [],
@@ -2327,7 +2347,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 6
+            "y": 27
           },
           "hiddenSeries": false,
           "id": 176,
@@ -2424,7 +2444,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 6
+            "y": 27
           },
           "hiddenSeries": false,
           "id": 174,
@@ -2532,7 +2552,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 16
+            "y": 37
           },
           "hiddenSeries": false,
           "id": 172,
@@ -2644,7 +2664,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 16
+            "y": 37
           },
           "hiddenSeries": false,
           "id": 170,
@@ -2750,7 +2770,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 26
+            "y": 47
           },
           "hiddenSeries": false,
           "id": 168,
@@ -2859,7 +2879,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 26
+            "y": 47
           },
           "hiddenSeries": false,
           "id": 166,
@@ -2968,7 +2988,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 36
+            "y": 57
           },
           "hiddenSeries": false,
           "id": 164,
@@ -3077,7 +3097,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 36
+            "y": 57
           },
           "hiddenSeries": false,
           "id": 162,
@@ -3187,7 +3207,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 46
+            "y": 67
           },
           "height": "",
           "hiddenSeries": false,
@@ -3302,7 +3322,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 46
+            "y": 67
           },
           "height": "",
           "hiddenSeries": false,
@@ -3413,7 +3433,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 56
+            "y": 77
           },
           "height": "",
           "hiddenSeries": false,
@@ -3528,7 +3548,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 56
+            "y": 77
           },
           "height": "",
           "hiddenSeries": false,
@@ -3639,7 +3659,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 66
+            "y": 87
           },
           "height": "",
           "hiddenSeries": false,
@@ -3755,7 +3775,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 66
+            "y": 87
           },
           "height": "",
           "hiddenSeries": false,
@@ -3869,7 +3889,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 76
+            "y": 97
           },
           "height": "",
           "hiddenSeries": false,
@@ -4158,7 +4178,8 @@
               "instant": true,
               "interval": "",
               "legendFormat": "",
-              "refId": "A"
+              "refId": "A",
+              "stepMode": "min"
             },
             {
               "exemplar": true,
@@ -6678,5 +6699,5 @@
   "timezone": "",
   "title": "4. 스토리지센터 가상머신 상세 현황",
   "uid": "scvm_details",
-  "version": 1
+  "version": 0
 }

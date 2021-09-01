@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630309462471,
+  "iteration": 1630375864411,
   "links": [
     {
       "asDropdown": true,
@@ -112,11 +112,13 @@
         {
           "exemplar": true,
           "expr": "libvirt_domain_info_virtual_cpus{domain=\"$vm\"}",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "vCPU 수",
@@ -277,11 +279,13 @@
         {
           "exemplar": true,
           "expr": "libvirt_domain_info_maximum_memory_bytes{domain=\"$vm\"}",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "메모리 합계",
@@ -420,27 +424,31 @@
           "exemplar": true,
           "expr": "libvirt_domain_block_stats_capacity_bytes{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"}",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "전체",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "libvirt_domain_block_stats_allocation{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"}",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "사용중",
-          "refId": "B"
+          "refId": "B",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "(libvirt_domain_block_stats_capacity_bytes{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"})\n-\n(libvirt_domain_block_stats_allocation{domain=\"$vm\"} / on (domain,target_device) group_left (mold_volume_type) libvirt_domain_block_meta{domain=\"$vm\", mold_volume_type=\"ROOT\"})",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "사용 가능",
-          "refId": "C"
+          "refId": "C",
+          "stepMode": "min"
         }
       ],
       "title": "Root 디스크 용량",
@@ -1000,7 +1008,7 @@
       }
     },
     {
-      "collapsed": false,
+      "collapsed": true,
       "datasource": null,
       "gridPos": {
         "h": 1,
@@ -1009,769 +1017,770 @@
         "y": 21
       },
       "id": 106,
-      "panels": [],
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 2
+          },
+          "hiddenSeries": false,
+          "id": 104,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.1.0-pre",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "irate(libvirt_domain_interface_stats_receive_bytes_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
+              "interval": "",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 트래픽 (bits/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:1376",
+              "format": "binbps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:1377",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
+            "vnet8": "orange"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 2
+          },
+          "hiddenSeries": false,
+          "id": 127,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.1.0-pre",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "irate(libvirt_domain_interface_stats_transmit_bytes_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
+              "interval": "",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 트래픽 (bits/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:1376",
+              "format": "binBps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:1377",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 10
+          },
+          "hiddenSeries": false,
+          "id": 128,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.1.0-pre",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(libvirt_domain_interface_stats_receive_packets_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
+              "interval": "",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:2639",
+              "format": "pps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:2640",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
+            "vnet8": "orange"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 10
+          },
+          "hiddenSeries": false,
+          "id": 102,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.1.0-pre",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(libvirt_domain_interface_stats_transmit_packets_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
+              "interval": "",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:2639",
+              "format": "pps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:2640",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 18
+          },
+          "hiddenSeries": false,
+          "id": 98,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.1.0-pre",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(libvirt_domain_interface_stats_receive_errors_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
+              "interval": "",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 오류 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:2214",
+              "format": "pps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:2215",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
+            "vnet8": "orange"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 18
+          },
+          "hiddenSeries": false,
+          "id": 129,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.1.0-pre",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(libvirt_domain_interface_stats_transmit_errors_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
+              "interval": "",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 오류 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:2214",
+              "format": "pps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:2215",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 26
+          },
+          "hiddenSeries": false,
+          "id": 100,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.1.0-pre",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(libvirt_domain_interface_stats_receive_drops_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
+              "interval": "",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
+              "refId": "B"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 수신 손실 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:1702",
+              "format": "pps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:1703",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
+            "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
+            "vnet8": "orange"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Wall",
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 26
+          },
+          "hiddenSeries": false,
+          "id": 130,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.1.0-pre",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "rate(libvirt_domain_interface_stats_transmit_drops_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
+              "interval": "",
+              "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "네트워크 송신 손실 트래픽 (packets/sec)",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:1702",
+              "format": "pps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:1703",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
       "title": "네트워크 상세",
       "type": "row"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Wall",
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 22
-      },
-      "hiddenSeries": false,
-      "id": 104,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.1.0-pre",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "irate(libvirt_domain_interface_stats_receive_bytes_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
-          "interval": "",
-          "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "네트워크 수신 트래픽 (bits/sec)",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:1376",
-          "format": "binbps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:1377",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
-        "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
-        "vnet8": "orange"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Wall",
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 22
-      },
-      "hiddenSeries": false,
-      "id": 127,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.1.0-pre",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "irate(libvirt_domain_interface_stats_transmit_bytes_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
-          "interval": "",
-          "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "네트워크 송신 트래픽 (bits/sec)",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:1376",
-          "format": "binBps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:1377",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Wall",
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 30
-      },
-      "hiddenSeries": false,
-      "id": 128,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.1.0-pre",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "rate(libvirt_domain_interface_stats_receive_packets_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
-          "interval": "",
-          "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "네트워크 수신 트래픽 (packets/sec)",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:2639",
-          "format": "pps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:2640",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
-        "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
-        "vnet8": "orange"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Wall",
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 30
-      },
-      "hiddenSeries": false,
-      "id": 102,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.1.0-pre",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "rate(libvirt_domain_interface_stats_transmit_packets_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
-          "interval": "",
-          "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "네트워크 송신 트래픽 (packets/sec)",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:2639",
-          "format": "pps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:2640",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Wall",
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 38
-      },
-      "hiddenSeries": false,
-      "id": 98,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.1.0-pre",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "rate(libvirt_domain_interface_stats_receive_errors_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
-          "interval": "",
-          "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "네트워크 수신 오류 트래픽 (packets/sec)",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:2214",
-          "format": "pps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:2215",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
-        "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
-        "vnet8": "orange"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Wall",
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 38
-      },
-      "hiddenSeries": false,
-      "id": 129,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.1.0-pre",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "rate(libvirt_domain_interface_stats_transmit_errors_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
-          "interval": "",
-          "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "네트워크 송신 오류 트래픽 (packets/sec)",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:2214",
-          "format": "pps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:2215",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Wall",
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 46
-      },
-      "hiddenSeries": false,
-      "id": 100,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.1.0-pre",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "rate(libvirt_domain_interface_stats_receive_drops_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
-          "interval": "",
-          "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
-          "refId": "B"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "네트워크 수신 손실 트래픽 (packets/sec)",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:1702",
-          "format": "pps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:1703",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network )": "yellow",
-        "vnet3 ( 02:00:62:bb:00:01 - ktcheon-isolated-Network ) ": "yellow",
-        "vnet8": "orange"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Wall",
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 46
-      },
-      "hiddenSeries": false,
-      "id": 130,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.1.0-pre",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "rate(libvirt_domain_interface_stats_transmit_drops_total{domain=~\"$vm\"}[5m]) / on (domain, target_device) group_left (mac_address, mold_network_name) libvirt_domain_interface_meta{domain=\"$vm\"}",
-          "interval": "",
-          "legendFormat": "{{target_device}} ( {{mac_address}} - {{mold_network_name}} )",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "네트워크 송신 손실 트래픽 (packets/sec)",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:1702",
-          "format": "pps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:1703",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
     },
     {
       "collapsed": true,
@@ -1780,7 +1789,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 54
+        "y": 22
       },
       "id": 96,
       "panels": [
@@ -1797,7 +1806,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 55
+            "y": 3
           },
           "hiddenSeries": false,
           "id": 80,
@@ -1894,7 +1903,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 55
+            "y": 3
           },
           "hiddenSeries": false,
           "id": 86,
@@ -1988,7 +1997,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 63
+            "y": 11
           },
           "hiddenSeries": false,
           "id": 90,
@@ -2085,7 +2094,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 63
+            "y": 11
           },
           "hiddenSeries": false,
           "id": 131,
@@ -2179,7 +2188,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 71
+            "y": 19
           },
           "hiddenSeries": false,
           "id": 132,
@@ -2281,7 +2290,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 71
+            "y": 19
           },
           "hiddenSeries": false,
           "id": 92,
@@ -2380,7 +2389,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 79
+            "y": 27
           },
           "hiddenSeries": false,
           "id": 94,
@@ -2482,7 +2491,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 79
+            "y": 27
           },
           "hiddenSeries": false,
           "id": 133,
@@ -2581,7 +2590,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 87
+            "y": 35
           },
           "hiddenSeries": false,
           "id": 84,
@@ -2712,5 +2721,5 @@
   "timezone": "",
   "title": "7. 사용자 가상머신 별 상세 현황",
   "uid": "uservm_details",
-  "version": 1
+  "version": 0
 }

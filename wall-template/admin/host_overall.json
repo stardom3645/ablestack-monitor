@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630309432215,
+  "iteration": 1630375832795,
   "links": [
     {
       "asDropdown": true,
@@ -129,7 +129,8 @@
           "intervalFactor": 1,
           "legendFormat": "평균",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "CPU 평균",
@@ -437,25 +438,31 @@
         {
           "exemplar": true,
           "expr": "count(probe_success{pingip=~\"$cubeips\"})",
+          "instant": true,
           "interval": "",
           "legendFormat": "전체",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "sum(probe_success{pingip=~\"$cubeips\"} == bool 1 )",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "실행",
-          "refId": "C"
+          "refId": "C",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "sum(probe_success{pingip=~\"$cubeips\"} == bool 0 )",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "정지",
-          "refId": "B"
+          "refId": "B",
+          "stepMode": "min"
         }
       ],
       "title": "Cube 서비스 상태",
@@ -554,25 +561,31 @@
         {
           "exemplar": true,
           "expr": "count(probe_success{pingip=~\"$hostips\"}) * 3",
+          "instant": true,
           "interval": "",
           "legendFormat": "전체",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "sum(libvirt_up{job=\"libvirt\"} + libvirt_rbd_collect_up{job=\"libvirt\"} + libvirt_mold_collect_up{job=\"libvirt\"})",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "실행",
-          "refId": "C"
+          "refId": "C",
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "count(probe_success{pingip=~\"$hostips\"}) * 3 - sum(libvirt_up{job=\"libvirt\"} + libvirt_rbd_collect_up{job=\"libvirt\"} + libvirt_mold_collect_up{job=\"libvirt\"})",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "정지",
-          "refId": "B"
+          "refId": "B",
+          "stepMode": "min"
         }
       ],
       "title": "가상머신 수집기 상태",
@@ -1223,10 +1236,11 @@
           "exemplar": true,
           "expr": "sum ((irate(node_disk_reads_completed_total{job=\"cube\"}[1m]) )  + \n(irate(node_disk_writes_completed_total{job=\"cube\"}[1m])))",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "디스크 IOPS",
@@ -1280,10 +1294,11 @@
         {
           "exemplar": true,
           "expr": "sum (\n  irate(node_network_receive_bytes_total{job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n  ) +\nsum (\n  irate(node_network_transmit_bytes_total{job=\"cube\", device=~\"e.+\", device!~\"e.+\\\\..+\"}[1m])\n  )",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
       "title": "네트워크 트래픽",
@@ -1357,5 +1372,5 @@
   "timezone": "",
   "title": "2. 호스트 종합 현황",
   "uid": "host_overall",
-  "version": 2
+  "version": 0
 }
