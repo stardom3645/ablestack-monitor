@@ -10,6 +10,8 @@ Copyright (c) 2021 ABLECLOUD Co. Ltd
 import requests
 import json
 import sys
+from ablestack import *
+
 
 '''
 함수명 : updateNotification
@@ -33,7 +35,10 @@ def updateNotification():
         data = json.load(notificationJsonFile)
 
     res = requests.put(url, data=json.dumps(data), headers=headers)
-    print(str(res.status_code) + "|" + res.text)
+    # print(str(res.status_code) + "|" + res.text)
+    ret = createReturn(code=res.status_code, val=res.text)
+    print(json.dumps(json.loads(ret), indent=4))
+    return ret
 
 
 def main():
@@ -44,7 +49,6 @@ def main():
             print('Update failed', e)
 
     else:
-        print(len(sys.argv))
         print("One parameter(wallvm_ip) is required.")
         sys.exit()
 
