@@ -148,6 +148,7 @@ def ccvmBlackboxConfig(ccvm_ip):
 
 def configYaml(cube, scvm, ccvm):
     prometheus_yml_path = '/usr/share/ablestack/ablestack-wall/prometheus/prometheus.yml'
+
     with open(prometheus_yml_path) as f:
         prometheus_org = yaml.load(f, Loader=yaml.FullLoader)
     for i in range(len(prometheus_org['scrape_configs'])):
@@ -191,25 +192,25 @@ def configYaml(cube, scvm, ccvm):
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeBlackboxConfig(
                 cube)
             prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
-                ccvm)
+                ccvm)[0]
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm-blackbox':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmBlackboxConfig(
                 scvm)
             prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
-                ccvm)
+                ccvm)[0]
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm-blackbox':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmBlackboxConfig(
                 ccvm)
             prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
-                ccvm)
+                ccvm)[0]
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'blackbox-tcp':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeServiceConfig(cube) + moldServiceConfig(ccvm) + moldDBConfig(ccvm) + libvirtConfig(cube) + cubeNodeConfig(cube) + scvmNodeConfig(scvm) + ccvmNodeConfig(
                 ccvm) + cubeProcessConfig(cube) + scvmProcessConfig(scvm) + ccvmProcessConfig(ccvm) + cubeBlackboxConfig(cube) + scvmBlackboxConfig(scvm) + ccvmBlackboxConfig(ccvm)
             prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
-                ccvm)
+                ccvm)[0]
 
         with open(prometheus_yml_path, 'w') as yaml_file:
             yaml_file.write(
