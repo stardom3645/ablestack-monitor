@@ -147,10 +147,9 @@ def ccvmBlackboxConfig(ccvm_ip):
 
 
 def configYaml(cube, scvm, ccvm):
-    prometheus_yml_org_path = '/usr/share/ablestack/ablestack-wall/prometheus/prometheus_org.yml'
     prometheus_yml_path = '/usr/share/ablestack/ablestack-wall/prometheus/prometheus.yml'
 
-    with open(prometheus_yml_org_path) as f:
+    with open(prometheus_yml_path) as f:
         prometheus_org = yaml.load(f, Loader=yaml.FullLoader)
     for i in range(len(prometheus_org['scrape_configs'])):
 
