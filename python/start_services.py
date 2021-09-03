@@ -19,7 +19,7 @@ def parseArgs():
                                      epilog='copyrightⓒ 2021 All rights reserved by ABLECLOUD™')
 
     parser.add_argument('action', choices=[
-                        'start'], help='choose one of the actions')
+                        'start', 'stop'], help='choose one of the actions')
     parser.add_argument('--service', metavar='name', type=str,
                         nargs='*', help='want to start service name')
 
@@ -28,6 +28,10 @@ def parseArgs():
 
 def startServices(service):
     print(systemctl('enable', '--now', service))
+
+
+def stopServices(service):
+    print(systemctl('disable', '--now', service))
 
 
 def main():
@@ -41,6 +45,16 @@ def main():
 
         except Exception as e:
             ret = createReturn(code=500, val="fail to start service")
+            print(json.dumps(json.loads(ret), indent=4))
+
+    elif (args.action) == 'stop':
+        try:
+            stopServices(args.service)
+            ret = createReturn(code=200, val="services are stopped")
+            print(json.dumps(json.loads(ret), indent=4))
+
+        except Exception as e:
+            ret = createReturn(code=500, val="fail to stop service")
             print(json.dumps(json.loads(ret), indent=4))
 
     return ret
