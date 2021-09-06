@@ -11,7 +11,7 @@ import yaml
 import argparse
 import json
 from ablestack import *
-
+import configparser
 
 # prometheus에서 수집하는 exporter 및 서비스 포트
 # prometheus_port = ":3001"
@@ -216,12 +216,28 @@ def configYaml(cube, scvm, ccvm):
             yaml_file.write(
                 yaml.dump(prometheus_org, default_flow_style=False))
 
+# 함수명 : configIni
+# 주요 기능 : grafana의 설정 파일에 도메인을 ccvm ip로 설정
+
+
+def configIni(ccvm):
+    ini_file = '/usr/share/ablestack/ablestack-wall/grafana/conf/defaults.ini'
+    config = configparser.ConfigParser()
+
+    config.read(ini_file)
+
+    config.set('server', 'domain', ccvm[0])
+
+    with open(ini_file, 'w') as f:
+        config.write(f)
+
 
 def main():
     args = parseArgs()
 
     if (args.action) == 'config':
         configYaml(args.cube, args.scvm, args.ccvm)
+        configIni(args.ccvm)
 
     ret = createReturn(code=200, val="update prometheus")
     print(json.dumps(json.loads(ret), indent=4))
