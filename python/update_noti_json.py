@@ -20,12 +20,12 @@ from ablestack import *
 
 def updateJson():
 
-    with open("../properties/notification.json", "r") as notificationJsonFile:
+    with open("/usr/share/ablestack/ablestack-wall/properties/notification.json", "r") as notificationJsonFile:
         data = json.load(notificationJsonFile)
 
     data["settings"]["addresses"] = sys.argv[1]
 
-    with open("../properties/notification.json", "w") as notificationJsonFile:
+    with open("/usr/share/ablestack/ablestack-wall/properties/notification.json", "w") as notificationJsonFile:
         json.dump(data, notificationJsonFile)
 
     ret = createReturn(code=200, val="update notification json file")

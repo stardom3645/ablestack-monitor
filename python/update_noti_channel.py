@@ -31,7 +31,7 @@ def updateNotification():
     headers = {'Accept': 'application/json', 'Content-Type': 'application/json',
                'Authorization': 'Bearer' + key}
 
-    with open("../properties/notification.json", "r") as notificationJsonFile:
+    with open("/usr/share/ablestack/ablestack-wall/properties/notification.json", "r") as notificationJsonFile:
         data = json.load(notificationJsonFile)
 
     res = requests.put(url, data=json.dumps(data), headers=headers)
