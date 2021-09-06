@@ -21,7 +21,7 @@ notification channel을 통한 알람 메시지 송신 여부를 체크합니다
 
 
 def testNotification():
-    with open("../properties/api.key") as apikey:
+    with open("/usr/share/ablestack/ablestack-wall/properties/api.key") as apikey:
         key = apikey.readline()
 
     wall_ip = sys.argv[1]
@@ -30,7 +30,7 @@ def testNotification():
 
     headers = {'Accept': 'application/json', 'Content-Type': 'application/json',
                'Authorization': 'Bearer' + key}
-    with open("../properties/notification.json", "r") as notificationJsonFile:
+    with open("/usr/share/ablestack/ablestack-wall/properties/notification.json", "r") as notificationJsonFile:
         data = json.load(notificationJsonFile)
 
     res = requests.post(url, data=json.dumps(data), headers=headers)

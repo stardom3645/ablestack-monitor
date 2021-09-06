@@ -11,7 +11,7 @@ import configparser
 import argparse
 import json
 from ablestack import *
-
+from sh import systemctl
 
 '''
 함수명: parseArgs
@@ -36,7 +36,7 @@ def parseArgs():
     return parser.parse_args()
 
 
-def configSmtp(host, user, password):
+def configWallSmtp(host, user, password):
     ini_file = '/usr/share/ablestack/ablestack-wall/grafana/conf/defaults.ini'
     config = configparser.ConfigParser()
 
@@ -52,15 +52,17 @@ def configSmtp(host, user, password):
     with open(ini_file, 'w') as f:
         config.write(f)
 
+    systemctl('restart', 'grafana')
+
 
 def main():
     args = parseArgs()
 
     if (args.action) == 'config':
-        configSmtp(args.host, args.user, args.password)
+        configWallSmtp(args.host, args.user, args.password)
 
-    ret = createReturn(code=200, val="update smtp")
-    print(json.dumps(json.loads(ret), indent=4))
+        ret = createReturn(code=200, val="update smtp")
+        print(json.dumps(json.loads(ret), indent=4))
 
     return ret
 

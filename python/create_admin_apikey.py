@@ -36,13 +36,13 @@ def createApiKey():
     print(json.dumps(json.loads(ret), indent=4))
     if str(res.status_code) == '200':
 
-        with open("../properties/api.json", "w") as apiJsonFile:
+        with open("/usr/share/ablestack/ablestack-wall/properties/api.json", "w") as apiJsonFile:
             apiJsonFile.write(res.text)
 
-    with open("../properties/api.json", "r") as apiJsonFile:
+    with open("/usr/share/ablestack/ablestack-wall/properties/api.json", "r") as apiJsonFile:
         data = json.load(apiJsonFile)
         key = data["key"]
-        with open("../properties/api.key", "w") as apiKey:
+        with open("/usr/share/ablestack/ablestack-wall/properties/api.key", "w") as apiKey:
             apiKey.write(key)
     return ret
 
