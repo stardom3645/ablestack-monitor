@@ -12,6 +12,7 @@ import argparse
 import json
 from ablestack import *
 from sh import systemctl
+import pymysql
 
 '''
 함수명: parseArgs
@@ -55,11 +56,50 @@ def configWallSmtp(host, user, password):
     systemctl('restart', 'grafana')
 
 
+def configMoldSmtp(host, user, password):
+    cloud_db = pymysql.connect(
+        user='cloud',
+        password='Ablecloud1!',
+        host='localhost',
+        db='cloud',
+        charset='utf8'
+    )
+    smtp_server = host.split(':')[0]
+    smtp_port = host.split(':')[1]
+
+    cursor = cloud_db.cursor(pymysql.cursors.DictCursor)
+    update_email_sender_sql = "UPDATE configuration SET value ='" + \
+        user + "' WHERE name = 'alert.email.sender'"
+    cursor.execute(update_email_sender_sql)
+    update_smtp_host_sql = "UPDATE configuration SET value ='" + \
+        smtp_server + "' WHERE name = 'alert.smtp.host'"
+    cursor.execute(update_smtp_host_sql)
+    update_smtp_port_sql = "UPDATE configuration SET value ='" + \
+        smtp_port + "' WHERE name = 'alert.smtp.port'"
+    cursor.execute(update_smtp_port_sql)
+
+    with open("/usr/share/ablestack/ablestack-wall/properties/notification.json", "r") as notificationJsonFile:
+        data = json.load(notificationJsonFile)
+        # print(str(data['settings']['addresses']).replace(";",","))
+        smtp_addresses = str(data['settings']['addresses']).replace(";", ",")
+        update_email_addresses_sql = "UPDATE configuration SET value ='" + \
+            smtp_addresses + "' WHERE name = 'alert.email.addresses'"
+        cursor.execute(update_email_addresses_sql)
+
+    # result = cursor.fetchall()
+    # print(result)
+    cloud_db.commit()
+    cloud_db.close()
+
+    systemctl('restart', 'cloudstack-management')
+
+
 def main():
     args = parseArgs()
 
     if (args.action) == 'config':
         configWallSmtp(args.host, args.user, args.password)
+        configMoldSmtp(args.host, args.user, args.password)
 
         ret = createReturn(code=200, val="update smtp")
         print(json.dumps(json.loads(ret), indent=4))
