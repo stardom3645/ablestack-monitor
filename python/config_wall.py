@@ -1,6 +1,6 @@
 '''
 Copyright (c) 2021 ABLECLOUD Co. Ltd
-이 파일은 Wall VM을 구성할 때 prometheus.yml 파일의 tartget ip 및 port를 설정하는 프로그램입니다.
+이 파일은 Wall VM을 구성할 때 prometheus.yml, defaults.ini, db 파일 등을 설정하는 프로그램입니다.
 최초 작성일 : 2021. 08. 25
 '''
 
@@ -12,9 +12,11 @@ import argparse
 import json
 from ablestack import *
 import configparser
+import sqlite3
+from sh import cp
 
 # prometheus에서 수집하는 exporter 및 서비스 포트
-# prometheus_port = ":3001"
+wall_prometheus_port = ":3001"
 libvirt_exporter_port = ":3002"
 node_exporter_port = ":3003"
 process_exporter_port = ":3004"
@@ -22,6 +24,7 @@ blackbox_exporter_port = ":3005"
 cube_service_port = ":9090"
 mold_service_port = ":8080"
 mold_db_port = ":3306"
+glue_prometheus_port = ":9095"
 
 '''
 함수명 : parseArgs
@@ -95,11 +98,19 @@ def ccvmNodeConfig(ccvm_ip):
     return ccvm
 
 
-# def prometheusConfig(ccvm_ip):
-#     ccvm = ccvm_ip.copy()
-#     for i in range(len(ccvm)):
-#         ccvm[i] = ccvm[i] + prometheus_port
-#     return ccvm
+def wallPrometheusConfig(ccvm_ip):
+    ccvm = ccvm_ip.copy()
+    for i in range(len(ccvm)):
+        ccvm[i] = ccvm[i] + wall_prometheus_port
+    return ccvm
+
+
+def gluePrometheusConfig(scvm_ip):
+    scvm = scvm_ip.copy()
+    for i in range(len(scvm)):
+        scvm[i] = scvm[i] + glue_prometheus_port
+    return scvm
+
 
 def cubeProcessConfig(cube_ip):
     cube = cube_ip.copy()
@@ -169,13 +180,6 @@ def configYaml(cube, scvm, ccvm):
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmNodeConfig(
                 ccvm)
 
-        # elif prometheus_org['scrape_configs'][i]['job_name'] == 'prometheus':
-        #     prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = prometheusConfig(
-        #         ccvm)
-
-        #     print(prometheus_org['scrape_configs'][4]
-        #           ['static_configs'][0]['targets'])
-
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube-process-exporter':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeProcessConfig(
                 cube)
@@ -232,15 +236,54 @@ def configIni(ccvm):
         config.write(f)
 
 
+def configDS(scvm, ccvm):
+
+    conn = sqlite3.connect(
+        "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
+
+    ds_update_query1 = "UPDATE data_source SET url = \'http://" + \
+        wallPrometheusConfig(ccvm)[0] + "' WHERE id = 1"
+    ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
+        gluePrometheusConfig(scvm)[0] + "' WHERE id = 2"
+    ds_update_query3 = "UPDATE data_source SET url = \'" + \
+        moldDBConfig(ccvm)[0] + "' WHERE id = 3"
+    ds_update_query4 = "UPDATE data_source SET url = \'http://" + \
+        wallPrometheusConfig(ccvm)[0] + "' WHERE id = 4"
+
+    cur = conn.cursor()
+    cur.execute(ds_update_query1)
+    cur.execute(ds_update_query2)
+    cur.execute(ds_update_query3)
+    cur.execute(ds_update_query4)
+
+    conn.commit()
+
+    cur.execute('SELECT * FROM data_source')
+    for row in cur:
+        print(row)
+    conn.close()
+
+
+# DB 파일 초기화 (기존 초기 파일로 되돌리기)
+def initDB():
+    cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db",
+       "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
+
+
 def main():
     args = parseArgs()
+    initDB()
 
     if (args.action) == 'config':
-        configYaml(args.cube, args.scvm, args.ccvm)
-        configIni(args.ccvm)
-
-    ret = createReturn(code=200, val="update prometheus")
-    print(json.dumps(json.loads(ret), indent=4))
+        try:
+            configYaml(args.cube, args.scvm, args.ccvm)
+            configIni(args.ccvm)
+            configDS(args.scvm, args.ccvm)
+            ret = createReturn(code=200, val="update wall configuration")
+            print(json.dumps(json.loads(ret), indent=4))
+        except Exception as e:
+            ret = createReturn(code=500, val="fail to update")
+            print(json.dumps(json.loads(ret), indent=4))
 
     return ret
 
