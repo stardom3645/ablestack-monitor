@@ -257,10 +257,6 @@ def configDS(scvm, ccvm):
     cur.execute(ds_update_query4)
 
     conn.commit()
-
-    cur.execute('SELECT * FROM data_source')
-    for row in cur:
-        print(row)
     conn.close()
 
 
