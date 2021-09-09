@@ -53,7 +53,7 @@ def configWallSmtp(host, user, password):
     with open(ini_file, 'w') as f:
         config.write(f)
 
-    systemctl('restart', 'grafana')
+    systemctl('restart', 'grafana-server')
 
 
 def configMoldSmtp(host, user, password):
