@@ -161,7 +161,7 @@ def configYaml(cube, scvm, ccvm):
     prometheus_yml_path = '/usr/share/ablestack/ablestack-wall/prometheus/prometheus.yml'
 
     with open(prometheus_yml_path) as f:
-        prometheus_org = yaml.load(f, Loader=yaml.FullLoader)
+        prometheus_org = yaml.safe_load(f)
     for i in range(len(prometheus_org['scrape_configs'])):
 
         if prometheus_org['scrape_configs'][i]['job_name'] == 'libvirt':
