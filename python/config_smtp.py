@@ -68,22 +68,18 @@ def configMoldSmtp(host, user, password):
     smtp_port = host.split(':')[1]
 
     cursor = cloud_db.cursor(pymysql.cursors.DictCursor)
-    update_email_sender_sql = "UPDATE configuration SET value ='" + \
-        user + "' WHERE name = 'alert.email.sender'"
+    update_email_sender_sql = "UPDATE configuration SET value ='" + user + "' WHERE name = 'alert.email.sender'"
     cursor.execute(update_email_sender_sql)
-    update_smtp_host_sql = "UPDATE configuration SET value ='" + \
-        smtp_server + "' WHERE name = 'alert.smtp.host'"
+    update_smtp_host_sql = "UPDATE configuration SET value ='" + smtp_server + "' WHERE name = 'alert.smtp.host'"
     cursor.execute(update_smtp_host_sql)
-    update_smtp_port_sql = "UPDATE configuration SET value ='" + \
-        smtp_port + "' WHERE name = 'alert.smtp.port'"
+    update_smtp_port_sql = "UPDATE configuration SET value ='" + smtp_port + "' WHERE name = 'alert.smtp.port'"
     cursor.execute(update_smtp_port_sql)
 
     with open("/usr/share/ablestack/ablestack-wall/properties/notification.json", "r") as notificationJsonFile:
         data = json.load(notificationJsonFile)
         # print(str(data['settings']['addresses']).replace(";",","))
         smtp_addresses = str(data['settings']['addresses']).replace(";", ",")
-        update_email_addresses_sql = "UPDATE configuration SET value ='" + \
-            smtp_addresses + "' WHERE name = 'alert.email.addresses'"
+        update_email_addresses_sql = "UPDATE configuration SET value ='" + smtp_addresses + "' WHERE name = 'alert.email.addresses'"
         cursor.execute(update_email_addresses_sql)
 
     # result = cursor.fetchall()
