@@ -79,8 +79,7 @@ def configMoldSmtp(host, user, password):
         data = json.load(notificationJsonFile)
         # print(str(data['settings']['addresses']).replace(";",","))
         smtp_addresses = str(data['settings']['addresses']).replace(";", ",")
-        update_email_addresses_sql = "UPDATE configuration SET value ='" + \
-            smtp_addresses + "' WHERE name = 'alert.email.addresses'"
+        update_email_addresses_sql = "UPDATE configuration SET value ='" + smtp_addresses + "' WHERE name = 'alert.email.addresses'"
         cursor.execute(update_email_addresses_sql)
 
     # result = cursor.fetchall()
