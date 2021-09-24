@@ -6,11 +6,14 @@ Copyright (c) 2021 ABLECLOUD Co. Ltd
 
 # !/usr/bin/python3
 # -*- coding: utf-8 -*-
-
+import asyncio
+import os
 import yaml
 import argparse
 import json
+
 from ablestack import *
+import sh
 
 # skydive analyzer 포트
 skydive_analyzer_port = ":8082"
@@ -28,6 +31,8 @@ def parseArgs():
 
     parser.add_argument('action', choices=[
         'config'], help='choose one of the actions')
+    parser.add_argument('--cube', metavar='name', type=str,
+                        nargs='*', help='cube ips')
     parser.add_argument('--ccvm', metavar='name', type=str,
                         nargs='*', help='ccvm ips')
 
@@ -40,22 +45,41 @@ def ccvmSkydiveConfig(ccvm_ip):
         ccvm[i] = ccvm[i] + skydive_analyzer_port
     return ccvm
 
+
+def cubeServiceConfig(cube_ip):
+    cube = cube_ip.copy()
+    for i in range(len(cube)):
+        cube[i] = cube[i]
+    return cube
+
+
 # 함수명 : configYaml
 # 주요 기능 : 입력 받은 ip를 skydive.yml 파일의 analyzers에 설정
 
 
 def configYaml(ccvm):
-    skydive_yml_path = '/usr/share/ablestack/ablestack-skydive/skydive/skydive.yml'
+    skydive_yml_path = '/usr/share/ablestack/ablestack-skydive/skydive/'
 
-    with open(skydive_yml_path) as f:
+    with open(skydive_yml_path + "skydive.yml") as f:
         skydive_org = yaml.safe_load(f)
 
-        skydive_org['analyzers'][0] = ccvmSkydiveConfig(ccvm)
+        skydive_org['analyzers'] = ccvmSkydiveConfig(ccvm)
 
-        with open(skydive_yml_path, 'w') as yaml_file:
+        with open(skydive_yml_path + "skydive.yml", 'w') as yaml_file:
             yaml_file.write(
                 yaml.dump(skydive_org, default_flow_style=False))
 
+
+# 함수명 : SendCommandToHost
+# 주요 기능 : 입력 받은 cube ip의 주소로 skydive.yml 파일을 전송하고 service를 재시작 합니다.
+
+def SendCommandToHost(cube):
+    skydive_yml_path = '/usr/share/ablestack/ablestack-skydive/skydive/'
+
+    for i in range(len(cube)):
+        stringCube = ''.join(cubeServiceConfig(cube)[i])
+        sh.scp(skydive_yml_path + "skydive.yml", "root@" + stringCube + ":" + skydive_yml_path)
+        os.system("ssh root@" + stringCube + " 'systemctl restart skydive-agent.service'")
 
 def main():
     args = parseArgs()
@@ -63,6 +87,7 @@ def main():
     if (args.action) == 'config':
         try:
             configYaml(args.ccvm)
+            SendCommandToHost(args.cube)
             ret = createReturn(code=200, val="update skydive configuration")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
