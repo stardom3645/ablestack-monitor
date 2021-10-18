@@ -789,7 +789,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "사용자 VM vCPU 사용현황",
+      "title": "사용자 VM vCPU 사용 현황",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -882,7 +882,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "사용자 VM 메모리 사용현황",
+      "title": "사용자 VM 메모리 사용 현황",
       "tooltip": {
         "shared": true,
         "sort": 2,
