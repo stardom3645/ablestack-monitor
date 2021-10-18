@@ -864,7 +864,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "메모리 사용률 (TOP 5)",
+      "title": "메모리 사용 현황 (TOP 5)",
       "tooltip": {
         "shared": true,
         "sort": 2,

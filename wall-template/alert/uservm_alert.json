@@ -145,7 +145,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "CPU 사용현황",
+      "title": "CPU 사용률",
       "tooltip": {
         "shared": true,
         "sort": 2,

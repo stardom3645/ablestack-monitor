@@ -1092,7 +1092,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "vCPU 사용률",
+      "title": "vCPU 사용 현황",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1219,7 +1219,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Memory 사용 현황",
+      "title": "메모리 사용 현황",
       "tooltip": {
         "shared": true,
         "sort": 2,

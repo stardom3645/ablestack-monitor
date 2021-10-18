@@ -2688,8 +2688,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "i-12-50-VM",
-          "value": "i-12-50-VM"
+          "text": null,
+          "value": null
         },
         "datasource": "Wall",
         "definition": "label_values(libvirt_domain_info_meta{domain=~\"i-.*\"},domain)",
