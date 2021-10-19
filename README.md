@@ -15,48 +15,48 @@ Wall을 개발하기 위한 os 및 소프트웨어 버전은 아래 표와 같�
 
 ### MacOS에 개발환경 구성 방법
 ~~~
-a.	brew install git
-b.	brew install go
-c.	brew install nodejs ( 14 버전 이상 ) 
-d.	node -v ( 버전 확인 )
-e.	npm install -g yarn ( yarn 설치 )
-f.	yarn -v ( 버전 확인 )
-g.	git clonehttps://github.com/ablecloud-team/ablestack-wall.git ( 그라파나 소스다운로드 )
-h.	cd ablestack-wall( 폴더로 이동 )
-i.	git checkout ablestack-bronto ( branch 변경 )
-j.	구성 완료
+1.	brew install git
+2.	brew install go
+3.	brew install nodejs ( 14 버전 이상 ) 
+4.	node -v ( 버전 확인 )
+5.	npm install -g yarn ( yarn 설치 )
+6.	yarn -v ( 버전 확인 )
+7.	git clonehttps://github.com/ablecloud-team/ablestack-wall.git ( 그라파나 소스다운로드 )
+8.	cd ablestack-wall( 폴더로 이동 )
+9.	git checkout ablestack-bronto ( branch 변경 )
+10.	구성 완료
 ~~~
 
 ### Centos 8.4 VN에 개발환경 구성 방법
 ~~~
-a.	dnf -y install git make gcc
-b.	wget https://golang.org/dl/go1.16.6.linux-amd64.tar.gz
-c.	tar -C /usr/local -xvf go1.16.6.linux-amd64.tar.gz
-d.	vi ~/.bash_profile
-e.	export GOPATH=$HOME/go
-f.	export PATH=$PATH:$GOPATH/bin
-g.	export PATH=$PATH:/usr/local/go/bin
-h.	source ~/.bash_profile
-i.	curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash - (nodejs 최신버전 다운, 14이상)
-j.	dnf -y install nodejs
-k.	node -v ( 버전 확인 16.11 이상)
-l.	npm install -g yarn
-m.	yarn -v ( 버전 확인 1.22.17 이상)
-n.	git clone https://github.com/ablecloud-team/ablestack-wall.git ( 그라파나 소스다운로드 )
-o.	cd ablestack-wall( 폴더로 이동 )
-p.	git checkout ablestack-bronto ( branch 변경 )
-q.	구성 완료
+1.	dnf -y install git make gcc
+2.	wget https://golang.org/dl/go1.16.6.linux-amd64.tar.gz
+3.	tar -C /usr/local -xvf go1.16.6.linux-amd64.tar.gz
+4.	vi ~/.bash_profile
+5.	export GOPATH=$HOME/go
+6.	export PATH=$PATH:$GOPATH/bin
+7.	export PATH=$PATH:/usr/local/go/bin
+8.	source ~/.bash_profile
+9.	curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash - (nodejs 최신버전 다운, 14이상)
+10.	dnf -y install nodejs
+11.	node -v ( 버전 확인 16.11 이상)
+12.	npm install -g yarn
+13.	yarn -v ( 버전 확인 1.22.17 이상)
+14.	git clone https://github.com/ablecloud-team/ablestack-wall.git ( 그라파나 소스다운로드 )
+15.	cd ablestack-wall( 폴더로 이동 )
+16.	git checkout ablestack-bronto ( branch 변경 )
+17.	구성 완료
 ~~~
 
 ## 2. 소스 빌드
 Wall을 개발된 내용을 빌드 하는 방법은 아래와 같습니다. 
 
 ~~~
-a. cd grafana (개발 폴더)
-b. yarn install --pure-lockfile
-c. yarn start
-d. make build
-e. make run ("too many open files 에러 발생하면 url을 참조하여 해결 https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#troubleshooting")
+1. cd grafana (개발 폴더)
+2. yarn install --pure-lockfile
+3. yarn start
+4. make build
+5. make run ("too many open files 에러 발생하면 url을 참조하여 해결 https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#troubleshooting")
 ~~~
 
 소스 수정 후 빌드하면 수정된 소스로 반영됨
@@ -79,26 +79,26 @@ Wall 개발 환경에서 개발 및 빌드가 완료된 소스를 ablestack-temp
 
 ### 빌드된 소스를 파일 grafana ablestack-template 가상머신에 붙여 넣기
 ~~~
-scp -r /<개발 소스 경로>/bin root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
-scp -r /<개발 소스 경로>/bin/grafana-cli root@< ablestack-template-vm-ip>:/
-scp -r /<개발 소스 경로>/conf root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
-scp -r /<개발 소스 경로>/data root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
-scp -r /<개발 소스 경로>/ plugins-bundled root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
-scp -r /<개발 소스 경로>/public root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
-scp -r /<개발 소스 경로>/scripts root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
+1. scp -r /<개발 소스 경로>/bin root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
+2. scp -r /<개발 소스 경로>/bin/grafana-cli root@< ablestack-template-vm-ip>:/
+3. scp -r /<개발 소스 경로>/conf root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
+4. scp -r /<개발 소스 경로>/data root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
+5. scp -r /<개발 소스 경로>/ plugins-bundled root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
+6. scp -r /<개발 소스 경로>/public root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
+7. scp -r /<개발 소스 경로>/scripts root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
 ~~~
 
 ### ablestack-template 가상머신에 접속하여 실행파일 복사
 ~~~
-cp /usr/share/ablestack/ablestack-wall/grafana/bin/grafana-cli /usr/sbin/
-cp /usr/share/ablestack/ablestack-wall/grafana/bin/grafana-server /usr/sbin/
+1. cp /usr/share/ablestack/ablestack-wall/grafana/bin/grafana-cli /usr/sbin/
+2. cp /usr/share/ablestack/ablestack-wall/grafana/bin/grafana-server /usr/sbin/
 ~~~
 
 ### ablestack-template 가상머신에 접속하여 필요한 플러그인 패널 추가
-ablestack-template-vm의 /var/lib/grafana/plugins 경로에 grafana-clock-panel 및 grafana-image-renderer 폴더가 없을 경우 grafana-cli 명령어로 플러그인 패널 추가
+ablestack-template 가상머신의 /var/lib/grafana/plugins 경로에 grafana-clock-panel 및 grafana-image-renderer 폴더가 없을 경우 grafana-cli 명령어로 플러그인 패널 추가
 ~~~
-grafana-cli plugins install grafana-clock-pane
-grafana-cli plugins install grafana-image-renderer
+1. grafana-cli plugins install grafana-clock-pane
+2. grafana-cli plugins install grafana-image-renderer
 ~~~
 
 ## 4. wall 용 grafana.db 만드는 법
