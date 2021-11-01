@@ -36,6 +36,18 @@
       "tooltip": "",
       "type": "dashboards",
       "url": ""
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "넷다이브",
+      "tooltip": "",
+      "type": "link",
+      "url": "http://10.10.1.10:8082"
     }
   ],
   "liveNow": false,
