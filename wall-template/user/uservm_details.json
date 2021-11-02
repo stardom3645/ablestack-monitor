@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630375934651,
+  "iteration": 1635743328365,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -69,8 +69,79 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
+        "w": 4,
         "x": 0,
+        "y": 1
+      },
+      "id": 135,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.1.0-pre",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "libvirt_domain_info_meta{domain=\"$vm\"}",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{domain_mold_name}}",
+          "refId": "A",
+          "step": 240,
+          "stepMode": "min"
+        }
+      ],
+      "title": "가상머신 명",
+      "type": "stat"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 4,
         "y": 1
       },
       "id": 12,
@@ -168,8 +239,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 3,
+        "w": 2,
+        "x": 6,
         "y": 1
       },
       "id": 26,
@@ -236,8 +307,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 6,
+        "w": 2,
+        "x": 8,
         "y": 1
       },
       "id": 18,
@@ -310,8 +381,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 9,
+        "w": 2,
+        "x": 10,
         "y": 1
       },
       "hideTimeOverride": false,
@@ -2674,15 +2745,15 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "7a98709a-e67c-4519-ad99-b630909c8411",
-          "value": "7a98709a-e67c-4519-ad99-b630909c8411"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": "Wall",
         "definition": "label_values(libvirt_domain_info_meta{domain=~\"i-.*\"},uuid)",
         "description": "",
         "error": null,
         "hide": 2,
-        "includeAll": false,
+        "includeAll": true,
         "label": "vm_uuid",
         "multi": false,
         "name": "vm_uuid",
@@ -2700,9 +2771,10 @@
       {
         "allValue": null,
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "i-12-198-VM",
-          "value": "i-12-198-VM"
+          "text": null,
+          "value": null
         },
         "datasource": "Wall",
         "definition": "label_values(libvirt_domain_info_meta{uuid=\"$vm_uuid\"},domain)",

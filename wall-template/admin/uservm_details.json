@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1630375864411,
+  "iteration": 1635743222490,
   "links": [
     {
       "asDropdown": true,
@@ -37,6 +37,18 @@
       "tooltip": "",
       "type": "dashboards",
       "url": ""
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "넷다이브",
+      "tooltip": "",
+      "type": "link",
+      "url": "http://10.10.1.10:8082"
     }
   ],
   "liveNow": false,
@@ -84,8 +96,79 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
+        "w": 4,
         "x": 0,
+        "y": 1
+      },
+      "id": 135,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.1.0-pre",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "libvirt_domain_info_meta{domain=\"$vm\"}",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{domain_mold_name}}",
+          "refId": "A",
+          "step": 240,
+          "stepMode": "min"
+        }
+      ],
+      "title": "가상머신 명",
+      "type": "stat"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "Wall",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 4,
         "y": 1
       },
       "id": 12,
@@ -183,8 +266,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 3,
+        "w": 2,
+        "x": 6,
         "y": 1
       },
       "id": 26,
@@ -251,8 +334,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 6,
+        "w": 2,
+        "x": 8,
         "y": 1
       },
       "id": 18,
@@ -327,8 +410,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 9,
+        "w": 2,
+        "x": 10,
         "y": 1
       },
       "hideTimeOverride": false,

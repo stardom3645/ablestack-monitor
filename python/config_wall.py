@@ -13,6 +13,7 @@ import json
 from ablestack import *
 import configparser
 import sqlite3
+import pymysql
 from sh import cp
 
 # prometheus에서 수집하는 exporter 및 서비스 포트
@@ -260,6 +261,53 @@ def configDS(scvm, ccvm):
     conn.close()
 
 
+def configSkydiveLink(ccvm):
+
+    conn = sqlite3.connect(
+        "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
+
+    # skydive 링크가 들어가는 대시보드 ip 변경
+    link_update_query = "UPDATE dashboard SET data = replace(data, 'http://10.10.1.10:8082', 'http://" + str(ccvm[0]) + ":8082') WHERE org_id = 1 AND folder_id = 0 AND is_folder = 0 AND data like '%http://10.10.1.10:8082%'"
+
+    cur = conn.cursor()
+    cur.execute(link_update_query)
+
+    conn.commit()
+    conn.close()
+
+
+def configMoldUserDashboard():
+
+    # grafana.db 에서 사용자 대시보드의 UID 가져오기
+    conn = sqlite3.connect(
+        "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
+
+    user_dashboard_query = "SELECT uid, slug FROM dashboard WHERE id = 13 AND org_id = 2"
+
+    cur = conn.cursor()
+    cur.execute(user_dashboard_query)
+    user_dashboard_val = cur.fetchone()
+
+    uri_val = '/d/' + user_dashboard_val[0] + '/' + user_dashboard_val[1]
+    
+    conn.close()
+
+    cloud_db = pymysql.connect(
+        user='cloud',
+        password='Ablecloud1!',
+        host='localhost',
+        db='cloud',
+        charset='utf8'
+    )
+
+    cursor = cloud_db.cursor(pymysql.cursors.DictCursor)
+    update_user_dashboard_uri_sql = "UPDATE configuration SET value ='" + uri_val + "' WHERE name = 'monitoring.wall.portal.vm.uri'"
+    cursor.execute(update_user_dashboard_uri_sql)
+
+    cloud_db.commit()
+    cloud_db.close()
+
+
 # DB 파일 초기화 (기존 초기 파일로 되돌리기)
 def initDB():
     cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db",
@@ -275,6 +323,8 @@ def main():
             configYaml(args.cube, args.scvm, args.ccvm)
             configIni(args.ccvm)
             configDS(args.scvm, args.ccvm)
+            configSkydiveLink(args.ccvm)
+            configMoldUserDashboard()
             ret = createReturn(code=200, val="update wall configuration")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:

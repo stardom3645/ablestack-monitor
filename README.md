@@ -110,13 +110,13 @@ wall은 sqlite3 기반의 grafana.db를 사용하며 make build 명령을 통해
 3. 초기상태 grafana.db 생성
 4. make build
 5. wall 웹 포탈에 접속후 로그인
-6. 환경설정 > 데이터 소스 Wall, Glue, Mold 추가
+6. 환경설정 > 데이터 소스 Wall, Glue, Mold 순서로 추가 (순서 중요함)
 7. 템플릿 repository : https://github.com/ablecloud-team/ablestack-monitor.git 다운로드
 8. wall-template 안의 admin 폴더의 7개 대시보드 임포트 적용
 9. “Alert” 폴더 생성
 10. wall-template 안의 alert 폴더의 4개 대시보드 임포트 적용
 11. “1.종합대시보드” 즐겨찾기 후 환경설정 > 기본 설정 > 홈 대시보드 에서 기본페이지로 설정
-12. 플레이리스트 “Default Playlist” 이름으로 “1.종합 대시보드”, “2. 호스트 종합 현황”, “6. 사용자 가상머신 종합현황” 등록
+12. 플레이리스트 “Default Playlist” 이름으로 인터벌은 30s로 “1.종합 대시보드”, “2. 호스트 종합 현황”, “6. 사용자 가상머신 종합현황” 등록
 13. 조직 변경 Main Org.를 adminOrg로 변경
 14. 조직 추가 viewerOrg 추가
 15. 조직을 viewerOrg 변경하고 환경설정 > 데이터 소스에서 Wall 등록
