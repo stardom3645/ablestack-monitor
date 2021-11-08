@@ -1,6 +1,6 @@
 '''
 Copyright (c) 2021 ABLECLOUD Co. Ltd
-이 파일은 Wall VM을 구성할 때 skydive.yml 파일을 설정하는 프로그램입니다.
+이 파일은 Wall VM을 구성할 때 netdive.yml 파일을 설정하는 프로그램입니다.
 최초 작성일 : 2021. 09. 15
 '''
 
@@ -15,8 +15,8 @@ import json
 from ablestack import *
 import sh
 
-# skydive analyzer 포트
-skydive_analyzer_port = ":8082"
+# netdive analyzer 포트
+netdive_analyzer_port = ":8082"
 
 '''
 함수명 : parseArgs
@@ -26,7 +26,7 @@ skydive_analyzer_port = ":8082"
 
 
 def parseArgs():
-    parser = argparse.ArgumentParser(description='Skydive Yaml file parsing and replace targets',
+    parser = argparse.ArgumentParser(description='Netdive Yaml file parsing and replace targets',
                                      epilog='copyrightⓒ 2021 All rights reserved by ABLECLOUD™')
 
     parser.add_argument('action', choices=[
@@ -39,10 +39,10 @@ def parseArgs():
     return parser.parse_args()
 
 
-def ccvmSkydiveConfig(ccvm_ip):
+def ccvmNetdiveConfig(ccvm_ip):
     ccvm = ccvm_ip.copy()
     for i in range(len(ccvm)):
-        ccvm[i] = ccvm[i] + skydive_analyzer_port
+        ccvm[i] = ccvm[i] + netdive_analyzer_port
     return ccvm
 
 
@@ -54,32 +54,33 @@ def cubeServiceConfig(cube_ip):
 
 
 # 함수명 : configYaml
-# 주요 기능 : 입력 받은 ip를 skydive.yml 파일의 analyzers에 설정
+# 주요 기능 : 입력 받은 ip를 netdive.yml 파일의 analyzers에 설정
 
 
 def configYaml(ccvm):
-    skydive_yml_path = '/usr/share/ablestack/ablestack-skydive/skydive/'
+    netdive_yml_path = '/usr/share/ablestack/ablestack-netdive/netdive/'
 
-    with open(skydive_yml_path + "skydive.yml") as f:
-        skydive_org = yaml.safe_load(f)
+    with open(netdive_yml_path + "netdive.yml") as f:
+        netdive_org = yaml.safe_load(f)
 
-        skydive_org['analyzers'] = ccvmSkydiveConfig(ccvm)
+        netdive_org['analyzers'] = ccvmNetdiveConfig(ccvm)
 
-        with open(skydive_yml_path + "skydive.yml", 'w') as yaml_file:
+        with open(netdive_yml_path + "netdive.yml", 'w') as yaml_file:
             yaml_file.write(
-                yaml.dump(skydive_org, default_flow_style=False))
+                yaml.dump(netdive_org, default_flow_style=False))
 
 
 # 함수명 : SendCommandToHost
-# 주요 기능 : 입력 받은 cube ip의 주소로 skydive.yml 파일을 전송하고 service를 재시작 합니다.
+# 주요 기능 : 입력 받은 cube ip의 주소로 netdive.yml 파일을 전송하고 service를 재시작 합니다.
 
 def SendCommandToHost(cube):
-    skydive_yml_path = '/usr/share/ablestack/ablestack-skydive/skydive/'
+    netdive_yml_path = '/usr/share/ablestack/ablestack-netdive/netdive/'
 
     for i in range(len(cube)):
         stringCube = ''.join(cubeServiceConfig(cube)[i])
-        sh.scp(skydive_yml_path + "skydive.yml", "root@" + stringCube + ":" + skydive_yml_path)
-        os.system("ssh root@" + stringCube + " 'systemctl restart skydive-agent.service'")
+        sh.scp(netdive_yml_path + "netdive.yml", "root@" + stringCube + ":" + netdive_yml_path)
+        os.system("ssh root@" + stringCube + " 'systemctl restart netdive-agent.service'")
+
 
 def main():
     args = parseArgs()
@@ -88,7 +89,7 @@ def main():
         try:
             configYaml(args.ccvm)
             SendCommandToHost(args.cube)
-            ret = createReturn(code=200, val="update skydive configuration")
+            ret = createReturn(code=200, val="update netdive configuration")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
             ret = createReturn(code=500, val="fail to update")
