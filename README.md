@@ -57,6 +57,7 @@ Wall을 개발된 내용을 빌드 하는 방법은 아래와 같습니다.
 3. yarn start
 4. make build
 5. make run ("too many open files 에러 발생하면 url을 참조하여 해결 https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#troubleshooting")
+6. too many open files 에러 발생 > "ulimit -S -n 4096" 명령어 실행
 ~~~
 
 소스 수정 후 빌드하면 수정된 소스로 반영됨
@@ -122,10 +123,12 @@ wall은 sqlite3 기반의 grafana.db를 사용하며 make build 명령을 통해
 15. 조직을 viewerOrg 변경하고 환경설정 > 데이터 소스에서 Wall 등록
 16. wall-template 안의 user폴더의 1개 대시보드 임포트 적용
 17. “가상머신 상세 현황” 즐겨찾기 후 환경설정 > 기본 설정 > 홈 대시보드 에서 기본페이지로 설정
-18. Sqlite3 로 grafana.db 에 접근
-19. grafana.db 불필요 데이터 수동 삭제 ( ex : login 정보 등 )
-20. UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'user_auth_token';  (개발을 하기 위해 로그인 했던 정보 삭제)
-21. select * FROM SQLITE_SEQUENCE where name = 'user_auth_token';
-22. 작업 완료된 grafana.db 파일 gablestack-template 가상머신에 grafana.db, grafana_org.db 파일로 생성 복사
-23. scp <개발 폴더 경로>/gragana/data/grafana.db /usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db 
+18. adminOrg에 있는 Alert 폴더의 4개 대시보드 다시 저장 ( 템플릿만 임포트 시키면 알람이 표시안됨 )
+19. Sqlite3 로 grafana.db 에 접근
+20. grafana.db 불필요 데이터 수동 삭제 ( ex : login 정보 등 )
+21. DELETE FROM user_auth_token;
+22. UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'user_auth_token';  (개발을 하기 위해 로그인 했던 정보 삭제)
+23. select * FROM SQLITE_SEQUENCE where name = 'user_auth_token';
+24. 작업 완료된 grafana.db 파일 gablestack-template 가상머신에 grafana.db, grafana_org.db 파일로 생성 복사
+25. scp <개발 폴더 경로>/gragana/data/grafana.db /usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db 
 ~~~
