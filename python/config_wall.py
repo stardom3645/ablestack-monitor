@@ -243,13 +243,13 @@ def configDS(scvm, ccvm):
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
     ds_update_query1 = "UPDATE data_source SET url = \'http://" + \
-        wallPrometheusConfig(ccvm)[0] + "' WHERE id = 1"
+        "localhost:3001' WHERE id = 1"
     ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
         gluePrometheusConfig(scvm)[0] + "' WHERE id = 2"
     ds_update_query3 = "UPDATE data_source SET url = \'" + \
-        moldDBConfig(ccvm)[0] + "' WHERE id = 3"
+        "localhost:3306' WHERE id = 3"
     ds_update_query4 = "UPDATE data_source SET url = \'http://" + \
-        wallPrometheusConfig(ccvm)[0] + "' WHERE id = 4"
+        "localhost:3001' WHERE id = 4"
 
     cur = conn.cursor()
     cur.execute(ds_update_query1)
