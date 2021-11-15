@@ -335,11 +335,13 @@
         {
           "exemplar": true,
           "expr": "libvirt_domain_info_maximum_memory_bytes{domain=\"$vm\"}",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "메모리 합계",

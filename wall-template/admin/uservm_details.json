@@ -437,22 +437,26 @@
           "expr": "100",
           "format": "time_series",
           "hide": true,
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         },
         {
           "exemplar": true,
           "expr": "libvirt_domain_memory_stats_used_percent{domain=\"$vm\"}",
           "format": "time_series",
           "hide": false,
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "B",
-          "step": 240
+          "step": 240,
+          "stepMode": "min"
         }
       ],
       "title": "메모리 사용률",
