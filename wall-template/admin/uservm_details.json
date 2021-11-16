@@ -2778,8 +2778,8 @@
           "text": null,
           "value": null
         },
-        "datasource": "Wall",
-        "definition": "label_values(libvirt_domain_info_meta{domain=~\"i-.*\"},domain)",
+        "datasource": "Mold",
+        "definition": "SELECT instance_name FROM vm_instance WHERE removed is NULL AND instance_name LIKE 'i-%'",
         "description": "",
         "error": null,
         "hide": 1,
@@ -2788,10 +2788,7 @@
         "multi": false,
         "name": "vm",
         "options": [],
-        "query": {
-          "query": "label_values(libvirt_domain_info_meta{domain=~\"i-.*\"},domain)",
-          "refId": "StandardVariableQuery"
-        },
+        "query": "SELECT instance_name FROM vm_instance WHERE removed is NULL AND instance_name LIKE 'i-%'",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
