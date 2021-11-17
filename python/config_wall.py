@@ -147,13 +147,13 @@ def scvmBlackboxConfig(scvm_ip):
         scvm[i] = scvm[i]
     return scvm
 
-def ccvmBlackboxConfigReplacement(ccvm_ip):
+def ccvmBlackboxConfig(ccvm_ip):
     ccvm = ccvm_ip.copy()
     for i in range(len(ccvm)):
-        ccvm[i] = ccvm[i] + blackbox_exporter_port
+        ccvm[i] = ccvm[i]
     return ccvm
 
-def ccvmBlackboxConfigReplacementReplacement(ccvm_ip):
+def ccvmBlackboxConfigReplacement(ccvm_ip):
     ccvm = ccvm_ip.copy()
     for i in range(len(ccvm)):
         ccvm[i] = ccvm[i] + blackbox_exporter_port
