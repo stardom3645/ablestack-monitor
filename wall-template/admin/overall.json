@@ -1198,6 +1198,10 @@
               {
                 "id": "decimals",
                 "value": 2
+              },
+              {
+                "id": "max",
+                "value": 1
               }
             ]
           },

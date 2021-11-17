@@ -126,9 +126,13 @@ wall은 sqlite3 기반의 grafana.db를 사용하며 make build 명령을 통해
 18. adminOrg에 있는 Alert 폴더의 4개 대시보드 다시 저장 ( 템플릿만 임포트 시키면 알람이 표시안됨 )
 19. Sqlite3 로 grafana.db 에 접근
 20. grafana.db 불필요 데이터 수동 삭제 ( ex : login 정보 등 )
-21. DELETE FROM user_auth_token;
+21. DELETE FROM 'user_auth_token';
 22. UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'user_auth_token';  (개발을 하기 위해 로그인 했던 정보 삭제)
 23. select * FROM SQLITE_SEQUENCE where name = 'user_auth_token';
-24. 작업 완료된 grafana.db 파일 gablestack-template 가상머신에 grafana.db, grafana_org.db 파일로 생성 복사
-25. scp <개발 폴더 경로>/gragana/data/grafana.db /usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db 
+24. DELETE FROM 'annotation';
+25. UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'annotation';  (개발을 하기 위해 로그인 했던 정보 삭제)
+26. select * FROM SQLITE_SEQUENCE where name = 'annotation';
+27. UPDATE alert SET state = 'ok', execution_error = '', eval_data = '', eval_date = null WHERE 1=1;
+28. 작업 완료된 grafana.db 파일 gablestack-template 가상머신에 grafana.db, grafana_org.db 파일로 생성 복사
+29. scp <개발 폴더 경로>/gragana/data/grafana.db /usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db 
 ~~~

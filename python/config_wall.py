@@ -147,8 +147,13 @@ def scvmBlackboxConfig(scvm_ip):
         scvm[i] = scvm[i]
     return scvm
 
-
 def ccvmBlackboxConfig(ccvm_ip):
+    ccvm = ccvm_ip.copy()
+    for i in range(len(ccvm)):
+        ccvm[i] = ccvm[i]
+    return ccvm
+
+def ccvmBlackboxConfigReplacement(ccvm_ip):
     ccvm = ccvm_ip.copy()
     for i in range(len(ccvm)):
         ccvm[i] = ccvm[i] + blackbox_exporter_port
@@ -196,25 +201,25 @@ def configYaml(cube, scvm, ccvm):
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube-blackbox':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeBlackboxConfig(
                 cube)
-            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
+            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
                 ccvm)[0]
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm-blackbox':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmBlackboxConfig(
                 scvm)
-            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
+            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
                 ccvm)[0]
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm-blackbox':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmBlackboxConfig(
                 ccvm)
-            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
+            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
                 ccvm)[0]
 
         elif prometheus_org['scrape_configs'][i]['job_name'] == 'blackbox-tcp':
             prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeServiceConfig(cube) + moldServiceConfig(ccvm) + moldDBConfig(ccvm) + libvirtConfig(cube) + cubeNodeConfig(cube) + scvmNodeConfig(scvm) + ccvmNodeConfig(
-                ccvm) + cubeProcessConfig(cube) + scvmProcessConfig(scvm) + ccvmProcessConfig(ccvm) + ccvmBlackboxConfig(ccvm)
-            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfig(
+                ccvm) + cubeProcessConfig(cube) + scvmProcessConfig(scvm) + ccvmProcessConfig(ccvm) + ccvmBlackboxConfigReplacement(ccvm)
+            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
                 ccvm)[0]
 
         with open(prometheus_yml_path, 'w') as yaml_file:
@@ -243,13 +248,13 @@ def configDS(scvm, ccvm):
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
     ds_update_query1 = "UPDATE data_source SET url = \'http://" + \
-        wallPrometheusConfig(ccvm)[0] + "' WHERE id = 1"
+        "localhost:3001' WHERE id = 1"
     ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
         gluePrometheusConfig(scvm)[0] + "' WHERE id = 2"
     ds_update_query3 = "UPDATE data_source SET url = \'" + \
-        moldDBConfig(ccvm)[0] + "' WHERE id = 3"
+        "localhost:3306' WHERE id = 3"
     ds_update_query4 = "UPDATE data_source SET url = \'http://" + \
-        wallPrometheusConfig(ccvm)[0] + "' WHERE id = 4"
+        "localhost:3001' WHERE id = 4"
 
     cur = conn.cursor()
     cur.execute(ds_update_query1)
@@ -289,7 +294,7 @@ def configMoldUserDashboard():
     user_dashboard_val = cur.fetchone()
 
     uri_val = '/d/' + user_dashboard_val[0] + '/' + user_dashboard_val[1]
-    
+
     conn.close()
 
     cloud_db = pymysql.connect(

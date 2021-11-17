@@ -5007,6 +5007,30 @@
                   {
                     "id": "custom.displayMode",
                     "value": "lcd-gauge"
+                  },
+                  {
+                    "id": "max",
+                    "value": 1
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "percentage",
+                      "steps": [
+                        {
+                          "color": "green",
+                          "value": null
+                        },
+                        {
+                          "color": "#EAB839",
+                          "value": 75
+                        },
+                        {
+                          "color": "red",
+                          "value": 85
+                        }
+                      ]
+                    }
                   }
                 ]
               },
@@ -5028,7 +5052,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 4
+            "y": 25
           },
           "id": 246,
           "options": {
@@ -5145,7 +5169,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 4
+            "y": 25
           },
           "id": 249,
           "options": {
@@ -5187,7 +5211,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 12
+            "y": 33
           },
           "hiddenSeries": false,
           "id": 131,
@@ -5293,7 +5317,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 12
+            "y": 33
           },
           "hiddenSeries": false,
           "id": 132,
@@ -5400,7 +5424,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 20
+            "y": 41
           },
           "hiddenSeries": false,
           "id": 133,
@@ -5492,7 +5516,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 20
+            "y": 41
           },
           "hiddenSeries": false,
           "id": 134,
