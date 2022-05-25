@@ -1,0 +1,9 @@
+{
+    "mold_db": {
+        "serverhost":"ccvm",
+        "port":"3306",
+        "database": "cloud",
+        "username": "cloud",
+        "password": "Xurjj1idLzzHAF1fPnMJBg80kIXcN5-wK08y"
+    }
+}
