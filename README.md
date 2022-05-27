@@ -22,7 +22,7 @@ Wall을 개발하기 위한 os 및 소프트웨어 버전은 아래 표와 같�
 5.	npm install -g yarn ( yarn 설치 )
 6.	yarn -v ( 버전 확인 )
 7.	git clonehttps://github.com/ablecloud-team/ablestack-wall.git ( 그라파나 소스다운로드 )
-8.	cd ablestack-wall( 폴더로 이동 )
+8.	cd ablestack-wall ( 폴더로 이동 )
 9.	git checkout ablestack-bronto ( branch 변경 )
 10.	구성 완료
 ~~~
@@ -80,11 +80,11 @@ Wall 개발 환경에서 개발 및 빌드가 완료된 소스를 ablestack-temp
 
 ### 빌드된 소스를 파일 grafana ablestack-template 가상머신에 붙여 넣기
 ~~~
-1. scp -r /<개발 소스 경로>/bin root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
-2. scp -r /<개발 소스 경로>/bin/grafana-cli root@< ablestack-template-vm-ip>:/
+1. scp -r /<개발 소스 경로>/bin/linux-amd64/grafana-cli root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana/bin
+2. scp -r /<개발 소스 경로>/bin/linux-amd64/grafana-server root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana/bin
 3. scp -r /<개발 소스 경로>/conf root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
 4. scp -r /<개발 소스 경로>/data root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
-5. scp -r /<개발 소스 경로>/ plugins-bundled root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
+5. scp -r /<개발 소스 경로>/plugins-bundled root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
 6. scp -r /<개발 소스 경로>/public root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
 7. scp -r /<개발 소스 경로>/scripts root@< ablestack-template-vm-ip>:/usr/share/ablecloud/ablecloud-wall/grafana
 ~~~

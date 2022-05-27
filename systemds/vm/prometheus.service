@@ -1,0 +1,19 @@
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Restart=on-failure
+
+ExecStart=/usr/share/ablestack/ablestack-wall/prometheus/prometheus \
+    --config.file=/usr/share/ablestack/ablestack-wall/prometheus/prometheus.yml \
+    --storage.tsdb.path=/data/prometheus \
+    --web.console.templates=/usr/share/ablestack/ablestack-wall/prometheus/consoles \
+    --web.console.libraries=/usr/share/ablestack/ablestack-wall/prometheus/console_libraries \
+    --web.listen-address=0.0.0.0:3001 \
+    --web.enable-admin-api
+
+[Install]
+WantedBy=multi-user.target

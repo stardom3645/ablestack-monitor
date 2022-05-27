@@ -1,0 +1,16 @@
+[Unit]
+Description=Blackbox Exporter
+After=network-online.target
+
+[Service]
+User=root
+Restart=on-failure
+
+#Change this line if you download ther
+
+ExecStart=/usr/share/ablestack/ablestack-wall/blackbox-exporter/blackbox_exporter \
+  --config.file="/usr/share/ablestack/ablestack-wall/blackbox-exporter/blackbox.yml" \
+  --web.listen-address=":3005"
+
+[Install]
+WantedBy=multi-user.target

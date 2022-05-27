@@ -1,0 +1,30 @@
+[Unit]
+Description=Grafana instance
+Documentation=http://docs.grafana.org
+Wants=network-online.target
+After=network-online.target
+After=postgresql.service mariadb.service mysqld.service
+
+[Service]
+EnvironmentFile=/etc/sysconfig/grafana-server
+Environment=/usr/share/ablestack/ablestack-wall/grafana
+User=root
+Group=root
+Type=notify
+Restart=on-failure
+WorkingDirectory=/usr/share/ablestack/ablestack-wall/grafana
+RuntimeDirectory=grafana
+RuntimeDirectoryMode=0750
+ExecStart=/usr/share/ablestack/ablestack-wall/grafana/bin/grafana-server \
+                            --config=${CONF_FILE} \
+                            --pidfile=${PID_FILE_DIR}/grafana-server.pid  \
+                            cfg:default.paths.logs=${LOG_DIR} \
+                            cfg:default.paths.data=${DATA_DIR} \
+                            cfg:default.paths.plugins=${PLUGINS_DIR} \
+                            cfg:default.paths.provisioning=${PROVISIONING_CFG_DIR}
+
+LimitNOFILE=10000
+TimeoutStopSec=20
+
+[Install]
+WantedBy=multi-user.target
