@@ -1,0 +1,24 @@
+GRAFANA_USER=root
+
+GRAFANA_GROUP=root
+
+GRAFANA_HOME=/usr/share/ablestack/ablestack-wall/grafana
+
+LOG_DIR=/usr/share/ablestack/ablestack-wall/grafana/data/log
+
+DATA_DIR=/usr/share/ablestack/ablestack-wall/grafana/data
+
+MAX_OPEN_FILES=10000
+
+CONF_DIR=/usr/share/ablestack/ablestack-wall/grafana/conf
+
+CONF_FILE=/usr/share/ablestack/ablestack-wall/grafana/conf/defaults.ini
+
+RESTART_ON_UPGRADE=true
+
+PLUGINS_DIR=/usr/share/ablestack/ablestack-wall/grafana/data/plugins
+
+PROVISIONING_CFG_DIR=/usr/share/ablestack/ablestack-wall/grafanaconf/provisioning
+
+# Only used on systemd systems
+PID_FILE_DIR=/usr/share/ablestack/ablestack-wall/grafana
