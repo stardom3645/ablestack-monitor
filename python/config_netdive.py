@@ -58,7 +58,7 @@ def cubeServiceConfig(cube_ip):
 
 
 def configYaml(ccvm):
-    netdive_yml_path = '/usr/share/ablestack/ablestack-netdive/netdive/'
+    netdive_yml_path = '/usr/share/ablestack/ablestack-netdive/'
 
     with open(netdive_yml_path + "netdive.yml") as f:
         netdive_org = yaml.safe_load(f)
@@ -74,7 +74,7 @@ def configYaml(ccvm):
 # 주요 기능 : 입력 받은 cube ip의 주소로 netdive.yml 파일을 전송하고 service를 재시작 합니다.
 
 def SendCommandToHost(cube):
-    netdive_yml_path = '/usr/share/ablestack/ablestack-netdive/netdive/'
+    netdive_yml_path = '/usr/share/ablestack/ablestack-netdive/'
 
     for i in range(len(cube)):
         stringCube = ''.join(cubeServiceConfig(cube)[i])
