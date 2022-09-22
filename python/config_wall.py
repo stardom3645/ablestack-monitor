@@ -15,6 +15,7 @@ import configparser
 import sqlite3
 import pymysql
 from sh import cp
+from sh import systemctl
 
 # prometheus에서 수집하는 exporter 및 서비스 포트
 wall_prometheus_port = ":3001"
@@ -39,7 +40,7 @@ def parseArgs():
                                      epilog='copyrightⓒ 2021 All rights reserved by ABLECLOUD™')
 
     parser.add_argument('action', choices=[
-                        'config'], help='choose one of the actions')
+                        'config', 'update'], help='choose one of the actions')
     parser.add_argument('--cube', metavar='name', type=str,
                         nargs='*', help='cube ips')
     parser.add_argument('--scvm', metavar='name', type=str,
@@ -312,7 +313,6 @@ def configMoldUserDashboard():
     cloud_db.commit()
     cloud_db.close()
 
-
 # DB 파일 초기화 (기존 초기 파일로 되돌리기)
 def initDB():
     cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db",
@@ -321,23 +321,31 @@ def initDB():
 
 def main():
     args = parseArgs()
-    initDB()
-
+    
     if (args.action) == 'config':
         try:
+            initDB()
             configYaml(args.cube, args.scvm, args.ccvm)
             configIni(args.ccvm)
             configDS(args.scvm, args.ccvm)
             configSkydiveLink(args.ccvm)
             configMoldUserDashboard()
-            ret = createReturn(code=200, val="update wall configuration")
+            ret = createReturn(code=200, val="success wall configuration")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
-            ret = createReturn(code=500, val="fail to update")
+            ret = createReturn(code=500, val="fail to configuration")
+            print(json.dumps(json.loads(ret), indent=4))
+    if (args.action) == 'update':
+        try:
+            configYaml(args.cube, args.scvm, args.ccvm)
+            systemctl('restart', 'prometheus')
+            ret = createReturn(code=200, val="success prometheus update")
+            print(json.dumps(json.loads(ret), indent=4))
+        except Exception as e:
+            ret = createReturn(code=500, val="fail to update prometheus")
             print(json.dumps(json.loads(ret), indent=4))
 
     return ret
-
 
 if __name__ == "__main__":
     main()
