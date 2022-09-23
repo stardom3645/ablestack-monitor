@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1635743120697,
+  "iteration": 1663826488525,
   "links": [
     {
       "asDropdown": true,
@@ -653,152 +653,112 @@
       "type": "gauge"
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
       "datasource": "Glue",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "DOWN"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "OUT"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "UP"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "IN"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
-        "h": 4,
+        "h": 8,
         "w": 6,
         "x": 3,
         "y": 4
       },
-      "id": 81,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
+      "hiddenSeries": false,
+      "id": 94,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
       },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
       "pluginVersion": "8.1.0-pre",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:381",
+          "alias": "Reads",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(ceph_osd_up)",
-          "instant": true,
+          "expr": "sum(irate(ceph_osd_op_w_in_bytes[1m]))",
           "interval": "",
-          "legendFormat": "UP",
+          "legendFormat": "Wirtes",
           "refId": "A",
           "stepMode": "min"
         },
         {
           "exemplar": true,
-          "expr": "sum(ceph_osd_up == bool 0)",
+          "expr": "sum(irate(ceph_osd_op_r_out_bytes[1m]))",
           "hide": false,
-          "instant": true,
           "interval": "",
-          "legendFormat": "DOWN",
-          "refId": "C",
-          "stepMode": "min"
-        },
-        {
-          "exemplar": true,
-          "expr": "sum(ceph_osd_in)",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "IN",
+          "legendFormat": "Reads",
           "refId": "B",
-          "stepMode": "min"
-        },
-        {
-          "exemplar": true,
-          "expr": "sum(ceph_osd_in == bool 0)",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "OUT",
-          "refId": "D",
           "stepMode": "min"
         }
       ],
-      "title": "Glue 스토리지 디바이스 상태",
-      "type": "stat"
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Glue Client I/O",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:113",
+          "format": "bps",
+          "label": "Reads(-) / Writes (+)",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:114",
+          "format": "bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "cacheTimeout": null,
@@ -1123,194 +1083,58 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {
-            "align": "center",
-            "displayMode": "auto",
-            "filterable": false
-          },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 75
-              },
-              {
-                "color": "red",
-                "value": 85
               }
             ]
           },
-          "unit": "string"
+          "unit": "s"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value #A"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "사용률"
-              },
-              {
-                "id": "custom.align",
-                "value": "center"
-              },
-              {
-                "id": "unit",
-                "value": "percentunit"
-              },
-              {
-                "id": "custom.displayMode",
-                "value": "lcd-gauge"
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "percentage",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": null
-                    },
-                    {
-                      "color": "yellow",
-                      "value": 75
-                    },
-                    {
-                      "color": "red",
-                      "value": 85
-                    }
-                  ]
-                }
-              },
-              {
-                "id": "custom.width",
-                "value": 340
-              },
-              {
-                "id": "decimals",
-                "value": 2
-              },
-              {
-                "id": "max",
-                "value": 1
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value #B"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "용량 증설 예상 시간"
-              },
-              {
-                "id": "custom.align",
-                "value": "center"
-              },
-              {
-                "id": "unit",
-                "value": "s"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "options": {
-                      "match": "null+nan",
-                      "result": {
-                        "index": 0,
-                        "text": "INF"
-                      }
-                    },
-                    "type": "special"
-                  }
-                ]
-              },
-              {
-                "id": "custom.width"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "name"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "풀 이름"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 4,
-        "w": 9,
+        "w": 3,
         "x": 0,
         "y": 8
       },
-      "id": 66,
+      "id": 92,
       "options": {
-        "frameIndex": 0,
-        "showHeader": true,
-        "sortBy": []
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
       },
       "pluginVersion": "8.1.0-pre",
       "targets": [
         {
           "exemplar": true,
-          "expr": "(topk(3,((ceph_pool_stored / (ceph_pool_stored + ceph_pool_max_avail)) * on(pool_id) group_left(name) ceph_pool_metadata)))",
+          "expr": "(ceph_pool_max_avail / deriv(ceph_pool_stored[6h])) * on(pool_id) group_left(instance,name) ceph_pool_metadata{name=\"rbd\"} > 0",
           "format": "table",
           "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "((ceph_pool_max_avail / deriv(ceph_pool_stored[7d])) * on(pool_id) group_left(instance,name) ceph_pool_metadata{})\n + on(pool_id) group_left(instance,name)\ntopk(3,((ceph_pool_stored / (ceph_pool_stored + ceph_pool_max_avail)) * on(pool_id) group_left(name) ceph_pool_metadata)) > 0",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "B"
+          "refId": "A",
+          "stepMode": "min"
         }
       ],
-      "title": "풀 별 사용률 Top 3",
-      "transformations": [
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "names": [
-                "Value #A",
-                "Value #B",
-                "name"
-              ]
-            }
-          }
-        },
-        {
-          "id": "merge",
-          "options": {}
-        }
-      ],
-      "type": "table"
+      "title": "rbd 풀 증설 예상 시간",
+      "type": "stat"
     },
     {
       "cacheTimeout": null,
@@ -1407,7 +1231,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "Mold",
+      "datasource": "Glue",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1418,12 +1242,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -1432,17 +1252,13 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "C 기타"
+              "options": "DOWN"
             },
             "properties": [
               {
-                "id": "displayName",
-                "value": "전체"
-              },
-              {
                 "id": "color",
                 "value": {
-                  "fixedColor": "text",
+                  "fixedColor": "orange",
                   "mode": "fixed"
                 }
               }
@@ -1451,7 +1267,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "정지"
+              "options": "OUT"
             },
             "properties": [
               {
@@ -1466,13 +1282,28 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "기타"
+              "options": "UP"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "orange",
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "IN"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
                   "mode": "fixed"
                 }
               }
@@ -1481,12 +1312,12 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 4,
         "w": 4,
         "x": 0,
         "y": 12
       },
-      "id": 88,
+      "id": 81,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -1505,101 +1336,46 @@
       "pluginVersion": "8.1.0-pre",
       "targets": [
         {
-          "datasource": "__expr__",
-          "expression": "$A + $B + $D",
-          "hide": false,
-          "refId": "C",
-          "type": "math"
-        },
-        {
-          "format": "table",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"실행\" as id\n  ,count(*) as Value\nFROM vm_instance\nWHERE\n  removed is null\n  and state = \"Running\"\n  and vm_type = \"User\"",
+          "exemplar": true,
+          "expr": "sum(ceph_osd_up)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "UP",
           "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "id"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "account",
-          "timeColumn": "created",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
+          "stepMode": "min"
         },
         {
-          "format": "table",
-          "group": [],
+          "exemplar": true,
+          "expr": "sum(ceph_osd_up == bool 0)",
           "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"정지\" as id\n  ,count(*) as Value\nFROM vm_instance\nWHERE\n  removed is null\n  and state = \"Stopped\"\n  and vm_type = \"User\"",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "DOWN",
+          "refId": "C",
+          "stepMode": "min"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(ceph_osd_in)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "IN",
           "refId": "B",
-          "select": [
-            [
-              {
-                "params": [
-                  "id"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "account",
-          "timeColumn": "created",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
+          "stepMode": "min"
         },
         {
-          "format": "table",
-          "group": [],
+          "exemplar": true,
+          "expr": "sum(ceph_osd_in == bool 0)",
           "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"기타\" as id\n  ,count(*) as Value\nFROM vm_instance\nWHERE\n  removed is null\n  and state not in (\"Running\",\"Stopped\") \n  and vm_type = \"User\"",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "OUT",
           "refId": "D",
-          "select": [
-            [
-              {
-                "params": [
-                  "id"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "account",
-          "timeColumn": "created",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
+          "stepMode": "min"
         }
       ],
-      "title": "사용자 VM 현황",
+      "title": "Glue 스토리지 디바이스 상태",
       "type": "stat"
     },
     {
@@ -2033,6 +1809,202 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "datasource": "Mold",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "C 기타"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "전체"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "정지"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "기타"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 16
+      },
+      "id": 88,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.0-pre",
+      "targets": [
+        {
+          "datasource": "__expr__",
+          "expression": "$A + $B + $D",
+          "hide": false,
+          "refId": "C",
+          "type": "math"
+        },
+        {
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"실행\" as id\n  ,count(*) as Value\nFROM vm_instance\nWHERE\n  removed is null\n  and state = \"Running\"\n  and vm_type = \"User\"",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "account",
+          "timeColumn": "created",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"정지\" as id\n  ,count(*) as Value\nFROM vm_instance\nWHERE\n  removed is null\n  and state = \"Stopped\"\n  and vm_type = \"User\"",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "account",
+          "timeColumn": "created",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"기타\" as id\n  ,count(*) as Value\nFROM vm_instance\nWHERE\n  removed is null\n  and state not in (\"Running\",\"Stopped\") \n  and vm_type = \"User\"",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "account",
+          "timeColumn": "created",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "사용자 VM 현황",
+      "type": "stat"
     },
     {
       "cacheTimeout": null,
