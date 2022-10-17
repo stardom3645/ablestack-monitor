@@ -13,7 +13,9 @@ ExecStart=/usr/share/ablestack/ablestack-wall/prometheus/prometheus \
     --web.console.templates=/usr/share/ablestack/ablestack-wall/prometheus/consoles \
     --web.console.libraries=/usr/share/ablestack/ablestack-wall/prometheus/console_libraries \
     --web.listen-address=0.0.0.0:3001 \
-    --web.enable-admin-api
+    --web.enable-admin-api \
+    --storage.tsdb.retention.time=90d \
+    --storage.tsdb.retention.size=60GB
 
 [Install]
 WantedBy=multi-user.target
