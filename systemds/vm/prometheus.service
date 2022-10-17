@@ -9,7 +9,7 @@ Restart=on-failure
 
 ExecStart=/usr/share/ablestack/ablestack-wall/prometheus/prometheus \
     --config.file=/usr/share/ablestack/ablestack-wall/prometheus/prometheus.yml \
-    --storage.tsdb.path=/data/prometheus \
+    --storage.tsdb.path=/nfs/primary/prometheus \
     --web.console.templates=/usr/share/ablestack/ablestack-wall/prometheus/consoles \
     --web.console.libraries=/usr/share/ablestack/ablestack-wall/prometheus/console_libraries \
     --web.listen-address=0.0.0.0:3001 \
