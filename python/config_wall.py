@@ -10,14 +10,16 @@ Copyright (c) 2021 ABLECLOUD Co. Ltd
 import yaml
 import argparse
 import json
+import os
+import sh
 from ablestack import *
 import configparser
 import sqlite3
 import pymysql
-import sh
-import os
 from sh import cp
 from sh import systemctl
+from sh import ssh
+from sh import python3
 
 # prometheus에서 수집하는 exporter 및 서비스 포트
 wall_prometheus_port = ":3001"
@@ -29,9 +31,6 @@ cube_service_port = ":9090"
 mold_service_port = ":8080"
 mold_db_port = ":3306"
 glue_prometheus_port = ":9095"
-
-# netdive analyzer 포트
-netdive_analyzer_port = ":8082"
 
 '''
 함수명 : parseArgs
@@ -165,18 +164,6 @@ def ccvmBlackboxConfigReplacement(ccvm_ip):
         ccvm[i] = ccvm[i] + blackbox_exporter_port
     return ccvm
 
-def ccvmNetdiveConfig(ccvm_ip):
-    ccvm = ccvm_ip.copy()
-    for i in range(len(ccvm)):
-        ccvm[i] = ccvm[i] + netdive_analyzer_port
-    return ccvm
-
-def cubeHosConfig(cube_ip):
-    cube = cube_ip.copy()
-    for i in range(len(cube)):
-        cube[i] = cube[i]
-    return cube
-
 # 함수명 : configYaml
 # 주요 기능 : 입력 받은 ip를 prometheus.yml 파일의 targets에 설정
 
@@ -244,15 +231,6 @@ def configYaml(cube, scvm, ccvm):
             yaml_file.write(
                 yaml.dump(prometheus_org, default_flow_style=False))
 
-    # netdive.yml 파일의 analyzers에 설정
-    netdive_yml_path = '/usr/share/ablestack/ablestack-netdive/'
-    with open(netdive_yml_path + "netdive.yml") as f:
-        netdive_org = yaml.safe_load(f)
-        netdive_org['analyzers'] = ccvmNetdiveConfig(ccvm)
-        with open(netdive_yml_path + "netdive.yml", 'w') as yaml_file:
-            yaml_file.write(
-                yaml.dump(netdive_org, default_flow_style=False))
-
 # 함수명 : configIni
 # 주요 기능 : grafana의 설정 파일에 도메인을 ccvm ip로 설정
 
@@ -307,16 +285,6 @@ def configSkydiveLink(ccvm):
     conn.commit()
     conn.close()
 
-# 함수명 : SendCommandToHost
-# 주요 기능 : 입력 받은 cube ip의 주소로 netdive.yml 파일을 전송하고 service를 재시작 합니다.
-
-def SendCommandToHost(cube):
-    netdive_yml_path = '/usr/share/ablestack/ablestack-netdive/'
-
-    for i in range(len(cube)):
-        stringCube = ''.join(cubeHosConfig(cube)[i])
-        sh.scp(netdive_yml_path + "netdive.yml", "root@" + stringCube + ":" + netdive_yml_path)
-        os.system("ssh root@" + stringCube + " 'systemctl restart netdive-agent.service'")
 
 def configMoldUserDashboard():
 
@@ -374,12 +342,19 @@ def main():
     if (args.action) == 'update':
         try:
             configYaml(args.cube, args.scvm, args.ccvm)
-            SendCommandToHost(args.cube)
             systemctl('restart', 'prometheus')
+            netdive_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_netdive.py","config", "--ccvm", args.ccvm, "--cube", args.cube).stdout.decode())
+            if netdive_result["code"] == 200:
+                for scvm_ip in args.scvm:
+                    result = ssh('-o','StrictHostKeyChecking=no', scvm_ip, '/usr/bin/ls /usr/share/ablestack/ablestack-wall/process-exporter/').stdout.decode().splitlines()
+                    if 'scvm_process.yml' in result:
+                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "mv -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml /usr/share/ablestack/ablestack-wall/process-exporter/process.yml").stdout.strip().decode()
+                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "systemctl enable --now node-exporter.service process-exporter.service").stdout.strip().decode()
+
             ret = createReturn(code=200, val="success prometheus update")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
-            ret = createReturn(code=500, val="fail to update prometheus")
+            ret = createReturn(code=500, val="fail to update prometheus : "+e)
             print(json.dumps(json.loads(ret), indent=4))
 
     return ret
