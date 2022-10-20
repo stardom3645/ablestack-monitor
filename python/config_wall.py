@@ -14,6 +14,8 @@ from ablestack import *
 import configparser
 import sqlite3
 import pymysql
+import sh
+import os
 from sh import cp
 from sh import systemctl
 
@@ -27,6 +29,9 @@ cube_service_port = ":9090"
 mold_service_port = ":8080"
 mold_db_port = ":3306"
 glue_prometheus_port = ":9095"
+
+# netdive analyzer 포트
+netdive_analyzer_port = ":8082"
 
 '''
 함수명 : parseArgs
@@ -160,6 +165,18 @@ def ccvmBlackboxConfigReplacement(ccvm_ip):
         ccvm[i] = ccvm[i] + blackbox_exporter_port
     return ccvm
 
+def ccvmNetdiveConfig(ccvm_ip):
+    ccvm = ccvm_ip.copy()
+    for i in range(len(ccvm)):
+        ccvm[i] = ccvm[i] + netdive_analyzer_port
+    return ccvm
+
+def cubeHosConfig(cube_ip):
+    cube = cube_ip.copy()
+    for i in range(len(cube)):
+        cube[i] = cube[i]
+    return cube
+
 # 함수명 : configYaml
 # 주요 기능 : 입력 받은 ip를 prometheus.yml 파일의 targets에 설정
 
@@ -227,6 +244,15 @@ def configYaml(cube, scvm, ccvm):
             yaml_file.write(
                 yaml.dump(prometheus_org, default_flow_style=False))
 
+    # netdive.yml 파일의 analyzers에 설정
+    netdive_yml_path = '/usr/share/ablestack/ablestack-netdive/'
+    with open(netdive_yml_path + "netdive.yml") as f:
+        netdive_org = yaml.safe_load(f)
+        netdive_org['analyzers'] = ccvmNetdiveConfig(ccvm)
+        with open(netdive_yml_path + "netdive.yml", 'w') as yaml_file:
+            yaml_file.write(
+                yaml.dump(netdive_org, default_flow_style=False))
+
 # 함수명 : configIni
 # 주요 기능 : grafana의 설정 파일에 도메인을 ccvm ip로 설정
 
@@ -281,6 +307,16 @@ def configSkydiveLink(ccvm):
     conn.commit()
     conn.close()
 
+# 함수명 : SendCommandToHost
+# 주요 기능 : 입력 받은 cube ip의 주소로 netdive.yml 파일을 전송하고 service를 재시작 합니다.
+
+def SendCommandToHost(cube):
+    netdive_yml_path = '/usr/share/ablestack/ablestack-netdive/'
+
+    for i in range(len(cube)):
+        stringCube = ''.join(cubeHosConfig(cube)[i])
+        sh.scp(netdive_yml_path + "netdive.yml", "root@" + stringCube + ":" + netdive_yml_path)
+        os.system("ssh root@" + stringCube + " 'systemctl restart netdive-agent.service'")
 
 def configMoldUserDashboard():
 
@@ -338,6 +374,7 @@ def main():
     if (args.action) == 'update':
         try:
             configYaml(args.cube, args.scvm, args.ccvm)
+            SendCommandToHost(args.cube)
             systemctl('restart', 'prometheus')
             ret = createReturn(code=200, val="success prometheus update")
             print(json.dumps(json.loads(ret), indent=4))
