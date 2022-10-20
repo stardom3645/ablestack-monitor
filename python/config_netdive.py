@@ -78,8 +78,8 @@ def SendCommandToHost(cube):
 
     for i in range(len(cube)):
         stringCube = ''.join(cubeServiceConfig(cube)[i])
-        sh.scp(netdive_yml_path + "netdive.yml", "root@" + stringCube + ":" + netdive_yml_path)
-        os.system("ssh root@" + stringCube + " 'systemctl restart netdive-agent.service'")
+        os.system("scp -q -o StrictHostKeyChecking=no " + netdive_yml_path + "netdive.yml root@" + stringCube + ":" + netdive_yml_path)
+        os.system("ssh -o StrictHostKeyChecking=no root@" + stringCube + " 'systemctl restart netdive-agent.service'")
 
 
 def main():
