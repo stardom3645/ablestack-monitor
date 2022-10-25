@@ -11,9 +11,15 @@ import os
 import yaml
 import argparse
 import json
-
+import subprocess
+from subprocess import check_output
+from subprocess import call
 from ablestack import *
 import sh
+
+env=os.environ.copy()
+env['LANG']="en_US.utf-8"
+env['LANGUAGE']="en"
 
 # netdive analyzer 포트
 netdive_analyzer_port = ":8082"
@@ -75,11 +81,27 @@ def configYaml(ccvm):
 
 def SendCommandToHost(cube):
     netdive_yml_path = '/usr/share/ablestack/ablestack-netdive/'
-
-    for i in range(len(cube)):
-        stringCube = ''.join(cubeServiceConfig(cube)[i])
-        os.system("scp -q -o StrictHostKeyChecking=no " + netdive_yml_path + "netdive.yml root@" + stringCube + ":" + netdive_yml_path)
-        os.system("ssh -o StrictHostKeyChecking=no root@" + stringCube + " 'systemctl restart netdive-agent.service'")
+    result_code_list = []
+    # 오류 발생할 경우, 3번 재시도 합니다.
+    tries = 3
+    for j in range(tries):
+        for i in range(len(cube)):
+            stringCube = ''.join(cubeServiceConfig(cube)[i])
+            rc_one = call(["scp -q -o StrictHostKeyChecking=no " + netdive_yml_path + "netdive.yml root@" + stringCube + ":" + netdive_yml_path], universal_newlines=True, shell=True, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+            rc_two = call(["ssh -o StrictHostKeyChecking=no root@" + stringCube + " 'systemctl restart netdive-agent.service'"], universal_newlines=True, shell=True, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+            result_code_list.append(rc_one)
+            result_code_list.append(rc_two)
+        if all(0 == x for x in result_code_list):
+            result = 200
+        else:
+            result = 500
+        if result == 500:
+            if j < tries - 1:
+                continue
+            else:
+                raise
+        break
+    return result
 
 
 def main():
@@ -88,13 +110,16 @@ def main():
     if (args.action) == 'config':
         try:
             configYaml(args.ccvm)
-            SendCommandToHost(args.cube)
-            ret = createReturn(code=200, val="update netdive configuration")
-            print(json.dumps(json.loads(ret), indent=4))
+            result = SendCommandToHost(args.cube)
+            if result == 200:
+                ret = createReturn(code=200, val="update netdive configuration")
+                print(json.dumps(json.loads(ret), indent=4))
+            else:
+                ret = createReturn(code=500, val="fail to update netdive configuration")
+                print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
-            ret = createReturn(code=500, val="fail to update")
+            ret = createReturn(code=500, val="fail to update netdive configuration")
             print(json.dumps(json.loads(ret), indent=4))
-
     return ret
 
 
