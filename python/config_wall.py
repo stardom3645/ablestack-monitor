@@ -325,7 +325,6 @@ def initDB():
 
 def main():
     args = parseArgs()
-    
     if (args.action) == 'config':
         try:
             initDB()
@@ -346,10 +345,13 @@ def main():
             netdive_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_netdive.py","config", "--ccvm", args.ccvm, "--cube", args.cube).stdout.decode())
             if netdive_result["code"] == 200:
                 for scvm_ip in args.scvm:
-                    result = ssh('-o','StrictHostKeyChecking=no', scvm_ip, '/usr/bin/ls /usr/share/ablestack/ablestack-wall/process-exporter/').stdout.decode().splitlines()
+                    result = ssh('-o','StrictHostKeyChecking=no','-o','ConnectTimeout=5', scvm_ip, '/usr/bin/ls /usr/share/ablestack/ablestack-wall/process-exporter/').stdout.decode().splitlines()
                     if 'scvm_process.yml' in result:
-                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "mv -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml /usr/share/ablestack/ablestack-wall/process-exporter/process.yml").stdout.strip().decode()
+                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "\cp -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml /usr/share/ablestack/ablestack-wall/process-exporter/process.yml").stdout.strip().decode()
                         ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "systemctl enable --now node-exporter.service process-exporter.service").stdout.strip().decode()
+                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "rm -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml").stdout.strip().decode()
+            else:
+                createReturn(code=500, val="fail to update netdive : " + netdive_result["val"])    
 
             ret = createReturn(code=200, val="success prometheus update")
             print(json.dumps(json.loads(ret), indent=4))
