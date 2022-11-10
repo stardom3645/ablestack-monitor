@@ -44,7 +44,7 @@ def parseArgs():
                                      epilog='copyrightⓒ 2021 All rights reserved by ABLECLOUD™')
 
     parser.add_argument('action', choices=[
-                        'config', 'update'], help='choose one of the actions')
+                        'config', 'update', 'glueDsUpdate'], help='choose one of the actions')
     parser.add_argument('--cube', metavar='name', type=str,
                         nargs='*', help='cube ips')
     parser.add_argument('--scvm', metavar='name', type=str,
@@ -248,16 +248,23 @@ def configIni(ccvm):
 
 
 def configDS(scvm, ccvm):
-
     conn = sqlite3.connect(
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
     ds_update_query1 = "UPDATE data_source SET url = \'http://" + \
         "localhost:3001' WHERE id = 1"
+
     ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
         gluePrometheusConfig(scvm)[0] + "' WHERE id = 2"
+    
+    glue_prometheus_ip = findGluePrometheusIp()
+    if glue_prometheus_ip != "":
+        ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
+            glue_prometheus_ip+glue_prometheus_port + "' WHERE id = 2"
+
     ds_update_query3 = "UPDATE data_source SET url = \'" + \
         "localhost:3306' WHERE id = 3"
+
     ds_update_query4 = "UPDATE data_source SET url = \'http://" + \
         "localhost:3001' WHERE id = 4"
 
@@ -269,6 +276,10 @@ def configDS(scvm, ccvm):
 
     conn.commit()
     conn.close()
+    
+    exist_yn = os.system("crontab -l |grep 'config_wall.py glueDsUpdate' > /dev/null")
+    if exist_yn != 0:
+        os.system("echo -e \'*/5 * * * * /usr/bin/python3 /usr/share/ablestack/ablestack-wall/python/config_wall.py glueDsUpdate \' >> /var/spool/cron/root")
 
 
 def configSkydiveLink(ccvm):
@@ -322,6 +333,29 @@ def initDB():
     cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db",
        "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
+def gluePrometheusIpUpdate():
+    conn = sqlite3.connect(
+            "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
+
+    select_query = "select url from data_source WHERE id = 2"
+
+    cur = conn.cursor()
+    cur.execute(select_query)
+    
+    crrent_ip = cur.fetchone()
+    if crrent_ip is not None:
+        glue_prometheus_ip = findGluePrometheusIp()
+        if glue_prometheus_ip != "" and glue_prometheus_ip not in crrent_ip[0]:
+            glue_ds_update_query = "UPDATE data_source SET url = \'http://" + \
+                glue_prometheus_ip+glue_prometheus_port + "' WHERE id = 2"
+
+            cur.execute(glue_ds_update_query)
+
+    conn.commit()
+    conn.close()
+
+def findGluePrometheusIp():
+    return ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', "ablecube", "grep $(ceph orch ps |grep prometheus | awk '{print $2 \"-mngt\"}') /etc/hosts | awk '{print $1}'" ).stdout.strip().decode()
 
 def main():
     args = parseArgs()
@@ -357,6 +391,14 @@ def main():
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
             ret = createReturn(code=500, val="fail to update prometheus : "+e)
+            print(json.dumps(json.loads(ret), indent=4))
+    if (args.action) == 'glueDsUpdate':
+        try:
+            gluePrometheusIpUpdate()
+            ret = createReturn(code=200, val="success Glue prometheus ip update")
+            print(json.dumps(json.loads(ret), indent=4))
+        except Exception as e:
+            ret = createReturn(code=500, val="fail to update Glue prometheus ip : "+e)
             print(json.dumps(json.loads(ret), indent=4))
 
     return ret
