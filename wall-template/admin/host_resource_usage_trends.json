@@ -1,0 +1,1235 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 1671339664231,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "admin"
+      ],
+      "targetBlank": false,
+      "title": "대시보드 목록",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "넷다이브",
+      "tooltip": "",
+      "type": "link",
+      "url": "http://10.10.1.10:8082"
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "max": 0,
+          "min": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "클러스터 호스트 CPU 사용률"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": null
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 26,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {
+          "titleSize": 14
+        }
+      },
+      "pluginVersion": "8.1.0-pre",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "avg (100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\",job=\"cube\"}[1m])) * 100))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "클러스터 호스트 CPU 사용률",
+          "refId": "A",
+          "stepMode": "min"
+        },
+        {
+          "exemplar": true,
+          "expr": "avg(rate(libvirt_domain_info_cpu_time_seconds_total{domain=~\"i-.*\"}[1m]) / on (domain, instance) count(libvirt_domain_vcpu_cpu{}) by (instance, domain) * 100)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "VM vCPU 사용률",
+          "refId": "B",
+          "stepMode": "min"
+        }
+      ],
+      "title": "호스트 : VM CPU 사용률",
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "VM CPU 축소 필요"
+                },
+                "to": 25
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 26,
+                "result": {
+                  "index": 1,
+                  "text": "적정 사용중"
+                },
+                "to": 75
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 76,
+                "result": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "호스트 CPU 증설 필요"
+                },
+                "to": 10000
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "id": 28,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 20
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.0-pre",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "avg(rate(libvirt_domain_info_cpu_time_seconds_total{domain=~\"i-.*\"}[1m]) / on (domain, instance) count(libvirt_domain_vcpu_cpu{}) by (instance, domain) * 100) * 100 / avg (100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\",job=\"cube\"}[1m])) * 100))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A",
+          "stepMode": "min"
+        }
+      ],
+      "title": "CPU 자원할당 적정 평가",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "클러스터 호스트 메모리 예약률"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": null
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 12,
+        "y": 0
+      },
+      "id": 30,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {
+          "titleSize": 14
+        }
+      },
+      "pluginVersion": "8.1.0-pre",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "avg(100 - ((node_memory_MemAvailable_bytes{job=\"cube\"} * 100) / node_memory_MemTotal_bytes{job=\"cube\"}))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "클러스터 호스트 메모리 예약률",
+          "refId": "A",
+          "stepMode": "min"
+        },
+        {
+          "exemplar": true,
+          "expr": "avg(libvirt_domain_memory_stats_used_percent{domain=~\"i-.*\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "VM 메모리 사용률",
+          "refId": "B",
+          "stepMode": "min"
+        }
+      ],
+      "title": "호스트 : VM 메모리 사용률",
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "VM 메모리 축소 필요"
+                },
+                "to": 25
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 26,
+                "result": {
+                  "index": 1,
+                  "text": "적정 사용중"
+                },
+                "to": 75
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 76,
+                "result": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "호스트 메모리 증설 필요"
+                },
+                "to": 10000
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 0
+      },
+      "id": 32,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 20
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.0-pre",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "avg(libvirt_domain_memory_stats_used_percent{domain=~\"i-.*\"}) * 100 / avg(100 - ((node_memory_MemAvailable_bytes{job=\"cube\"} * 100) / node_memory_MemTotal_bytes{job=\"cube\"}))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A",
+          "stepMode": "min"
+        }
+      ],
+      "title": "메모리 자원할당 적정 평가",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 10,
+        "x": 0,
+        "y": 5
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{instance=\"$host:3003\",mode=\"idle\",job=\"cube\"}[1m])) * 100)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A",
+          "stepMode": "min"
+        }
+      ],
+      "title": "호스트 CPU 사용률",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "hidden",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 10,
+        "x": 10,
+        "y": 5
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(deriv(node_cpu_seconds_total{instance=\"$host:3003\", mode!=\"idle\"}[7d])) by (instance)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A",
+          "stepMode": "min"
+        }
+      ],
+      "title": "호스트 CPU 사용률 추이",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "from": -1e+36,
+                "result": {
+                  "index": 0,
+                  "text": "inf"
+                },
+                "to": 0
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 4,
+        "x": 20,
+        "y": 5
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.0-pre",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(node_cpu_seconds_total{instance=\"$host:3003\"}) by (instance) / sum(deriv(node_cpu_seconds_total{instance=\"$host:3003\", mode!=\"idle\"}[$period])) by (instance)",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A",
+          "stepMode": "min"
+        }
+      ],
+      "title": "호스트 CPU 증설 예상 시간",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 10,
+        "x": 0,
+        "y": 11
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "100 - ((node_memory_MemAvailable_bytes{instance=\"$host:3003\",job=\"cube\"} * 100) / node_memory_MemTotal_bytes{instance=\"$host:3003\",job=\"cube\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A",
+          "stepMode": "min"
+        }
+      ],
+      "title": "호스트 메모리 사용률",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "hidden",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 10,
+        "x": 10,
+        "y": 11
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "deriv(node_memory_MemAvailable_bytes{instance=\"$host:3003\", job=\"cube\"}[$period]) * -1",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A",
+          "stepMode": "min"
+        }
+      ],
+      "title": "호스트 메모리 사용률 추이",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "from": -1e+36,
+                "result": {
+                  "index": 0,
+                  "text": "inf"
+                },
+                "to": 0
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 4,
+        "x": 20,
+        "y": 11
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.0-pre",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "node_memory_MemTotal_bytes{instance=\"$host:3003\", job=\"cube\"}/deriv(node_memory_MemAvailable_bytes{instance=\"$host:3003\", job=\"cube\"}[$period]) * -1",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A",
+          "stepMode": "min"
+        }
+      ],
+      "title": "호스트 메모리 증설 예상 시간",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 10,
+        "x": 0,
+        "y": 17
+      },
+      "id": 22,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "(node_filesystem_size_bytes{instance=\"$host:3003\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"}) - (node_filesystem_avail_bytes{instance=\"$host:3003\", mountpoint=\"/\",fstype!=\"rootfs\", job=\"cube\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A",
+          "stepMode": "min"
+        }
+      ],
+      "title": "호스트 ROOT DISK 사용량",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "hidden",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 10,
+        "x": 10,
+        "y": 17
+      },
+      "id": 23,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "node_filesystem_size_bytes{instance=\"$host:3003\", mountpoint=\"/\", job=\"cube\"}/deriv(node_filesystem_avail_bytes{instance=\"$host:3003\", mountpoint=\"/\", job=\"cube\"}[$period]) * -1",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A",
+          "stepMode": "min"
+        }
+      ],
+      "title": "호스트 ROOT DISK 사용량 추이",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "from": -1e+36,
+                "result": {
+                  "index": 0,
+                  "text": "inf"
+                },
+                "to": 0
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 4,
+        "x": 20,
+        "y": 17
+      },
+      "id": 24,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.0-pre",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "node_filesystem_size_bytes{instance=\"$host:3003\", mountpoint=\"/\", job=\"cube\"}/deriv(node_filesystem_avail_bytes{instance=\"$host:3003\", mountpoint=\"/\", job=\"cube\"}[$period]) * -1",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A",
+          "stepMode": "min"
+        }
+      ],
+      "title": "호스트 ROOT DISK 증설 예상 시간",
+      "type": "stat"
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": [
+    "admin",
+    "wall"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "30d",
+          "value": "30d"
+        },
+        "description": "period",
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": "period",
+        "multi": false,
+        "name": "period",
+        "options": [
+          {
+            "selected": true,
+            "text": "30d",
+            "value": "30d"
+          }
+        ],
+        "query": "30d",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "10.10.1.1",
+          "value": "10.10.1.1"
+        },
+        "datasource": null,
+        "definition": "label_values(node_uname_info{job=\"cube\"},instance)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Host",
+        "multi": false,
+        "name": "host",
+        "options": [],
+        "query": {
+          "query": "label_values(node_uname_info{job=\"cube\"},instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "(.*):.*",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "nowDelay": "",
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "8. 호스트 자원 사용량 추이 예측",
+  "uid": "host_resource_usage_trends",
+  "version": 0
+}
