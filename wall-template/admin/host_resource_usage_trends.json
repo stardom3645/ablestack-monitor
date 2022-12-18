@@ -180,11 +180,11 @@
               "options": {
                 "from": 76,
                 "result": {
-                  "color": "red",
+                  "color": "blue",
                   "index": 2,
-                  "text": "호스트 CPU 증설 필요"
+                  "text": "호스트 CPU 원활"
                 },
-                "to": 10000
+                "to": 100000
               },
               "type": "range"
             }
@@ -195,10 +195,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -371,11 +367,11 @@
               "options": {
                 "from": 76,
                 "result": {
-                  "color": "red",
+                  "color": "blue",
                   "index": 2,
-                  "text": "호스트 메모리 증설 필요"
+                  "text": "호스트 메모리 원활"
                 },
-                "to": 10000
+                "to": 100000
               },
               "type": "range"
             }
@@ -1210,7 +1206,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {

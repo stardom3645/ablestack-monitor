@@ -303,7 +303,7 @@ def configMoldUserDashboard():
     conn = sqlite3.connect(
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
-    user_dashboard_query = "SELECT uid, slug FROM dashboard WHERE id = 13 AND org_id = 2"
+    user_dashboard_query = "SELECT uid, slug FROM dashboard WHERE id = 15 AND org_id = 2"
 
     cur = conn.cursor()
     cur.execute(user_dashboard_query)
