@@ -110,29 +110,30 @@ wall은 sqlite3 기반의 grafana.db를 사용하며 make build 명령을 통해
 2. rm -f <개발 폴더 경로>/gragana/data/grafana.db (db를 지워야 make build 할떄 새로 초기화 상태로 생성됨)
 3. 초기상태 grafana.db 생성
 4. make build
-5. wall 웹 포탈에 접속후 로그인
-6. 환경설정 > 데이터 소스 Wall, Glue, Mold 순서로 추가 (순서 중요함)
-7. 템플릿 repository : https://github.com/ablecloud-team/ablestack-monitor.git 다운로드
-8. wall-template 안의 admin 폴더의 7개 대시보드 임포트 적용
-9. “Alert” 폴더 생성
-10. wall-template 안의 alert 폴더의 4개 대시보드 임포트 적용
-11. “1.종합대시보드” 즐겨찾기 후 환경설정 > 기본 설정 > 홈 대시보드 에서 기본페이지로 설정
-12. 플레이리스트 “Default Playlist” 이름으로 인터벌은 30s로 “1.종합 대시보드”, “2. 호스트 종합 현황”, “6. 사용자 가상머신 종합현황” 등록
-13. 조직 변경 Main Org.를 adminOrg로 변경
-14. 조직 추가 viewerOrg 추가
-15. 조직을 viewerOrg 변경하고 환경설정 > 데이터 소스에서 Wall 등록
-16. wall-template 안의 user폴더의 1개 대시보드 임포트 적용
-17. “가상머신 상세 현황” 즐겨찾기 후 환경설정 > 기본 설정 > 홈 대시보드 에서 기본페이지로 설정
-18. adminOrg에 있는 Alert 폴더의 4개 대시보드 다시 저장 ( 템플릿만 임포트 시키면 알람이 표시안됨 )
-19. Sqlite3 로 grafana.db 에 접근
-20. grafana.db 불필요 데이터 수동 삭제 ( ex : login 정보 등 )
-21. DELETE FROM 'user_auth_token';
-22. UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'user_auth_token';  (개발을 하기 위해 로그인 했던 정보 삭제)
-23. select * FROM SQLITE_SEQUENCE where name = 'user_auth_token';
-24. DELETE FROM 'annotation';
-25. UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'annotation';  (개발을 하기 위해 로그인 했던 정보 삭제)
-26. select * FROM SQLITE_SEQUENCE where name = 'annotation';
-27. UPDATE alert SET state = 'ok', execution_error = '', eval_data = '', eval_date = null WHERE 1=1;
-28. 작업 완료된 grafana.db 파일 gablestack-template 가상머신에 grafana.db, grafana_org.db 파일로 생성 복사
-29. scp <개발 폴더 경로>/gragana/data/grafana.db /usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db 
+5. make run
+6. wall 웹 포탈에 접속후 로그인
+7. 환경설정 > 데이터 소스 Wall, Glue, Mold 순서로 추가 (순서 중요함)
+8. 템플릿 repository : https://github.com/ablecloud-team/ablestack-monitor.git 다운로드
+9. wall-template 안의 admin 폴더의 7개 대시보드 임포트 적용
+10. “Alert” 폴더 생성
+11. wall-template 안의 alert 폴더의 4개 대시보드 임포트 적용
+12. “1.종합대시보드” 즐겨찾기 후 환경설정 > 기본 설정 > 홈 대시보드 에서 기본페이지로 설정
+13. 플레이리스트 “Default Playlist” 이름으로 인터벌은 30s로 “1.종합 대시보드”, “2. 호스트 종합 현황”, “6. 사용자 가상머신 종합현황” 등록
+14. 조직 변경 Main Org.를 adminOrg로 변경
+15. 조직 추가 viewerOrg 추가
+16. 조직을 viewerOrg 변경하고 환경설정 > 데이터 소스에서 Wall 등록
+17. wall-template 안의 user폴더의 1개 대시보드 임포트 적용
+18. “가상머신 상세 현황” 즐겨찾기 후 환경설정 > 기본 설정 > 홈 대시보드 에서 기본페이지로 설정
+19. adminOrg에 있는 Alert 폴더의 4개의 각각 대시보드에 들어가서 다시 저장 (중요! 템플릿만 임포트 시키면 알람이 표시안됨 )
+20. Sqlite3 로 grafana.db 에 접근
+21. grafana.db 불필요 데이터 수동 삭제 ( ex : login 정보 등 )
+22. DELETE FROM 'user_auth_token';
+23. UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'user_auth_token';  (개발을 하기 위해 로그인 했던 정보 삭제)
+24. select * FROM SQLITE_SEQUENCE where name = 'user_auth_token';
+25. DELETE FROM 'annotation';
+26. UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'annotation';  (개발을 하기 위해 로그인 했던 정보 삭제)
+27. select * FROM SQLITE_SEQUENCE where name = 'annotation';
+28. UPDATE alert SET state = 'ok', execution_error = '', eval_data = '', eval_date = null WHERE 1=1;
+29. 작업 완료된 grafana.db 파일 ablestack-template 가상머신에 grafana.db, grafana_org.db 파일로 생성 복사
+30. scp <개발 폴더 경로>/gragana/data/grafana.db /usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db 
 ~~~
