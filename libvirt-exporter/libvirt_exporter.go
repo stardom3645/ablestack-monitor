@@ -24,7 +24,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/exec"
 	"strconv"
 	"strings"
 	"io/ioutil"
@@ -41,7 +40,6 @@ import (
 	"libvirt.org/go/libvirt"
 )
 
-var rbdImageDiskUsageResult []interface{}
 var confValue map[string]interface{}
 var byteValue []uint8
 var domainMetaInfo = map[int]map[string]string{}
@@ -57,11 +55,6 @@ var (
 	libvirtUpDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "", "up"),
 		"Whether scraping libvirt's metrics was successful.",
-		nil,
-		nil)
-	libvirtRbdCollectDesc = prometheus.NewDesc(
-		prometheus.BuildFQName("libvirt", "rbd_collect", "up"),
-		"Whether scraping rbd image disk usage metrics was successful.",
 		nil,
 		nil)
 	libvirtMoldCollectDesc = prometheus.NewDesc(
@@ -663,20 +656,10 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 				disk.Name)
 		}
 		if disk.AllocationSet {
-			//rbd 디스크 사용량 
-			diskAllocation := float64(disk.Allocation)
-			
-			for _, diskUsage := range rbdImageDiskUsageResult {
-				result := diskUsage.(map[string]interface{})
-				if result["snapshot_id"] == nil && strings.Contains(DiskSource, result["name"].(string)) {
-					diskAllocation = result["used_size"].(float64)
-				}
-			}
-
 			ch <- prometheus.MustNewConstMetric(
 				libvirtDomainBlockAllocationDesc,
 				prometheus.GaugeValue,
-				diskAllocation,
+				float64(disk.Allocation),
 				domainName,
 				disk.Name)
 		}
@@ -1126,7 +1109,6 @@ func NewLibvirtExporter(uri string) (*LibvirtExporter, error) {
 func (e *LibvirtExporter) Describe(ch chan<- *prometheus.Desc) {
 	// Status and versions
 	ch <- libvirtUpDesc
-	ch <- libvirtRbdCollectDesc
 	ch <- libvirtMoldCollectDesc
 	ch <- libvirtVersionsInfoDesc
 
@@ -1183,7 +1165,6 @@ func (e *LibvirtExporter) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect scrapes Prometheus metrics from libvirt.
 func (e *LibvirtExporter) Collect(ch chan<- prometheus.Metric) {
-	CollectRbdImageDiskUsage(ch)
 	CollectMoldMeta(ch)
 
 	err := CollectFromLibvirt(ch, e.uri)
@@ -1199,30 +1180,6 @@ func (e *LibvirtExporter) Collect(ch chan<- prometheus.Metric) {
 			prometheus.GaugeValue,
 			0.0)
 	}
-}
-
-func CollectRbdImageDiskUsage(ch chan<- prometheus.Metric) {
-	//rbd Image DiskUsage(du) information
-	cmd := exec.Command("rbd", "du", "--format", "json")
-	output, err := cmd.Output()
-	statusVal := 1.0
-
-	if err != nil {
-		log.Println("rbd image disk usage 정보를 수집할 수 없습니다.")
-		log.Println(err)
-		statusVal = 0.0
-	} else {
-		var dat map[string]interface{}
-		if err := json.Unmarshal([]byte(output), &dat); err != nil {
-			fmt.Println(err)
-		}
-		rbdImageDiskUsageResult = (dat["images"].([]interface{}))		
-	}
-
-	ch <- prometheus.MustNewConstMetric(
-		libvirtRbdCollectDesc,
-		prometheus.GaugeValue,
-		statusVal)
 }
 
 func NewAesCipher(key []byte) (*AESCipher, error) {
