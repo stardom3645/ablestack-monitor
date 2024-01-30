@@ -279,7 +279,7 @@ def configDS(scvm, ccvm):
     
     exist_yn = os.system("crontab -l |grep 'config_wall.py glueDsUpdate' > /dev/null")
     if exist_yn != 0:
-        os.system("echo -e \'*/5 * * * * /usr/bin/python3 /usr/share/ablestack/ablestack-wall/python/config_wall.py glueDsUpdate \' >> /var/spool/cron/root")
+        os.system("echo -e \'* * * * * /usr/bin/python3 /usr/share/ablestack/ablestack-wall/python/config_wall.py glueDsUpdate \' >> /var/spool/cron/root")
 
 
 def configSkydiveLink(ccvm):
@@ -355,7 +355,7 @@ def gluePrometheusIpUpdate():
     conn.close()
 
 def findGluePrometheusIp():
-    return ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', "ablecube", "grep $(ceph orch ps |grep prometheus | awk '{print $2 \"-mngt\"}') /etc/hosts | awk '{print $1}'" ).stdout.strip().decode()
+    return ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', "ablecube", "grep $(ceph orch ps |grep prometheus | awk '{print $2 \"-mngt\"}') /etc/hosts | awk '{print $1}'" ).strip()
 
 def main():
     args = parseArgs()
@@ -376,14 +376,14 @@ def main():
         try:
             configYaml(args.cube, args.scvm, args.ccvm)
             systemctl('restart', 'prometheus')
-            netdive_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_netdive.py","config", "--ccvm", args.ccvm, "--cube", args.cube).stdout.decode())
+            netdive_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_netdive.py","config", "--ccvm", args.ccvm, "--cube", args.cube))
             if netdive_result["code"] == 200:
                 for scvm_ip in args.scvm:
-                    result = ssh('-o','StrictHostKeyChecking=no','-o','ConnectTimeout=5', scvm_ip, '/usr/bin/ls /usr/share/ablestack/ablestack-wall/process-exporter/').stdout.decode().splitlines()
+                    result = ssh('-o','StrictHostKeyChecking=no','-o','ConnectTimeout=5', scvm_ip, '/usr/bin/ls /usr/share/ablestack/ablestack-wall/process-exporter/').splitlines()
                     if 'scvm_process.yml' in result:
-                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "\cp -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml /usr/share/ablestack/ablestack-wall/process-exporter/process.yml").stdout.strip().decode()
-                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "systemctl enable --now node-exporter.service process-exporter.service").stdout.strip().decode()
-                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "rm -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml").stdout.strip().decode()
+                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "\cp -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml /usr/share/ablestack/ablestack-wall/process-exporter/process.yml").strip()
+                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "systemctl enable --now node-exporter.service process-exporter.service").strip()
+                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "rm -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml").strip()
             else:
                 createReturn(code=500, val="fail to update netdive : " + netdive_result["val"])    
 
