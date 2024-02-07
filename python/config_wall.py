@@ -343,6 +343,7 @@ def gluePrometheusIpUpdate():
     cur.execute(select_query)
     
     crrent_ip = cur.fetchone()
+    glue_prometheus_ip = ""
     if crrent_ip is not None:
         glue_prometheus_ip = findGluePrometheusIp()
         if glue_prometheus_ip != "" and glue_prometheus_ip not in crrent_ip[0]:
@@ -353,9 +354,14 @@ def gluePrometheusIpUpdate():
 
     conn.commit()
     conn.close()
+    return glue_prometheus_ip
 
 def findGluePrometheusIp():
-    return ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', "ablecube", "grep $(ceph orch ps |grep prometheus | awk '{print $2 \"-mngt\"}') /etc/hosts | awk '{print $1}'" ).strip()
+    try:
+        ret=ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', "scvm1-mngt", "grep $(ceph orch ps |grep prometheus |grep running | head -n 1| awk '{print $2 \"-mngt\"}') /etc/hosts | awk '{print $1}'" ).strip()
+    except:
+        ret=ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', "scvm2-mngt", "grep $(ceph orch ps |grep prometheus |grep running | head -n 1| awk '{print $2 \"-mngt\"}') /etc/hosts | awk '{print $1}'" ).strip()
+    return ret
 
 def main():
     args = parseArgs()
@@ -370,7 +376,7 @@ def main():
             ret = createReturn(code=200, val="success wall configuration")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
-            ret = createReturn(code=500, val="fail to configuration")
+            ret = createReturn(code=500, val="fail to configuration" + e)
             print(json.dumps(json.loads(ret), indent=4))
     if (args.action) == 'update':
         try:
@@ -394,8 +400,8 @@ def main():
             print(json.dumps(json.loads(ret), indent=4))
     if (args.action) == 'glueDsUpdate':
         try:
-            gluePrometheusIpUpdate()
-            ret = createReturn(code=200, val="success Glue prometheus ip update")
+            glue_ip = gluePrometheusIpUpdate()
+            ret = createReturn(code=200, val="success Glue prometheus ip update : "+glue_ip)
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
             ret = createReturn(code=500, val="fail to update Glue prometheus ip : "+e)
