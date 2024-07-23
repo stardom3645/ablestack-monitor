@@ -18,27 +18,59 @@
 package main
 
 import (
-	"encoding/xml"
+	"crypto/aes"
+	"crypto/cipher"
+	"database/sql"
+	"encoding/base64"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
-	"io/ioutil"
-	"database/sql"
-	"crypto/aes"
-	"crypto/cipher"
-	"encoding/base64"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/AlexZzz/libvirt-exporter/libvirtSchema"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"libvirt.org/go/libvirt"
 )
+
+// DiskInfo represents information about a disk
+type DiskInfo struct {
+	Serial        string `json:"serial"`
+	BusType       string `json:"bus-type"`
+	Bus           int    `json:"bus"`
+	Unit          int    `json:"unit"`
+	PCIController struct {
+		Bus      int `json:"bus"`
+		Slot     int `json:"slot"`
+		Domain   int `json:"domain"`
+		Function int `json:"function"`
+	} `json:"pci-controller"`
+	Dev    string `json:"dev"`
+	Target int    `json:"target"`
+}
+
+// PartitionInfo represents information about a partition
+type PartitionInfo struct {
+	Name       string     `json:"name"`
+	TotalBytes int        `json:"total-bytes"`
+	Mountpoint string     `json:"mountpoint"`
+	Disk       []DiskInfo `json:"disk"`
+	UsedBytes  int        `json:"used-bytes"`
+	Type       string     `json:"type"`
+}
+
+// ReturnData represents the top-level JSON structure
+type ReturnData struct {
+	Return []PartitionInfo `json:"return"`
+}
 
 var confValue map[string]interface{}
 var byteValue []uint8
@@ -70,7 +102,7 @@ var (
 	libvirtDomainInfoMetaDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_info", "meta"),
 		"Domain metadata",
-		[]string{"domain", "uuid", "instance_name", "flavor", "user_name", "user_uuid", "project_name", "project_uuid", "root_type", "root_uuid","domain_mold_name","vm_user_name","display_mold_name"},
+		[]string{"domain", "uuid", "instance_name", "flavor", "user_name", "user_uuid", "project_name", "project_uuid", "root_type", "root_uuid", "domain_mold_name", "vm_user_name", "display_mold_name"},
 		nil)
 	libvirtDomainInfoMaxMemBytesDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_info", "maximum_memory_bytes"),
@@ -132,7 +164,7 @@ var (
 	libvirtDomainMetaBlockDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_block", "meta"),
 		"Block device metadata info. Device name, source file, serial.",
-		[]string{"domain", "target_device", "source_file", "serial", "bus", "disk_type", "driver_type", "cache", "discard","mold_disk_name","display_volume_name","mold_volume_type"},
+		[]string{"domain", "target_device", "source_file", "serial", "bus", "disk_type", "driver_type", "cache", "discard", "mold_disk_name", "display_volume_name", "mold_volume_type"},
 		nil)
 	libvirtDomainBlockRdBytesDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_block_stats", "read_bytes_total"),
@@ -188,6 +220,22 @@ var (
 		prometheus.BuildFQName("libvirt", "domain_block_stats", "physicalsize_bytes"),
 		"Physical size in bytes of the container of the backing image.",
 		[]string{"domain", "target_device"},
+		nil)
+
+	libvirtDomainFsInfoAgentStatusDesc = prometheus.NewDesc(
+		prometheus.BuildFQName("libvirt", "fs_info", "agent_status"),
+		"Check agent operation status.",
+		[]string{"domain"},
+		nil)
+	libvirtDomainFsInfoTotalBytesDesc = prometheus.NewDesc(
+		prometheus.BuildFQName("libvirt", "fs_info", "total_bytes"),
+		"Total disk capacity of virtual machine mount path.",
+		[]string{"domain", "partition_name", "partition_mountpoint", "partition_type", "serial"},
+		nil)
+	libvirtDomainFsInfoUsageBytesDesc = prometheus.NewDesc(
+		prometheus.BuildFQName("libvirt", "fs_info", "usage_bytes"),
+		"Total disk usage of virtual machine mount path",
+		[]string{"domain", "partition_name", "partition_mountpoint", "partition_type", "serial"},
 		nil)
 
 	// Block IO tune parameters
@@ -292,7 +340,7 @@ var (
 	libvirtDomainMetaInterfacesDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_interface", "meta"),
 		"Interfaces metadata. Source bridge, target device, interface uuid",
-		[]string{"domain", "source_bridge", "target_device", "virtual_interface","mac_address","mold_network_name"},
+		[]string{"domain", "source_bridge", "target_device", "virtual_interface", "mac_address", "mold_network_name"},
 		nil)
 	libvirtDomainInterfaceRxBytesDesc = prometheus.NewDesc(
 		prometheus.BuildFQName("libvirt", "domain_interface_stats", "receive_bytes_total"),
@@ -435,9 +483,9 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 	display_mold_name := domainName
 	vm_user_name := "N/A"
 	for _, val := range domainMetaInfo {
-		if domainName ==  val["domain_name"] {
+		if domainName == val["domain_name"] {
 			domain_mold_name = val["domain_mold_name"]
-			display_mold_name = display_mold_name + " ( "+domain_mold_name+" )"
+			display_mold_name = display_mold_name + " ( " + domain_mold_name + " )"
 			vm_user_name = val["vm_user_name"]
 		}
 	}
@@ -567,9 +615,9 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 		display_volume_name := disk.Name
 		mold_volume_type := "N/A"
 		for _, val := range diskMetaInfo {
-			if domainName ==  val["domain_name"] && strings.Contains(DiskSource, val["disk_path"]) {
+			if domainName == val["domain_name"] && strings.Contains(DiskSource, val["disk_path"]) {
 				mold_disk_name = val["mold_disk_name"]
-				display_volume_name = display_volume_name + " ( "+mold_disk_name+" )"
+				display_volume_name = display_volume_name + " ( " + mold_disk_name + " )"
 				mold_volume_type = val["volume_type"]
 			}
 		}
@@ -850,6 +898,8 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 		}
 	}
 
+	checkFsinfo(domainName, ch)
+
 	// Report network interface statistics.
 	for _, iface := range stat.Net {
 		var SourceBridge string
@@ -866,10 +916,10 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 		}
 
 		if SourceBridge != "" || VirtualInterface != "" || MacAddress != "" {
-			
+
 			mold_network_name := "N/A"
 			for _, val := range networkMetaInfo {
-				if MacAddress ==  val["mac_addr"] && val["mold_network_name"] != "%!s(<nil>)" {
+				if MacAddress == val["mac_addr"] && val["mold_network_name"] != "%!s(<nil>)" {
 					mold_network_name = val["mold_network_name"]
 				}
 			}
@@ -1141,6 +1191,11 @@ func (e *LibvirtExporter) Describe(ch chan<- *prometheus.Desc) {
 	ch <- libvirtDomainBlockCapacityBytesDesc
 	ch <- libvirtDomainBlockPhysicalSizeBytesDesc
 
+	// Domain fsinfo stats
+	ch <- libvirtDomainFsInfoAgentStatusDesc
+	ch <- libvirtDomainFsInfoTotalBytesDesc
+	ch <- libvirtDomainFsInfoUsageBytesDesc
+
 	// Domain net interfaces stats
 	ch <- libvirtDomainMetaInterfacesDesc
 	ch <- libvirtDomainInterfaceRxBytesDesc
@@ -1205,7 +1260,7 @@ func (a *AESCipher) DecryptString(base64String string) string {
 	//byte 배열에 담긴 ascii 코드를 확인하여 32 (공백) 이상이면서 127(delete) 문자일 경우에 정상 문자로 인식
 	for i, _ := range decryptByteArray {
 		if decryptByteArray[i] > 31 && decryptByteArray[i] < 127 {
-				decPw += string(decryptByteArray[i])
+			decPw += string(decryptByteArray[i])
 		}
 	}
 
@@ -1223,10 +1278,10 @@ func CollectMoldMeta(ch chan<- prometheus.Metric) {
 	username := moldDbConf["username"].(string)
 	statusVal := 1.0
 	enpw := moldDbConf["password"].(string) // pw_encryption.go 파일로 암호화시킨 비밀번호
-	
+
 	//키는 16, 24, 32만 가능합니다
 	var key = []byte("ablestackwallkey") // pw_encryption.go 에서 암호화 한 방식과 동일한 key
-	
+
 	if password == "" {
 		a, _ := NewAesCipher(key)
 		password = a.DecryptString(enpw)
@@ -1259,31 +1314,31 @@ func CollectMoldMeta(ch chan<- prometheus.Metric) {
 			values := make([]interface{}, count)
 			valuePtrs := make([]interface{}, count)
 			result_id := 0
-	
+
 			for doaminRows.Next() {
 				for i, _ := range columns {
 					valuePtrs[i] = &values[i]
 				}
 				doaminRows.Scan(valuePtrs...)
-			
+
 				tmp_struct := map[string]string{}
-			
+
 				for i, col := range columns {
 					var v interface{}
 					val := values[i]
 					b, ok := val.([]byte)
-					if (ok) {
+					if ok {
 						v = string(b)
 					} else {
 						v = val
 					}
-					tmp_struct[col] = fmt.Sprintf("%s",v)
+					tmp_struct[col] = fmt.Sprintf("%s", v)
 				}
-				
-				domainMetaInfo[ result_id ] = tmp_struct
+
+				domainMetaInfo[result_id] = tmp_struct
 				result_id++
 			}
-			
+
 			//row 닫기. 안닫으면 too many connections  에러 오류 발생
 			doaminRows.Close()
 		}
@@ -1311,31 +1366,31 @@ func CollectMoldMeta(ch chan<- prometheus.Metric) {
 			values := make([]interface{}, count)
 			valuePtrs := make([]interface{}, count)
 			result_id := 0
-	
+
 			for networkRows.Next() {
 				for i, _ := range columns {
 					valuePtrs[i] = &values[i]
 				}
 				networkRows.Scan(valuePtrs...)
-			
+
 				tmp_struct := map[string]string{}
-			
+
 				for i, col := range columns {
 					var v interface{}
 					val := values[i]
 					b, ok := val.([]byte)
-					if (ok) {
+					if ok {
 						v = string(b)
 					} else {
 						v = val
 					}
-					tmp_struct[col] = fmt.Sprintf("%s",v)
+					tmp_struct[col] = fmt.Sprintf("%s", v)
 				}
-				
-				networkMetaInfo[ result_id ] = tmp_struct
+
+				networkMetaInfo[result_id] = tmp_struct
 				result_id++
 			}
-			
+
 			//row 닫기. 안닫으면 too many connections  에러 오류 발생
 			networkRows.Close()
 		}
@@ -1364,31 +1419,31 @@ func CollectMoldMeta(ch chan<- prometheus.Metric) {
 			values := make([]interface{}, count)
 			valuePtrs := make([]interface{}, count)
 			result_id := 0
-	
+
 			for diskRows.Next() {
 				for i, _ := range columns {
 					valuePtrs[i] = &values[i]
 				}
 				diskRows.Scan(valuePtrs...)
-			
+
 				tmp_struct := map[string]string{}
-			
+
 				for i, col := range columns {
 					var v interface{}
 					val := values[i]
 					b, ok := val.([]byte)
-					if (ok) {
+					if ok {
 						v = string(b)
 					} else {
 						v = val
 					}
-					tmp_struct[col] = fmt.Sprintf("%s",v)
+					tmp_struct[col] = fmt.Sprintf("%s", v)
 				}
-				
-				diskMetaInfo[ result_id ] = tmp_struct
+
+				diskMetaInfo[result_id] = tmp_struct
 				result_id++
 			}
-	
+
 			//row 닫기. 안닫으면 too many connections  에러 오류 발생
 			diskRows.Close()
 		}
@@ -1398,6 +1453,101 @@ func CollectMoldMeta(ch chan<- prometheus.Metric) {
 		libvirtMoldCollectDesc,
 		prometheus.GaugeValue,
 		statusVal)
+}
+
+func checkFsinfo(domainName string, ch chan<- prometheus.Metric) {
+	// 실행할 셸 명령과 인자들
+	cmd := exec.Command("virsh", "qemu-agent-command", domainName, "{\"execute\": \"guest-get-fsinfo\"}", "--pretty")
+
+	// 명령 실행 및 결과 처리
+	jsonString, err := cmd.CombinedOutput()
+	if err != nil {
+		ch <- prometheus.MustNewConstMetric(
+			libvirtDomainFsInfoAgentStatusDesc,
+			prometheus.GaugeValue,
+			float64(1),
+			domainName)
+		// fmt.Println("에러 발생:", err)
+		return
+	}
+
+	jsonBytes := []byte(jsonString)
+	// JSON 디코딩하여 구조체에 저장
+	var data ReturnData
+	err = json.Unmarshal(jsonBytes, &data)
+	if err != nil {
+		// fmt.Println("JSON 파싱 오류:", err)
+		return
+	}
+
+	// 데이터 출력
+	for _, partition := range data.Return {
+		// 디스크 정보가 null이면 제외
+		// 총 용량이 0이면 제외
+		if partition.TotalBytes > 0 && len(partition.Disk) != 0 {
+			var serial string = ""
+			fmt.Println("-----------------------------------")
+			fmt.Printf("가상머신 이름: %s\n", domainName)
+			fmt.Printf("파티션 이름: %s\n", partition.Name)
+			fmt.Printf("총 용량(bytes): %d\n", partition.TotalBytes)
+			fmt.Printf("마운트 포인트: %s\n", partition.Mountpoint)
+			fmt.Printf("사용 용량(bytes): %d\n", partition.UsedBytes)
+			fmt.Printf("파티션 타입: %s\n", partition.Type)
+			fmt.Println("디스크 정보:")
+
+			for _, disk := range partition.Disk {
+				// 마지막 16자리 단어 구하기 (시리얼 정보)
+				length := len(disk.Serial)
+				var last20 string
+				if length >= 20 {
+					last20 = disk.Serial[length-20:]
+				} else {
+					last20 = disk.Serial // 문자열이 16자리보다 짧을 경우 전체 문자열 반환
+				}
+				serial = last20
+				// serial = disk.Serial
+				fmt.Printf("- 시리얼 번호: %s\n", disk.Serial)
+				fmt.Printf("- 버스 타입: %s\n", disk.BusType)
+				fmt.Printf("  버스: %d\n", disk.Bus)
+				fmt.Printf("  PCI 컨트롤러: Bus %d, Slot %d, Domain %d, Function %d\n",
+					disk.PCIController.Bus, disk.PCIController.Slot, disk.PCIController.Domain, disk.PCIController.Function)
+				fmt.Printf("  장치 경로: %s\n", disk.Dev)
+				fmt.Printf("  타겟: %d\n", disk.Target)
+			}
+
+			ch <- prometheus.MustNewConstMetric(
+				libvirtDomainFsInfoAgentStatusDesc,
+				prometheus.GaugeValue,
+				float64(0),
+				domainName)
+
+			ch <- prometheus.MustNewConstMetric(
+				libvirtDomainFsInfoTotalBytesDesc,
+				prometheus.GaugeValue,
+				float64(partition.TotalBytes),
+				domainName,
+				partition.Name,
+				partition.Mountpoint,
+				partition.Type,
+				serial)
+
+			ch <- prometheus.MustNewConstMetric(
+				libvirtDomainFsInfoUsageBytesDesc,
+				prometheus.GaugeValue,
+				float64(partition.UsedBytes),
+				domainName,
+				partition.Name,
+				partition.Mountpoint,
+				partition.Type,
+				serial)
+		} else {
+			ch <- prometheus.MustNewConstMetric(
+				libvirtDomainFsInfoAgentStatusDesc,
+				prometheus.GaugeValue,
+				float64(2),
+				domainName)
+		}
+	}
 }
 
 func main() {
@@ -1410,9 +1560,9 @@ func main() {
 	)
 
 	kingpin.MustParse(app.Parse(os.Args[1:]))
-	
+
 	errorsMap = make(map[string]struct{})
-	
+
 	// Open config json file
 	jsonFile, err := os.Open(*confPath)
 	if err != nil {
