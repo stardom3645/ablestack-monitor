@@ -223,17 +223,17 @@ var (
 		nil)
 
 	libvirtDomainFsInfoAgentStatusDesc = prometheus.NewDesc(
-		prometheus.BuildFQName("libvirt", "fs_info", "agent_status"),
+		prometheus.BuildFQName("libvirt", "domain_fs_info", "agent_status"),
 		"Check agent operation status.",
 		[]string{"domain"},
 		nil)
 	libvirtDomainFsInfoTotalBytesDesc = prometheus.NewDesc(
-		prometheus.BuildFQName("libvirt", "fs_info", "total_bytes"),
+		prometheus.BuildFQName("libvirt", "domain_fs_info", "total_bytes"),
 		"Total disk capacity of virtual machine mount path.",
 		[]string{"domain", "partition_name", "partition_mountpoint", "partition_type", "serial"},
 		nil)
 	libvirtDomainFsInfoUsageBytesDesc = prometheus.NewDesc(
-		prometheus.BuildFQName("libvirt", "fs_info", "usage_bytes"),
+		prometheus.BuildFQName("libvirt", "domain_fs_info", "usage_bytes"),
 		"Total disk usage of virtual machine mount path",
 		[]string{"domain", "partition_name", "partition_mountpoint", "partition_type", "serial"},
 		nil)
@@ -1486,14 +1486,14 @@ func checkFsinfo(domainName string, ch chan<- prometheus.Metric) {
 		// 총 용량이 0이면 제외
 		if partition.TotalBytes > 0 && len(partition.Disk) != 0 {
 			var serial string = ""
-			fmt.Println("-----------------------------------")
-			fmt.Printf("가상머신 이름: %s\n", domainName)
-			fmt.Printf("파티션 이름: %s\n", partition.Name)
-			fmt.Printf("총 용량(bytes): %d\n", partition.TotalBytes)
-			fmt.Printf("마운트 포인트: %s\n", partition.Mountpoint)
-			fmt.Printf("사용 용량(bytes): %d\n", partition.UsedBytes)
-			fmt.Printf("파티션 타입: %s\n", partition.Type)
-			fmt.Println("디스크 정보:")
+			// fmt.Println("-----------------------------------")
+			// fmt.Printf("가상머신 이름: %s\n", domainName)
+			// fmt.Printf("파티션 이름: %s\n", partition.Name)
+			// fmt.Printf("총 용량(bytes): %d\n", partition.TotalBytes)
+			// fmt.Printf("마운트 포인트: %s\n", partition.Mountpoint)
+			// fmt.Printf("사용 용량(bytes): %d\n", partition.UsedBytes)
+			// fmt.Printf("파티션 타입: %s\n", partition.Type)
+			// fmt.Println("디스크 정보:")
 
 			for _, disk := range partition.Disk {
 				// 마지막 16자리 단어 구하기 (시리얼 정보)
@@ -1506,20 +1506,14 @@ func checkFsinfo(domainName string, ch chan<- prometheus.Metric) {
 				}
 				serial = last20
 				// serial = disk.Serial
-				fmt.Printf("- 시리얼 번호: %s\n", disk.Serial)
-				fmt.Printf("- 버스 타입: %s\n", disk.BusType)
-				fmt.Printf("  버스: %d\n", disk.Bus)
-				fmt.Printf("  PCI 컨트롤러: Bus %d, Slot %d, Domain %d, Function %d\n",
-					disk.PCIController.Bus, disk.PCIController.Slot, disk.PCIController.Domain, disk.PCIController.Function)
-				fmt.Printf("  장치 경로: %s\n", disk.Dev)
-				fmt.Printf("  타겟: %d\n", disk.Target)
+				// fmt.Printf("- 시리얼 번호: %s\n", disk.Serial)
+				// fmt.Printf("- 버스 타입: %s\n", disk.BusType)
+				// fmt.Printf("  버스: %d\n", disk.Bus)
+				// fmt.Printf("  PCI 컨트롤러: Bus %d, Slot %d, Domain %d, Function %d\n",
+				// 	disk.PCIController.Bus, disk.PCIController.Slot, disk.PCIController.Domain, disk.PCIController.Function)
+				// fmt.Printf("  장치 경로: %s\n", disk.Dev)
+				// fmt.Printf("  타겟: %d\n", disk.Target)
 			}
-
-			ch <- prometheus.MustNewConstMetric(
-				libvirtDomainFsInfoAgentStatusDesc,
-				prometheus.GaugeValue,
-				float64(0),
-				domainName)
 
 			ch <- prometheus.MustNewConstMetric(
 				libvirtDomainFsInfoTotalBytesDesc,
@@ -1546,8 +1540,15 @@ func checkFsinfo(domainName string, ch chan<- prometheus.Metric) {
 				prometheus.GaugeValue,
 				float64(2),
 				domainName)
+			return
 		}
 	}
+
+	ch <- prometheus.MustNewConstMetric(
+		libvirtDomainFsInfoAgentStatusDesc,
+		prometheus.GaugeValue,
+		float64(0),
+		domainName)
 }
 
 func main() {
