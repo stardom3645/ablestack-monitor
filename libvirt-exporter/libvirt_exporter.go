@@ -1481,10 +1481,11 @@ func checkFsinfo(domainName string, ch chan<- prometheus.Metric) {
 	}
 
 	// 데이터 출력
+	var notSupportedAgnet bool = true
 	for _, partition := range data.Return {
 		// 디스크 정보가 null이면 제외
 		// 총 용량이 0이면 제외
-		if partition.TotalBytes > 0 && len(partition.Disk) != 0 {
+		if len(partition.Disk) != 0 {
 			var serial string = ""
 			// fmt.Println("-----------------------------------")
 			// fmt.Printf("가상머신 이름: %s\n", domainName)
@@ -1515,40 +1516,44 @@ func checkFsinfo(domainName string, ch chan<- prometheus.Metric) {
 				// fmt.Printf("  타겟: %d\n", disk.Target)
 			}
 
-			ch <- prometheus.MustNewConstMetric(
-				libvirtDomainFsInfoTotalBytesDesc,
-				prometheus.GaugeValue,
-				float64(partition.TotalBytes),
-				domainName,
-				partition.Name,
-				partition.Mountpoint,
-				partition.Type,
-				serial)
+			if partition.TotalBytes > 0 {
+				notSupportedAgnet = false
+				ch <- prometheus.MustNewConstMetric(
+					libvirtDomainFsInfoTotalBytesDesc,
+					prometheus.GaugeValue,
+					float64(partition.TotalBytes),
+					domainName,
+					partition.Name,
+					partition.Mountpoint,
+					partition.Type,
+					serial)
 
-			ch <- prometheus.MustNewConstMetric(
-				libvirtDomainFsInfoUsageBytesDesc,
-				prometheus.GaugeValue,
-				float64(partition.UsedBytes),
-				domainName,
-				partition.Name,
-				partition.Mountpoint,
-				partition.Type,
-				serial)
-		} else {
-			ch <- prometheus.MustNewConstMetric(
-				libvirtDomainFsInfoAgentStatusDesc,
-				prometheus.GaugeValue,
-				float64(2),
-				domainName)
-			return
+				ch <- prometheus.MustNewConstMetric(
+					libvirtDomainFsInfoUsageBytesDesc,
+					prometheus.GaugeValue,
+					float64(partition.UsedBytes),
+					domainName,
+					partition.Name,
+					partition.Mountpoint,
+					partition.Type,
+					serial)
+			}
 		}
 	}
 
-	ch <- prometheus.MustNewConstMetric(
-		libvirtDomainFsInfoAgentStatusDesc,
-		prometheus.GaugeValue,
-		float64(0),
-		domainName)
+	if notSupportedAgnet {
+		ch <- prometheus.MustNewConstMetric(
+			libvirtDomainFsInfoAgentStatusDesc,
+			prometheus.GaugeValue,
+			float64(2),
+			domainName)
+	} else {
+		ch <- prometheus.MustNewConstMetric(
+			libvirtDomainFsInfoAgentStatusDesc,
+			prometheus.GaugeValue,
+			float64(0),
+			domainName)
+	}
 }
 
 func main() {
