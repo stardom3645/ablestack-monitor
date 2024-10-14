@@ -1,0 +1,63 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://ccvm:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: job1
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: ccvm
+      __path__: /var/log/cloudstack/management/*.log
+      stream: stdout
+  pipeline_stages:
+      - multiline:
+          firstline: '^\S'
+      - labels:
+          filename: "{{ .filename }}"
+      - regex:
+          expression: '.*\s(?P<level>DEBUG|INFO|WARN|ERROR)\s.*'
+      - labels:
+          level:
+      - match:
+          selector: '{level="DEBUG"}'
+          stages:
+          - drop:
+              expression: '.*error.*'
+      - replace:
+          expression: '(.*)'
+          replacement: 'test_$1'
+          source: filename
+
+- job_name: job2
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: ccvm
+      __path__: /var/log/messages
+      stream: stdout
+  pipeline_stages:
+      - multiline:
+          firstline: '^\S'
+      - labels:
+          filename: "{{ .filename }}"
+      - regex:
+          expression: '.*(?i)(?P<level>DEBUG|INFO|WARN|ERROR).*'
+      - labels:
+          level:
+      - replace:
+          expression: '(?i)(debug|info|warn|error)'
+          replacement: '{{ .Value | upper }}'
+          source: level
+      - replace:
+          expression: '(.*)'
+          replacement: 'test_$1'
+          source: filename
