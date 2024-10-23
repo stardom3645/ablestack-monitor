@@ -7,11 +7,11 @@ server:
 
 common:
   instance_addr: 127.0.0.1
-  path_prefix: /tmp/loki
+  path_prefix: /nfs/loki
   storage:
     filesystem:
-      chunks_directory: /tmp/loki/chunks
-      rules_directory: /tmp/loki/rules
+      chunks_directory: /nfs/loki/chunks
+      rules_directory: /nfs/loki/rules
   replication_factor: 1
   ring:
     kvstore:
@@ -43,12 +43,12 @@ frontend:
 compactor:
   retention_enabled: true
   retention_delete_delay: 30m
-  working_directory: /tmp/loki/compactor
+  working_directory: /nfs/loki/compactor
   delete_request_store: filesystem
 
 limits_config:
-  max_query_lookback: 2160h
-  retention_period: 2160h
+  max_query_lookback: 90d
+  retention_period: 90d
   max_metadata_cache_freshness: 90d
   ingestion_rate_mb: 8
   max_line_size: 2048KB
@@ -56,7 +56,7 @@ limits_config:
 
 table_manager:
   retention_deletes_enabled: true
-  retention_period: 2160h
+  retention_period: 90d
 
 # By default, Loki will send anonymous, but uniquely-identifiable usage and configuration
 # analytics to Grafana Labs. These statistics are sent to https://stats.grafana.org/
