@@ -28,6 +28,10 @@ scrape_configs:
       - labels:
           level:
       - replace:
+          expression: '.*level=warn.*'  # "level=warn"이 포함된 경우
+          replacement: 'WARN'  # level을 WARN으로 변경
+          source: level
+      - replace:
           expression: '(?i)(debug|info|warn|error)'
           replacement: '{{ .Value | upper }}'
           source: level
