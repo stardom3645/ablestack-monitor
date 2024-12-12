@@ -38,13 +38,13 @@ glue_prometheus_port = ":9095"
 예를들어 action을 요청하면 해당 action일 때 요구되는 파라미터를 입력받고 해당 코드를 수행합니다.
 '''
 
-
+json_file_path = "/etc/cluster.json"
 def parseArgs():
     parser = argparse.ArgumentParser(description='Prometheus Yaml file parsing and replace targets',
                                      epilog='copyrightⓒ 2021 All rights reserved by ABLECLOUD™')
 
     parser.add_argument('action', choices=[
-                        'config', 'update', 'glueDsUpdate'], help='choose one of the actions')
+                        'config', 'update', 'glueDsUpdate', 'configGfs'], help='choose one of the actions')
     parser.add_argument('--cube', metavar='name', type=str,
                         nargs='*', help='cube ips')
     parser.add_argument('--scvm', metavar='name', type=str,
@@ -54,6 +54,18 @@ def parseArgs():
 
     return parser.parse_args()
 
+def openClusterJson():
+    try:
+        with open(json_file_path, 'r') as json_file:
+            ret = json.load(json_file)
+    except Exception as e:
+        ret = createReturn(code=500, val='cluster.json read error')
+        print ('EXCEPTION : ',e)
+
+    return ret
+
+json_data = openClusterJson()
+os_type = json_data["clusterConfig"]["type"]
 
 def cubeServiceConfig(cube_ip):
     cube = cube_ip.copy()
@@ -168,64 +180,103 @@ def ccvmBlackboxConfigReplacement(ccvm_ip):
 # 주요 기능 : 입력 받은 ip를 prometheus.yml 파일의 targets에 설정
 
 
-def configYaml(cube, scvm, ccvm):
+def configYaml(cube, ccvm, scvm=None):
     prometheus_yml_path = '/usr/share/ablestack/ablestack-wall/prometheus/prometheus.yml'
 
     with open(prometheus_yml_path) as f:
         prometheus_org = yaml.safe_load(f)
     for i in range(len(prometheus_org['scrape_configs'])):
 
-        if prometheus_org['scrape_configs'][i]['job_name'] == 'libvirt':
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = libvirtConfig(
-                cube)
+        if os_type != "general-virtualization":
+            if prometheus_org['scrape_configs'][i]['job_name'] == 'libvirt':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = libvirtConfig(
+                    cube)
 
-        elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube':
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeNodeConfig(
-                cube)
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeNodeConfig(
+                    cube)
 
-        elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm':
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmNodeConfig(
-                scvm)
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmNodeConfig(
+                    scvm)
 
-        elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm':
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmNodeConfig(
-                ccvm)
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmNodeConfig(
+                    ccvm)
 
-        elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube-process-exporter':
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeProcessConfig(
-                cube)
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube-process-exporter':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeProcessConfig(
+                    cube)
 
-        elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm-process-exporter':
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmProcessConfig(
-                scvm)
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm-process-exporter':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmProcessConfig(
+                    scvm)
 
-        elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm-process-exporter':
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmProcessConfig(
-                ccvm)
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm-process-exporter':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmProcessConfig(
+                    ccvm)
 
-        elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube-blackbox':
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeBlackboxConfig(
-                cube)
-            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
-                ccvm)[0]
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube-blackbox':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeBlackboxConfig(
+                    cube)
+                prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
+                    ccvm)[0]
 
-        elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm-blackbox':
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmBlackboxConfig(
-                scvm)
-            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
-                ccvm)[0]
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm-blackbox':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmBlackboxConfig(
+                    scvm)
+                prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
+                    ccvm)[0]
 
-        elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm-blackbox':
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmBlackboxConfig(
-                ccvm)
-            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
-                ccvm)[0]
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm-blackbox':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmBlackboxConfig(
+                    ccvm)
+                prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
+                    ccvm)[0]
 
-        elif prometheus_org['scrape_configs'][i]['job_name'] == 'blackbox-tcp':
-            prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeServiceConfig(cube) + moldServiceConfig(ccvm) + moldDBConfig(ccvm) + libvirtConfig(cube) + cubeNodeConfig(cube) + scvmNodeConfig(scvm) + ccvmNodeConfig(
-                ccvm) + cubeProcessConfig(cube) + scvmProcessConfig(scvm) + ccvmProcessConfig(ccvm) + ccvmBlackboxConfigReplacement(ccvm)
-            prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
-                ccvm)[0]
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'blackbox-tcp':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeServiceConfig(cube) + moldServiceConfig(ccvm) + moldDBConfig(ccvm) + libvirtConfig(cube) + cubeNodeConfig(cube) + scvmNodeConfig(scvm) + ccvmNodeConfig(
+                    ccvm) + cubeProcessConfig(cube) + scvmProcessConfig(scvm) + ccvmProcessConfig(ccvm) + ccvmBlackboxConfigReplacement(ccvm)
+                prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
+                    ccvm)[0]
+        else :
+            if prometheus_org['scrape_configs'][i]['job_name'] == 'libvirt':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = libvirtConfig(
+                    cube)
+
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeNodeConfig(
+                    cube)
+
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmNodeConfig(
+                    ccvm)
+
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube-process-exporter':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeProcessConfig(
+                    cube)
+
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm-process-exporter':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmProcessConfig(
+                    ccvm)
+
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube-blackbox':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeBlackboxConfig(
+                    cube)
+                prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
+                    ccvm)[0]
+
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm-blackbox':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ccvmBlackboxConfig(
+                    ccvm)
+                prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
+                    ccvm)[0]
+
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'blackbox-tcp':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeServiceConfig(cube) + moldServiceConfig(ccvm) + moldDBConfig(ccvm) + libvirtConfig(cube) + cubeNodeConfig(cube) + ccvmNodeConfig(
+                    ccvm) + cubeProcessConfig(cube)  + ccvmProcessConfig(ccvm) + ccvmBlackboxConfigReplacement(ccvm)
+                prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
+                    ccvm)[0]
 
         with open(prometheus_yml_path, 'w') as yaml_file:
             yaml_file.write(
@@ -247,20 +298,21 @@ def configIni(ccvm):
         config.write(f)
 
 
-def configDS(scvm, ccvm):
+def configDS(scvm=None):  # 기본값 None 추가
     conn = sqlite3.connect(
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
     ds_update_query1 = "UPDATE data_source SET url = \'http://" + \
         "localhost:3001' WHERE id = 1"
 
-    ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
-        gluePrometheusConfig(scvm)[0] + "' WHERE id = 2"
-    
-    glue_prometheus_ip = findGluePrometheusIp()
-    if glue_prometheus_ip != "":
+    if os_type != "general-virtualization" and scvm is not None:
         ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
-            glue_prometheus_ip+glue_prometheus_port + "' WHERE id = 2"
+            gluePrometheusConfig(scvm)[0] + "' WHERE id = 2"
+
+        glue_prometheus_ip = findGluePrometheusIp()
+        if glue_prometheus_ip != "":
+            ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
+                glue_prometheus_ip + glue_prometheus_port + "' WHERE id = 2"
 
     ds_update_query3 = "UPDATE data_source SET url = \'" + \
         "localhost:3306' WHERE id = 3"
@@ -270,16 +322,18 @@ def configDS(scvm, ccvm):
 
     cur = conn.cursor()
     cur.execute(ds_update_query1)
-    cur.execute(ds_update_query2)
+    if os_type != "general-virtualization" and scvm is not None:
+        cur.execute(ds_update_query2)
     cur.execute(ds_update_query3)
     cur.execute(ds_update_query4)
 
     conn.commit()
     conn.close()
-    
+
     exist_yn = os.system("crontab -l |grep 'config_wall.py glueDsUpdate' > /dev/null")
     if exist_yn != 0:
-        os.system("echo -e \'* * * * * /usr/bin/python3 /usr/share/ablestack/ablestack-wall/python/config_wall.py glueDsUpdate \' >> /var/spool/cron/root")
+        os.system("echo -e \'*/5 * * * * /usr/bin/python3 /usr/share/ablestack/ablestack-wall/python/config_wall.py glueDsUpdate \' >> /var/spool/cron/root")
+
 
 
 def configSkydiveLink(ccvm):
@@ -330,8 +384,12 @@ def configMoldUserDashboard():
 
 # DB 파일 초기화 (기존 초기 파일로 되돌리기)
 def initDB():
-    cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db",
-       "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
+    if os_type != "general-virtualization":
+        cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db",
+        "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
+    else:
+        cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_gfs.db",
+        "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
 def gluePrometheusIpUpdate():
     conn = sqlite3.connect(
@@ -341,9 +399,8 @@ def gluePrometheusIpUpdate():
 
     cur = conn.cursor()
     cur.execute(select_query)
-    
+
     crrent_ip = cur.fetchone()
-    glue_prometheus_ip = ""
     if crrent_ip is not None:
         glue_prometheus_ip = findGluePrometheusIp()
         if glue_prometheus_ip != "" and glue_prometheus_ip not in crrent_ip[0]:
@@ -354,54 +411,76 @@ def gluePrometheusIpUpdate():
 
     conn.commit()
     conn.close()
-    return glue_prometheus_ip
 
 def findGluePrometheusIp():
-    try:
-        ret=ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', "scvm1-mngt", "grep $(ceph orch ps |grep prometheus |grep running | head -n 1| awk '{print $2 \"-mngt\"}') /etc/hosts | awk '{print $1}'" ).strip()
-    except:
-        ret=ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', "scvm2-mngt", "grep $(ceph orch ps |grep prometheus |grep running | head -n 1| awk '{print $2 \"-mngt\"}') /etc/hosts | awk '{print $1}'" ).strip()
-    return ret
+    return ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', "ablecube", "grep $(ceph orch ps |grep prometheus | awk '{print $2 \"-mngt\"}') /etc/hosts | awk '{print $1}'" ).strip()
 
 def main():
     args = parseArgs()
     if (args.action) == 'config':
         try:
             initDB()
-            configYaml(args.cube, args.scvm, args.ccvm)
+            configYaml(args.cube, args.ccvm, args.scvm)
             configIni(args.ccvm)
-            configDS(args.scvm, args.ccvm)
+            configDS(args.scvm)
             configSkydiveLink(args.ccvm)
             configMoldUserDashboard()
             ret = createReturn(code=200, val="success wall configuration")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
-            ret = createReturn(code=500, val="fail to configuration" + e)
+            ret = createReturn(code=500, val="fail to configuration")
             print(json.dumps(json.loads(ret), indent=4))
     if (args.action) == 'update':
         try:
-            configYaml(args.cube, args.scvm, args.ccvm)
+            configYaml(args.cube, args.ccvm, args.scvm)
             systemctl('restart', 'prometheus')
             netdive_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_netdive.py","config", "--ccvm", args.ccvm, "--cube", args.cube))
             if netdive_result["code"] == 200:
-                for scvm_ip in args.scvm:
-                    result = ssh('-o','StrictHostKeyChecking=no','-o','ConnectTimeout=5', scvm_ip, '/usr/bin/ls /usr/share/ablestack/ablestack-wall/process-exporter/').splitlines()
-                    if 'scvm_process.yml' in result:
-                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "\cp -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml /usr/share/ablestack/ablestack-wall/process-exporter/process.yml").strip()
-                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "systemctl enable --now node-exporter.service process-exporter.service").strip()
-                        ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "rm -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml").strip()
+                if os_type != "general-virtualization":
+                    for scvm_ip in args.scvm:
+                        result = ssh('-o','StrictHostKeyChecking=no','-o','ConnectTimeout=5', scvm_ip, '/usr/bin/ls /usr/share/ablestack/ablestack-wall/process-exporter/').splitlines()
+                        if 'scvm_process.yml' in result:
+                            ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "\cp -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml /usr/share/ablestack/ablestack-wall/process-exporter/process.yml").strip()
+                            ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "systemctl enable --now node-exporter.service process-exporter.service").strip()
+                            ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "rm -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml").strip()
             else:
-                createReturn(code=500, val="fail to update netdive : " + netdive_result["val"])    
+                createReturn(code=500, val="fail to update netdive : " + netdive_result["val"])
 
             ret = createReturn(code=200, val="success prometheus update")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
             ret = createReturn(code=500, val="fail to update prometheus : "+e)
             print(json.dumps(json.loads(ret), indent=4))
+    if (args.action) == 'configGfs':
+        try:
+            initDB()
+            configYaml(args.cube, args.ccvm)
+            configIni(args.ccvm)
+            configDS()
+            configSkydiveLink(args.ccvm)
+            configMoldUserDashboard()
+
+            systemctl('stop', "grafana-server")
+
+            systemctl('enable', '--now', "blackbox-exporter")
+            systemctl('enable', '--now', "node-exporter")
+            systemctl('enable', '--now', "grafana-server")
+            systemctl('enable', '--now', "prometheus")
+            systemctl('enable', '--now', "process-exporter")
+            systemctl('enable', '--now', "netdive-analyzer")
+
+            systemctl('restart', "grafana-server")
+            systemctl('restart', '--now', "prometheus")
+
+            ret = createReturn(code=200, val="success wall configuration")
+            print(json.dumps(json.loads(ret), indent=4))
+        except Exception as e:
+            ret = createReturn(code=500, val="fail to configuration")
+            print(json.dumps(json.loads(ret), indent=4))
     if (args.action) == 'glueDsUpdate':
         try:
-            glue_ip = gluePrometheusIpUpdate()
-            ret = createReturn(code=200, val="success Glue prometheus ip update : "+glue_ip)
+            gluePrometheusIpUpdate()
+            ret = createReturn(code=200, val="success Glue prometheus ip update")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
             ret = createReturn(code=500, val="fail to update Glue prometheus ip : "+e)
