@@ -615,7 +615,7 @@ func CollectDomain(ch chan<- prometheus.Metric, stat libvirt.DomainStats) error 
 		display_volume_name := disk.Name
 		mold_volume_type := "N/A"
 		for _, val := range diskMetaInfo {
-			if domainName == val["domain_name"] && strings.Contains(DiskSource, val["disk_path"]) {
+			if domainName == val["domain_name"] && strings.Contains(strings.ReplaceAll(DiskSource, "-", ""), strings.ReplaceAll(val["disk_path"], "-", "")) {
 				mold_disk_name = val["mold_disk_name"]
 				display_volume_name = display_volume_name + " ( " + mold_disk_name + " )"
 				mold_volume_type = val["volume_type"]
@@ -1410,7 +1410,7 @@ func CollectMoldMeta(ch chan<- prometheus.Metric) {
 		diskMetaInfoQuery += "  and vi.type = 'User'"
 		diskRows, diskErr := db.Query(diskMetaInfoQuery)
 		if diskErr != nil {
-			log.Println("networkMetaInfoQuery 정보를 수집할 수 없습니다.")
+			log.Println("diskMetaInfoQuery 정보를 수집할 수 없습니다.")
 			log.Println(diskErr)
 			statusVal = 0.0
 		} else {
