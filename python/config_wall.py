@@ -399,7 +399,7 @@ def gluePrometheusIpUpdate():
     conn = sqlite3.connect(
             "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
-    select_query = "select url from data_source WHERE id = 3"
+    select_query = "select url from data_source WHERE name = 'Glue'"
 
     cur = conn.cursor()
     cur.execute(select_query)
@@ -409,7 +409,7 @@ def gluePrometheusIpUpdate():
         glue_prometheus_ip = findGluePrometheusIp()
         if glue_prometheus_ip != "" and glue_prometheus_ip not in crrent_ip[0]:
             glue_ds_update_query = "UPDATE data_source SET url = \'http://" + \
-                glue_prometheus_ip+glue_prometheus_port + "' WHERE id = 3"
+                glue_prometheus_ip+glue_prometheus_port + "' WHERE name = 'Glue'"
 
             cur.execute(glue_ds_update_query)
 
