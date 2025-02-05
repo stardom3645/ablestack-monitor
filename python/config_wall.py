@@ -346,7 +346,7 @@ def configSkydiveLink(ccvm):
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
     # skydive 링크가 들어가는 대시보드 ip 변경
-    link_update_query = "UPDATE dashboard SET data = replace(data, 'http://10.10.1.10:8082', 'http://" + str(ccvm[0]) + ":8082') WHERE org_id = 1 AND folder_id = 0 AND is_folder = 0 AND data like '%http://10.10.1.10:8082%'"
+    link_update_query = "UPDATE dashboard SET data = replace(data, 'http://10.10.1.10:8082', 'http://" + str(ccvm[0]) + ":8082') WHERE org_id = 1 AND data like '%http://10.10.1.10:8082%'"
 
     cur = conn.cursor()
     cur.execute(link_update_query)
