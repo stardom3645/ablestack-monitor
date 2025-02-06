@@ -187,7 +187,7 @@ def configYaml(cube, ccvm, scvm=None):
         prometheus_org = yaml.safe_load(f)
     for i in range(len(prometheus_org['scrape_configs'])):
 
-        if os_type != "general-virtualization":
+        if os_type != "ablestack-vm":
             if prometheus_org['scrape_configs'][i]['job_name'] == 'libvirt':
                 prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = libvirtConfig(
                     cube)
@@ -305,7 +305,7 @@ def configDS(scvm=None):  # 기본값 None 추가
     ds_update_query1 = "UPDATE data_source SET url = \'http://" + \
         "localhost:3001' WHERE id = 1"
 
-    if os_type != "general-virtualization" and scvm is not None:
+    if os_type != "ablestack-vm" and scvm is not None:
         ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
             gluePrometheusConfig(scvm)[0] + "' WHERE id = 2"
 
@@ -322,7 +322,7 @@ def configDS(scvm=None):  # 기본값 None 추가
 
     cur = conn.cursor()
     cur.execute(ds_update_query1)
-    if os_type != "general-virtualization" and scvm is not None:
+    if os_type != "ablestack-vm" and scvm is not None:
         cur.execute(ds_update_query2)
     cur.execute(ds_update_query3)
     cur.execute(ds_update_query4)
@@ -384,7 +384,7 @@ def configMoldUserDashboard():
 
 # DB 파일 초기화 (기존 초기 파일로 되돌리기)
 def initDB():
-    if os_type != "general-virtualization":
+    if os_type != "ablestack-vm":
         cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db",
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
     else:
@@ -436,7 +436,7 @@ def main():
             systemctl('restart', 'prometheus')
             netdive_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_netdive.py","config", "--ccvm", args.ccvm, "--cube", args.cube))
             if netdive_result["code"] == 200:
-                if os_type != "general-virtualization":
+                if os_type != "ablestack-vm":
                     for scvm_ip in args.scvm:
                         result = ssh('-o','StrictHostKeyChecking=no','-o','ConnectTimeout=5', scvm_ip, '/usr/bin/ls /usr/share/ablestack/ablestack-wall/process-exporter/').splitlines()
                         if 'scvm_process.yml' in result:
