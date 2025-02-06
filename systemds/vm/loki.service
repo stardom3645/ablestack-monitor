@@ -1,0 +1,16 @@
+[Unit]
+Description=Loki
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Restart=on-failure
+
+#Change this line if you download ther
+
+ExecStart=/usr/share/ablestack/ablestack-wall/loki/loki \
+  -config.file=/usr/share/ablestack/ablestack-wall/loki/loki-local-config.yaml
+
+[Install]
+WantedBy=multi-user.target

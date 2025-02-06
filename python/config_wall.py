@@ -303,22 +303,25 @@ def configDS(scvm=None):  # 기본값 None 추가
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
     ds_update_query1 = "UPDATE data_source SET url = \'http://" + \
-        "localhost:3001' WHERE id = 1"
+        "localhost:3001' WHERE name = 'Wall'"
 
     if os_type != "ablestack-vm" and scvm is not None:
         ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
-            gluePrometheusConfig(scvm)[0] + "' WHERE id = 2"
+            gluePrometheusConfig(scvm)[0] + "' WHERE name = 'Glue'"
 
         glue_prometheus_ip = findGluePrometheusIp()
         if glue_prometheus_ip != "":
             ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
-                glue_prometheus_ip + glue_prometheus_port + "' WHERE id = 2"
+                glue_prometheus_ip + glue_prometheus_port + "' WHERE name = 'Glue'"
 
     ds_update_query3 = "UPDATE data_source SET url = \'" + \
-        "localhost:3306' WHERE id = 3"
+        "localhost:3306' WHERE name = 'Mold'"
 
     ds_update_query4 = "UPDATE data_source SET url = \'http://" + \
-        "localhost:3001' WHERE id = 4"
+        "localhost:3001' WHERE name = 'Wall' AND org_id = '2'"
+
+    ds_update_query5 = "UPDATE data_source SET url = \'http://" + \
+            "127.0.0.1:3000' WHERE name = 'yesoreyeram-infinity-datasource'"
 
     cur = conn.cursor()
     cur.execute(ds_update_query1)
@@ -326,6 +329,7 @@ def configDS(scvm=None):  # 기본값 None 추가
         cur.execute(ds_update_query2)
     cur.execute(ds_update_query3)
     cur.execute(ds_update_query4)
+    cur.execute(ds_update_query5)
 
     conn.commit()
     conn.close()
@@ -342,7 +346,7 @@ def configSkydiveLink(ccvm):
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
     # skydive 링크가 들어가는 대시보드 ip 변경
-    link_update_query = "UPDATE dashboard SET data = replace(data, 'http://10.10.1.10:8082', 'http://" + str(ccvm[0]) + ":8082') WHERE org_id = 1 AND folder_id = 0 AND is_folder = 0 AND data like '%http://10.10.1.10:8082%'"
+    link_update_query = "UPDATE dashboard SET data = replace(data, 'http://10.10.1.10:8082', 'http://" + str(ccvm[0]) + ":8082') WHERE org_id = 1 AND data like '%http://10.10.1.10:8082%'"
 
     cur = conn.cursor()
     cur.execute(link_update_query)
@@ -357,7 +361,7 @@ def configMoldUserDashboard():
     conn = sqlite3.connect(
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
-    user_dashboard_query = "SELECT uid, slug FROM dashboard WHERE id = 15 AND org_id = 2"
+    user_dashboard_query = "SELECT uid, slug FROM dashboard WHERE title = '가상머신 상세 현황' AND org_id = 2"
 
     cur = conn.cursor()
     cur.execute(user_dashboard_query)
@@ -395,7 +399,7 @@ def gluePrometheusIpUpdate():
     conn = sqlite3.connect(
             "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
-    select_query = "select url from data_source WHERE id = 2"
+    select_query = "select url from data_source WHERE name = 'Glue'"
 
     cur = conn.cursor()
     cur.execute(select_query)
@@ -405,7 +409,7 @@ def gluePrometheusIpUpdate():
         glue_prometheus_ip = findGluePrometheusIp()
         if glue_prometheus_ip != "" and glue_prometheus_ip not in crrent_ip[0]:
             glue_ds_update_query = "UPDATE data_source SET url = \'http://" + \
-                glue_prometheus_ip+glue_prometheus_port + "' WHERE id = 2"
+                glue_prometheus_ip+glue_prometheus_port + "' WHERE name = 'Glue'"
 
             cur.execute(glue_ds_update_query)
 
@@ -425,6 +429,7 @@ def main():
             configDS(args.scvm)
             configSkydiveLink(args.ccvm)
             configMoldUserDashboard()
+            loki_config_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_loki.py","config", "--ccvm", args.ccvm, "--cube", args.cube, "--scvm", args.scvm))
             ret = createReturn(code=200, val="success wall configuration")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
