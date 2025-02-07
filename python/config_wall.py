@@ -465,6 +465,8 @@ def main():
             configSkydiveLink(args.ccvm)
             configMoldUserDashboard()
 
+            loki_config_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_loki.py","config", "--ccvm", args.ccvm, "--cube", args.cube))
+
             systemctl('stop', "grafana-server")
 
             systemctl('enable', '--now', "blackbox-exporter")
