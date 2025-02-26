@@ -31,7 +31,7 @@ promtail_port = ":9080"
 예를들어 action을 요청하면 해당 action일 때 요구되는 파라미터를 입력받고 해당 코드를 수행합니다.
 '''
 
-
+json_file_path = "/etc/cluster.json"
 def parseArgs():
     parser = argparse.ArgumentParser(description='config loki',
                                      epilog='copyrightⓒ 2024 All rights reserved by ABLECLOUD™')
@@ -46,6 +46,19 @@ def parseArgs():
                         nargs='*', help='scvm ips')
 
     return parser.parse_args()
+
+def openClusterJson():
+    try:
+        with open(json_file_path, 'r') as json_file:
+            ret = json.load(json_file)
+    except Exception as e:
+        ret = createReturn(code=500, val='cluster.json read error')
+        print ('EXCEPTION : ',e)
+
+    return ret
+
+json_data = openClusterJson()
+os_type = json_data["clusterConfig"]["type"]
 
 def ccvmServiceConfig(ccvm_ip):
     ccvm = ccvm_ip.copy()
@@ -73,9 +86,8 @@ from subprocess import call, Popen, PIPE
 import subprocess
 import os
 
-def LokiPromtailConfig(ccvm, cube, scvm):
+def LokiPromtailConfig(ccvm, cube, scvm=None):
     promtail_yml_path = '/usr/share/ablestack/ablestack-wall/promtail/'
-
     # 오류 발생할 경우, 3번 재시도 합니다.
     tries = 3
     for j in range(tries):
@@ -158,46 +170,46 @@ def LokiPromtailConfig(ccvm, cube, scvm):
             rc = process.returncode  # 명령어 실행 후 리턴 코드
             result_code_list.append(rc)
 
+        if os_type != "ablestack-vm":
+            for i in range(len(scvm)):
+                stringOj = ''.join(scvmServiceConfig(scvm)[i])
+                promtail_config_file = "promtail-scvm-config.yaml"
 
-        for i in range(len(scvm)):
-            stringOj = ''.join(scvmServiceConfig(scvm)[i])
-            promtail_config_file = "promtail-scvm-config.yaml"
+                # scvm 각 항목에 맞는 HOSTNAME 설정
+                hostname_cmd = f"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 root@{stringOj} 'hostname'"
+                hostname = check_output(hostname_cmd, shell=True).strip().decode('utf-8')
 
-            # scvm 각 항목에 맞는 HOSTNAME 설정
-            hostname_cmd = f"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 root@{stringOj} 'hostname'"
-            hostname = check_output(hostname_cmd, shell=True).strip().decode('utf-8')
+                # envsubst 명령어 실행 전에 각 scvm HOSTNAME 환경 변수 전달
+                envsubst_cmd = (
+                    f"export HOSTNAME={hostname} && "  # scvm의 항목을 HOSTNAME으로 설정
+                    f"envsubst <{promtail_yml_path}{promtail_config_file} > {promtail_yml_path}temp.yaml && "
+                    f"mv -f {promtail_yml_path}temp.yaml {promtail_yml_path}promtail-local-config.yaml"
+                )
 
-            # envsubst 명령어 실행 전에 각 scvm HOSTNAME 환경 변수 전달
-            envsubst_cmd = (
-                f"export HOSTNAME={hostname} && "  # scvm의 항목을 HOSTNAME으로 설정
-                f"envsubst <{promtail_yml_path}{promtail_config_file} > {promtail_yml_path}temp.yaml && "
-                f"mv -f {promtail_yml_path}temp.yaml {promtail_yml_path}promtail-local-config.yaml"
-            )
+                # subprocess.Popen을 사용하여 명령 실행 및 출력 캡처
+                process = Popen(
+                    ["ssh -o StrictHostKeyChecking=no root@" + stringOj + " '" + envsubst_cmd + "'"],
+                    universal_newlines=True, shell=True, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+                )
 
-            # subprocess.Popen을 사용하여 명령 실행 및 출력 캡처
-            process = Popen(
-                ["ssh -o StrictHostKeyChecking=no root@" + stringOj + " '" + envsubst_cmd + "'"],
-                universal_newlines=True, shell=True, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
-            )
+                stdout, stderr = process.communicate()  # stdout, stderr 캡처
+                rc_one = process.returncode  # 명령어 실행 후 리턴 코드
 
-            stdout, stderr = process.communicate()  # stdout, stderr 캡처
-            rc_one = process.returncode  # 명령어 실행 후 리턴 코드
+                # promtail 서비스 재시작
+                service_restart_cmd = (
+                    'systemctl enable --now promtail.service'
+                )
 
-            # promtail 서비스 재시작
-            service_restart_cmd = (
-                'systemctl enable --now promtail.service'
-            )
+                process = Popen(
+                    ["ssh -o StrictHostKeyChecking=no root@" + stringOj + " '" + service_restart_cmd + "'"],
+                    universal_newlines=True, shell=True, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+                )
 
-            process = Popen(
-                ["ssh -o StrictHostKeyChecking=no root@" + stringOj + " '" + service_restart_cmd + "'"],
-                universal_newlines=True, shell=True, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
-            )
+                stdout, stderr = process.communicate()  # stdout, stderr 캡처
+                rc_two = process.returncode  # 명령어 실행 후 리턴 코드
 
-            stdout, stderr = process.communicate()  # stdout, stderr 캡처
-            rc_two = process.returncode  # 명령어 실행 후 리턴 코드
-
-            result_code_list.append(rc_one)
-            result_code_list.append(rc_two)
+                result_code_list.append(rc_one)
+                result_code_list.append(rc_two)
 
         if all(0 == x for x in result_code_list):
             result = 200
@@ -225,7 +237,7 @@ def RestartLoki(ccvm):
 # 함수명 : RestartLokiPromtail
 # 주요 기능 : 입력 받은 ccvm, cube, scvm ip의 주소로 promtail service를 재시작 합니다.
 
-def RestartLokiPromtail(ccvm, cube, scvm):
+def RestartLokiPromtail(ccvm, cube, scvm=None):
     for i in range(len(ccvm)):
         stringOj = ''.join(ccvmServiceConfig(ccvm)[i])
         os.system("ssh -o StrictHostKeyChecking=no root@" + stringOj + " 'systemctl restart loki.service'")
@@ -233,16 +245,21 @@ def RestartLokiPromtail(ccvm, cube, scvm):
     for i in range(len(cube)):
         stringOj = ''.join(cubeServiceConfig(cube)[i])
         os.system("ssh -o StrictHostKeyChecking=no root@" + stringOj + " 'systemctl restart promtail.service'")
-    for i in range(len(scvm)):
-        stringOj = ''.join(scvmServiceConfig(cube)[i])
-        os.system("ssh -o StrictHostKeyChecking=no root@" + stringOj + " 'systemctl restart promtail.service'")
+    if os_type != "ablestack-vm":
+        for i in range(len(scvm)):
+            stringOj = ''.join(scvmServiceConfig(cube)[i])
+            os.system("ssh -o StrictHostKeyChecking=no root@" + stringOj + " 'systemctl restart promtail.service'")
 
 def main():
     args = parseArgs()
 
     if (args.action) == 'config':
         try:
-            result = LokiPromtailConfig(args.ccvm, args.cube, args.scvm)
+            if os_type != "ablestack-vm":
+                result = LokiPromtailConfig(args.ccvm, args.cube, args.scvm)
+            else:
+                result = LokiPromtailConfig(args.ccvm, args.cube)
+
             if result == 200:
                 ret = createReturn(code=200, val="completed loki and promtail configuration")
                 print(json.dumps(json.loads(ret), indent=4))
@@ -254,7 +271,11 @@ def main():
             print(json.dumps(json.loads(ret), indent=4))
     if (args.action) == 'update':
         try:
-            RestartLokiPromtail(args.ccvm, args.cube, args.scvm)
+            if os_type != "ablestack-vm":
+                RestartLokiPromtail(args.ccvm, args.cube, args.scvm)
+            else:
+                RestartLokiPromtail(args.ccvm, args.cube)
+
             ret = createReturn(code=200, val="updated loki and promtail configuration")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
