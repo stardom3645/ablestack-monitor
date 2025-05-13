@@ -87,7 +87,7 @@ def configMoldSmtp(host, user, password):
     cloud_db.commit()
     cloud_db.close()
 
-    systemctl('restart', 'cloudstack-management')
+    systemctl('restart', 'mold')
 
 
 def main():
