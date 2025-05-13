@@ -423,6 +423,7 @@ def main():
     args = parseArgs()
     if (args.action) == 'config':
         try:
+            os.system("rm -rf cd /nfs/prometheus/ > /dev/null")
             initDB()
             configYaml(args.cube, args.ccvm, args.scvm)
             configIni(args.ccvm)
