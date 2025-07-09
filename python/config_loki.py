@@ -97,7 +97,7 @@ def LokiPromtailConfig(ccvm, cube, scvm=None):
             promtail_config_file = "promtail-ccvm-config.yaml"
 
             # ccvm 각 항목에 맞는 HOSTNAME 설정
-            hostname_cmd = f"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 root@{stringOj} 'hostname'"
+            hostname_cmd = f"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@{stringOj} 'hostname'"
             hostname = check_output(hostname_cmd, shell=True).strip().decode('utf-8')
 
             # envsubst 명령어 실행 전에 각 ccvm HOSTNAME 환경 변수 전달
@@ -136,7 +136,7 @@ def LokiPromtailConfig(ccvm, cube, scvm=None):
             promtail_config_file = "promtail-cube-config.yaml"
 
             # cube의 각 항목에 맞는 HOSTNAME 설정
-            hostname_cmd = f"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 root@{stringOj} 'hostname'"
+            hostname_cmd = f"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@{stringOj} 'hostname'"
             hostname = check_output(hostname_cmd, shell=True).strip().decode('utf-8')
 
             # envsubst 명령어 실행 전에 각 cube의 HOSTNAME 환경 변수 전달
@@ -176,7 +176,7 @@ def LokiPromtailConfig(ccvm, cube, scvm=None):
                 promtail_config_file = "promtail-scvm-config.yaml"
 
                 # scvm 각 항목에 맞는 HOSTNAME 설정
-                hostname_cmd = f"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 root@{stringOj} 'hostname'"
+                hostname_cmd = f"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@{stringOj} 'hostname'"
                 hostname = check_output(hostname_cmd, shell=True).strip().decode('utf-8')
 
                 # envsubst 명령어 실행 전에 각 scvm HOSTNAME 환경 변수 전달
@@ -247,7 +247,7 @@ def RestartLokiPromtail(ccvm, cube, scvm=None):
         os.system("ssh -o StrictHostKeyChecking=no root@" + stringOj + " 'systemctl restart promtail.service'")
     if os_type != "ablestack-vm":
         for i in range(len(scvm)):
-            stringOj = ''.join(scvmServiceConfig(cube)[i])
+            stringOj = ''.join(scvmServiceConfig(scvm)[i])
             os.system("ssh -o StrictHostKeyChecking=no root@" + stringOj + " 'systemctl restart promtail.service'")
 
 def main():
