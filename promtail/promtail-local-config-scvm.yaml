@@ -1,0 +1,60 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://ccvm:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: "${HOSTNAME}"
+          __path__: /var/log/messages
+          stream: stdout
+    pipeline_stages:
+      - multiline:
+          firstline: '^\S'
+      - labels:
+          filename: "{{ .filename }}"
+      - regex:
+          expression: '.*(?i)(?P<level>DEBUG|INFO|WARN|ERROR}).*'
+      - labels:
+          level:
+      - replace:
+          expression: '.*level=warn.*'  # "level=warn"이 포함된 경우
+          replacement: 'WARN'  # level을 WARN으로 변경
+          source: level  # source는 level로 설정
+      - replace:
+          expression: '(?i)(debug|info|warn|error)'
+          replacement: '{{ .Value | upper }}'
+          source: level
+
+  - job_name: job_2
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: "${HOSTNAME}"
+          __path__: /var/log/ceph/*/ceph-volume.log
+          stream: stdout
+    pipeline_stages:
+      - multiline:
+          firstline: '^\S'
+      - labels:
+          filename: "{{ .filename }}"
+      - regex:
+          expression: '.*(?i)(?P<level>DEBUG|INFO|WARN|ERROR).*'
+      - labels:
+          level:
+      - replace:
+          expression: '(?i)(debug|info|warn|error)'
+          replacement: '{{ .Value | upper }}'
+          source: level
+      - drop:
+          expression: "\\[INFO \\]"
