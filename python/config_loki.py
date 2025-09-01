@@ -170,7 +170,7 @@ def LokiPromtailConfig(ccvm, cube, scvm=None):
             rc = process.returncode  # 명령어 실행 후 리턴 코드
             result_code_list.append(rc)
 
-        if os_type != "ablestack-vm":
+        if os_type == "ablestack-hci":
             for i in range(len(scvm)):
                 stringOj = ''.join(scvmServiceConfig(scvm)[i])
                 promtail_config_file = "promtail-scvm-config.yaml"
@@ -245,7 +245,7 @@ def RestartLokiPromtail(ccvm, cube, scvm=None):
     for i in range(len(cube)):
         stringOj = ''.join(cubeServiceConfig(cube)[i])
         os.system("ssh -o StrictHostKeyChecking=no root@" + stringOj + " 'systemctl restart promtail.service'")
-    if os_type != "ablestack-vm":
+    if os_type == "ablestack-hci":
         for i in range(len(scvm)):
             stringOj = ''.join(scvmServiceConfig(scvm)[i])
             os.system("ssh -o StrictHostKeyChecking=no root@" + stringOj + " 'systemctl restart promtail.service'")
@@ -255,7 +255,7 @@ def main():
 
     if (args.action) == 'config':
         try:
-            if os_type != "ablestack-vm":
+            if os_type == "ablestack-hci":
                 result = LokiPromtailConfig(args.ccvm, args.cube, args.scvm)
             else:
                 result = LokiPromtailConfig(args.ccvm, args.cube)
@@ -271,7 +271,7 @@ def main():
             print(json.dumps(json.loads(ret), indent=4))
     if (args.action) == 'update':
         try:
-            if os_type != "ablestack-vm":
+            if os_type == "ablestack-hci":
                 RestartLokiPromtail(args.ccvm, args.cube, args.scvm)
             else:
                 RestartLokiPromtail(args.ccvm, args.cube)

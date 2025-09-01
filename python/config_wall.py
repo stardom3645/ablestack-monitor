@@ -44,7 +44,7 @@ def parseArgs():
                                      epilog='copyrightⓒ 2021 All rights reserved by ABLECLOUD™')
 
     parser.add_argument('action', choices=[
-                        'config', 'update', 'glueDsUpdate', 'configGfs'], help='choose one of the actions')
+                        'config', 'update', 'glueDsUpdate'], help='choose one of the actions')
     parser.add_argument('--cube', metavar='name', type=str,
                         nargs='*', help='cube ips')
     parser.add_argument('--scvm', metavar='name', type=str,
@@ -187,7 +187,7 @@ def configYaml(cube, ccvm, scvm=None):
         prometheus_org = yaml.safe_load(f)
     for i in range(len(prometheus_org['scrape_configs'])):
 
-        if os_type != "ablestack-vm":
+        if os_type == "ablestack-hci":
             if prometheus_org['scrape_configs'][i]['job_name'] == 'libvirt':
                 prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = libvirtConfig(
                     cube)
@@ -305,7 +305,7 @@ def configDS(scvm=None):  # 기본값 None 추가
     ds_update_query1 = "UPDATE data_source SET url = \'http://" + \
         "localhost:3001' WHERE name = 'Wall'"
 
-    if os_type != "ablestack-vm" and scvm is not None:
+    if os_type == "ablestack-hci" and scvm is not None:
         ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
             gluePrometheusConfig(scvm)[0] + "' WHERE name = 'Glue'"
 
@@ -325,7 +325,7 @@ def configDS(scvm=None):  # 기본값 None 추가
 
     cur = conn.cursor()
     cur.execute(ds_update_query1)
-    if os_type != "ablestack-vm" and scvm is not None:
+    if os_type == "ablestack-hci" and scvm is not None:
         cur.execute(ds_update_query2)
     cur.execute(ds_update_query3)
     cur.execute(ds_update_query4)
@@ -388,7 +388,7 @@ def configMoldUserDashboard():
 
 # DB 파일 초기화 (기존 초기 파일로 되돌리기)
 def initDB():
-    if os_type != "ablestack-vm":
+    if os_type == "ablestack-hci":
         cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db",
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
     else:
@@ -422,27 +422,58 @@ def findGluePrometheusIp():
 def main():
     args = parseArgs()
     if (args.action) == 'config':
-        try:
-            os.system("rm -rf cd /nfs/prometheus/ > /dev/null")
-            initDB()
-            configYaml(args.cube, args.ccvm, args.scvm)
-            configIni(args.ccvm)
-            configDS(args.scvm)
-            configSkydiveLink(args.ccvm)
-            configMoldUserDashboard()
-            loki_config_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_loki.py","config", "--ccvm", args.ccvm, "--cube", args.cube, "--scvm", args.scvm))
-            ret = createReturn(code=200, val="success wall configuration")
-            print(json.dumps(json.loads(ret), indent=4))
-        except Exception as e:
-            ret = createReturn(code=500, val="fail to configuration")
-            print(json.dumps(json.loads(ret), indent=4))
+        if os_type == "ablestack-hci":
+            try:
+                os.system("rm -rf cd /nfs/prometheus/ > /dev/null")
+                initDB()
+                configYaml(args.cube, args.ccvm, args.scvm)
+                configIni(args.ccvm)
+                configDS(args.scvm)
+                configSkydiveLink(args.ccvm)
+                configMoldUserDashboard()
+
+                json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_loki.py","config", "--ccvm", args.ccvm, "--cube", args.cube, "--scvm", args.scvm))
+
+                ret = createReturn(code=200, val="success wall configuration")
+                print(json.dumps(json.loads(ret), indent=4))
+            except Exception as e:
+                ret = createReturn(code=500, val="fail to configuration")
+                print(json.dumps(json.loads(ret), indent=4))
+        else:
+            try:
+                initDB()
+                configYaml(args.cube, args.ccvm)
+                configIni(args.ccvm)
+                configDS()
+                configSkydiveLink(args.ccvm)
+                configMoldUserDashboard()
+
+                json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_loki.py","config", "--ccvm", args.ccvm, "--cube", args.cube))
+
+                systemctl('stop', "grafana-server")
+
+                systemctl('enable', '--now', "blackbox-exporter")
+                systemctl('enable', '--now', "node-exporter")
+                systemctl('enable', '--now', "grafana-server")
+                systemctl('enable', '--now', "prometheus")
+                systemctl('enable', '--now', "process-exporter")
+                systemctl('enable', '--now', "netdive-analyzer")
+
+                systemctl('restart', "grafana-server")
+                systemctl('restart', '--now', "prometheus")
+
+                ret = createReturn(code=200, val="success wall configuration")
+                print(json.dumps(json.loads(ret), indent=4))
+            except Exception as e:
+                ret = createReturn(code=500, val="fail to configuration")
+                print(json.dumps(json.loads(ret), indent=4))
     if (args.action) == 'update':
         try:
             configYaml(args.cube, args.ccvm, args.scvm)
             systemctl('restart', 'prometheus')
             netdive_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_netdive.py","config", "--ccvm", args.ccvm, "--cube", args.cube))
             if netdive_result["code"] == 200:
-                if os_type != "ablestack-vm":
+                if os_type == "ablestack-hci":
                     for scvm_ip in args.scvm:
                         result = ssh('-o','StrictHostKeyChecking=no','-o','ConnectTimeout=5', scvm_ip, '/usr/bin/ls /usr/share/ablestack/ablestack-wall/process-exporter/').splitlines()
                         if 'scvm_process.yml' in result:
@@ -456,34 +487,6 @@ def main():
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
             ret = createReturn(code=500, val="fail to update prometheus : "+e)
-            print(json.dumps(json.loads(ret), indent=4))
-    if (args.action) == 'configGfs':
-        try:
-            initDB()
-            configYaml(args.cube, args.ccvm)
-            configIni(args.ccvm)
-            configDS()
-            configSkydiveLink(args.ccvm)
-            configMoldUserDashboard()
-
-            loki_config_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_loki.py","config", "--ccvm", args.ccvm, "--cube", args.cube))
-
-            systemctl('stop', "grafana-server")
-
-            systemctl('enable', '--now', "blackbox-exporter")
-            systemctl('enable', '--now', "node-exporter")
-            systemctl('enable', '--now', "grafana-server")
-            systemctl('enable', '--now', "prometheus")
-            systemctl('enable', '--now', "process-exporter")
-            systemctl('enable', '--now', "netdive-analyzer")
-
-            systemctl('restart', "grafana-server")
-            systemctl('restart', '--now', "prometheus")
-
-            ret = createReturn(code=200, val="success wall configuration")
-            print(json.dumps(json.loads(ret), indent=4))
-        except Exception as e:
-            ret = createReturn(code=500, val="fail to configuration")
             print(json.dumps(json.loads(ret), indent=4))
     if (args.action) == 'glueDsUpdate':
         try:
