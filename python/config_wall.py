@@ -15,6 +15,7 @@ import sh
 from ablestack import *
 import configparser
 import sqlite3
+import re
 import pymysql
 from sh import cp
 from sh import systemctl
@@ -339,17 +340,35 @@ def configDS(scvm=None):  # 기본값 None 추가
         os.system("echo -e \'*/5 * * * * /usr/bin/python3 /usr/share/ablestack/ablestack-wall/python/config_wall.py glueDsUpdate \' >> /var/spool/cron/root")
 
 
-
 def configSkydiveLink(ccvm):
+    ccvm_ip = ccvm[0] if isinstance(ccvm, (list, tuple)) else str(ccvm)
 
-    conn = sqlite3.connect(
-        "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
-
-    # skydive 링크가 들어가는 대시보드 ip 변경
-    link_update_query = "UPDATE dashboard SET data = replace(data, 'http://10.10.1.10:8082', 'http://" + str(ccvm[0]) + ":8082') WHERE org_id = 1 AND data like '%http://10.10.1.10:8082%'"
-
+    conn = sqlite3.connect("/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
     cur = conn.cursor()
-    cur.execute(link_update_query)
+
+    cur.execute("SELECT id, data FROM dashboard WHERE org_id = 1 AND data LIKE '%:8082%'")
+    rows = cur.fetchall()
+
+    pattern = re.compile(r"http://(?:\d{1,3}\.){3}\d{1,3}:8082(?P<tail>[^\"'\s]*)")
+    replacement = rf"http://{ccvm_ip}:8082\g<tail>"
+
+    updated = 0
+    for id_, data in rows:
+        if data is None:
+            continue
+        # bytes → str 디코딩
+        if isinstance(data, (bytes, bytearray)):
+            try:
+                data_str = data.decode('utf-8')
+            except UnicodeDecodeError:
+                data_str = data.decode('latin-1', 'ignore')  # 최후의 보루
+        else:
+            data_str = data
+
+        new_data, count = pattern.subn(replacement, data_str)
+        if count > 0 and new_data != data_str:
+            cur.execute("UPDATE dashboard SET data = ? WHERE id = ?", (new_data, id_))
+            updated += 1
 
     conn.commit()
     conn.close()
@@ -394,6 +413,16 @@ def initDB():
     else:
         cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_gfs.db",
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
+
+    # WAL/SHM 파일 제거
+    try:
+        os.remove("/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db-wal")
+    except FileNotFoundError:
+        pass
+    try:
+        os.remove("/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db-shm")
+    except FileNotFoundError:
+        pass
 
 def gluePrometheusIpUpdate():
     conn = sqlite3.connect(
