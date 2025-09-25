@@ -380,7 +380,10 @@ def configMoldUserDashboard():
     conn = sqlite3.connect(
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
-    user_dashboard_query = "SELECT uid, slug FROM dashboard WHERE title = '07. 사용자 가상머신 별 상세 현황' AND org_id = 1"
+    if os_type == "ablestack-hci":
+        user_dashboard_query = "SELECT uid, slug FROM dashboard WHERE title = '07. 사용자 가상머신 별 상세 현황' AND org_id = 1"
+    else:
+        user_dashboard_query = "SELECT uid, slug FROM dashboard WHERE title = '06. 사용자 가상머신 별 상세 현황' AND org_id = 1"
 
     cur = conn.cursor()
     cur.execute(user_dashboard_query)
