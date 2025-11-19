@@ -28,6 +28,7 @@ libvirt_exporter_port = ":3002"
 node_exporter_port = ":3003"
 process_exporter_port = ":3004"
 blackbox_exporter_port = ":3005"
+ipmi_exporter_port = ":3006"
 cube_service_port = ":9090"
 mold_service_port = ":8080"
 mold_db_port = ":3306"
@@ -102,6 +103,11 @@ def cubeNodeConfig(cube_ip):
         cube[i] = cube[i] + node_exporter_port
     return cube
 
+def ipmiConfig(cube_ip):
+    cube = cube_ip.copy()
+    for i in range(len(cube)):
+        cube[i] = cube[i] + ipmi_exporter_port
+    return cube
 
 def scvmNodeConfig(scvm_ip):
     scvm = scvm_ip.copy()
@@ -197,6 +203,10 @@ def configYaml(cube, ccvm, scvm=None):
                 prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeNodeConfig(
                     cube)
 
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'ipmi':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ipmiConfig(
+                    cube)
+
             elif prometheus_org['scrape_configs'][i]['job_name'] == 'scvm':
                 prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = scvmNodeConfig(
                     scvm)
@@ -236,7 +246,7 @@ def configYaml(cube, ccvm, scvm=None):
                     ccvm)[0]
 
             elif prometheus_org['scrape_configs'][i]['job_name'] == 'blackbox-tcp':
-                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeServiceConfig(cube) + moldServiceConfig(ccvm) + moldDBConfig(ccvm) + libvirtConfig(cube) + cubeNodeConfig(cube) + scvmNodeConfig(scvm) + ccvmNodeConfig(
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeServiceConfig(cube) + moldServiceConfig(ccvm) + moldDBConfig(ccvm) + libvirtConfig(cube) + cubeNodeConfig(cube) + ipmiConfig(cube) + scvmNodeConfig(scvm) + ccvmNodeConfig(
                     ccvm) + cubeProcessConfig(cube) + scvmProcessConfig(scvm) + ccvmProcessConfig(ccvm) + ccvmBlackboxConfigReplacement(ccvm)
                 prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
                     ccvm)[0]
@@ -247,6 +257,10 @@ def configYaml(cube, ccvm, scvm=None):
 
             elif prometheus_org['scrape_configs'][i]['job_name'] == 'cube':
                 prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeNodeConfig(
+                    cube)
+
+            elif prometheus_org['scrape_configs'][i]['job_name'] == 'ipmi':
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = ipmiConfig(
                     cube)
 
             elif prometheus_org['scrape_configs'][i]['job_name'] == 'ccvm':
@@ -274,7 +288,7 @@ def configYaml(cube, ccvm, scvm=None):
                     ccvm)[0]
 
             elif prometheus_org['scrape_configs'][i]['job_name'] == 'blackbox-tcp':
-                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeServiceConfig(cube) + moldServiceConfig(ccvm) + moldDBConfig(ccvm) + libvirtConfig(cube) + cubeNodeConfig(cube) + ccvmNodeConfig(
+                prometheus_org['scrape_configs'][i]['static_configs'][0]['targets'] = cubeServiceConfig(cube) + moldServiceConfig(ccvm) + moldDBConfig(ccvm) + libvirtConfig(cube) + cubeNodeConfig(cube) + ipmiConfig(cube) + ccvmNodeConfig(
                     ccvm) + cubeProcessConfig(cube)  + ccvmProcessConfig(ccvm) + ccvmBlackboxConfigReplacement(ccvm)
                 prometheus_org['scrape_configs'][i]['relabel_configs'][-1]['replacement'] = ccvmBlackboxConfigReplacement(
                     ccvm)[0]

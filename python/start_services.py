@@ -31,6 +31,7 @@ def startServices(service):
 
 
 def stopServices(service):
+    systemctl('stop', service)
     systemctl('disable', '--now', service)
 
 
