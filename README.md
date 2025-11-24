@@ -133,7 +133,16 @@ wall은 sqlite3 기반의 grafana.db를 사용하며 make build 명령을 통해
 25. DELETE FROM 'annotation';
 26. UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'annotation';  (개발을 하기 위해 로그인 했던 정보 삭제)
 27. select * FROM SQLITE_SEQUENCE where name = 'annotation';
-28. UPDATE alert SET state = 'ok', execution_error = '', eval_data = '', eval_date = null WHERE 1=1;
-29. 작업 완료된 grafana.db 파일 ablestack-template 가상머신에 grafana.db, grafana_org.db 파일로 생성 복사
-30. scp <개발 폴더 경로>/gragana/data/grafana.db /usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db 
+28. 데이터 삭제
+    delete from alert_instance;
+    delete from alert_rule_version;
+    delete from anon_device;
+    delete from lost_and_found;
+29. 데이터 삭제 확인
+    select count(*) from alert_instance;
+    select count(*) from alert_rule_version;
+    select count(*) from anon_device;
+    select count(*) from lost_and_found;
+30. 작업 완료된 grafana.db 파일 ablestack-template 가상머신에 grafana.db, grafana_org.db 파일로 생성 복사
+31. scp <개발 폴더 경로>/gragana/data/grafana.db /usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db 
 ~~~
