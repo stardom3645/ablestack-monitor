@@ -46,7 +46,7 @@ def parseArgs():
                                      epilog='copyrightⓒ 2021 All rights reserved by ABLECLOUD™')
 
     parser.add_argument('action', choices=[
-                        'config', 'update', 'glueDsUpdate'], help='choose one of the actions')
+        'config', 'update', 'glueDsUpdate'], help='choose one of the actions')
     parser.add_argument('--cube', metavar='name', type=str,
                         nargs='*', help='cube ips')
     parser.add_argument('--scvm', metavar='name', type=str,
@@ -318,25 +318,25 @@ def configDS(scvm=None):  # 기본값 None 추가
         "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
     ds_update_query1 = "UPDATE data_source SET url = \'http://" + \
-        "localhost:3001' WHERE name = 'Wall'"
+                       "localhost:3001' WHERE name = 'Wall'"
 
     if os_type == "ablestack-hci" and scvm is not None:
         ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
-            gluePrometheusConfig(scvm)[0] + "' WHERE name = 'Glue'"
+                           gluePrometheusConfig(scvm)[0] + "' WHERE name = 'Glue'"
 
         glue_prometheus_ip = findGluePrometheusIp()
         if glue_prometheus_ip != "":
             ds_update_query2 = "UPDATE data_source SET url = \'http://" + \
-                glue_prometheus_ip + glue_prometheus_port + "' WHERE name = 'Glue'"
+                               glue_prometheus_ip + glue_prometheus_port + "' WHERE name = 'Glue'"
 
     ds_update_query3 = "UPDATE data_source SET url = \'" + \
-        "localhost:3306' WHERE name = 'Mold'"
+                       "localhost:3306' WHERE name = 'Mold'"
 
     ds_update_query4 = "UPDATE data_source SET url = \'http://" + \
-        "localhost:3001' WHERE name = 'Wall' AND org_id = '2'"
+                       "localhost:3001' WHERE name = 'Wall' AND org_id = '2'"
 
     ds_update_query5 = "UPDATE data_source SET url = \'https://" + \
-            "ccvm:8081' WHERE name = 'yesoreyeram-infinity-datasource'"
+                       "ccvm:19400' WHERE name = 'yesoreyeram-infinity-datasource'"
 
     cur = conn.cursor()
     cur.execute(ds_update_query1)
@@ -354,35 +354,49 @@ def configDS(scvm=None):  # 기본값 None 추가
         os.system("echo -e \'*/5 * * * * /usr/bin/python3 /usr/share/ablestack/ablestack-wall/python/config_wall.py glueDsUpdate \' >> /var/spool/cron/root")
 
 
+import sqlite3
+import re
+
 def configSkydiveLink(ccvm):
+    # ccvm 처리 (리스트/튜플 대응)
     ccvm_ip = ccvm[0] if isinstance(ccvm, (list, tuple)) else str(ccvm)
 
     conn = sqlite3.connect("/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
     cur = conn.cursor()
 
-    cur.execute("SELECT id, data FROM dashboard WHERE org_id = 1 AND data LIKE '%:8082%'")
+    # 1. 기존 8082 포트와 신규 19500 포트가 포함된 데이터를 모두 조회
+    cur.execute("""
+        SELECT id, data FROM dashboard 
+        WHERE org_id = 1 AND (data LIKE '%:8082%' OR data LIKE '%:19500%')
+    """)
     rows = cur.fetchall()
 
-    pattern = re.compile(r"http://(?:\d{1,3}\.){3}\d{1,3}:8082(?P<tail>[^\"'\s]*)")
-    replacement = rf"http://{ccvm_ip}:8082\g<tail>"
+    # 2. 정규표현식: http/https 대응 및 8082/19500 포트 모두 매칭
+    # 패턴 설명: https? (프로토콜), IP주소, :(8082|19500) (포트)
+    pattern = re.compile(r"https?://(?:\d{1,3}\.){3}\d{1,3}:(8082|19500)(?P<tail>[^\"'\s]*)")
 
-    updated = 0
+    # 교체 포맷: 항상 https와 19500 포트를 사용하도록 강제
+    replacement = rf"https://{ccvm_ip}:19500\g<tail>"
+
     for id_, data in rows:
         if data is None:
             continue
-        # bytes → str 디코딩
+
+        # 데이터 디코딩 처리 (BLOB 대응)
         if isinstance(data, (bytes, bytearray)):
             try:
                 data_str = data.decode('utf-8')
             except UnicodeDecodeError:
-                data_str = data.decode('latin-1', 'ignore')  # 최후의 보루
+                data_str = data.decode('latin-1', 'ignore')
         else:
             data_str = data
 
+        # 패턴 치환
         new_data, count = pattern.subn(replacement, data_str)
+
+        # 실제 변경사항이 있을 때만 DB 업데이트 수행
         if count > 0 and new_data != data_str:
             cur.execute("UPDATE dashboard SET data = ? WHERE id = ?", (new_data, id_))
-            updated += 1
 
     conn.commit()
     conn.close()
@@ -422,10 +436,10 @@ def configMoldUserDashboard():
 def initDB():
     if os_type == "ablestack-hci":
         cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_org.db",
-        "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
+           "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
     else:
         cp("-f", "/usr/share/ablestack/ablestack-wall/grafana/data/grafana_gfs.db",
-        "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
+           "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
     # WAL/SHM 파일 제거
     try:
@@ -439,7 +453,7 @@ def initDB():
 
 def gluePrometheusIpUpdate():
     conn = sqlite3.connect(
-            "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
+        "/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
 
     select_query = "select url from data_source WHERE name = 'Glue'"
 
@@ -451,7 +465,7 @@ def gluePrometheusIpUpdate():
         glue_prometheus_ip = findGluePrometheusIp()
         if glue_prometheus_ip != "" and glue_prometheus_ip not in crrent_ip[0]:
             glue_ds_update_query = "UPDATE data_source SET url = \'http://" + \
-                glue_prometheus_ip+glue_prometheus_port + "' WHERE name = 'Glue'"
+                                   glue_prometheus_ip+glue_prometheus_port + "' WHERE name = 'Glue'"
 
             cur.execute(glue_ds_update_query)
 
