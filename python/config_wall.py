@@ -16,6 +16,7 @@ from ablestack import *
 import configparser
 import sqlite3
 import re
+import sys
 import pymysql
 from sh import cp
 from sh import systemctl
@@ -61,7 +62,7 @@ def openClusterJson():
         with open(json_file_path, 'r') as json_file:
             ret = json.load(json_file)
     except Exception as e:
-        ret = createReturn(code=500, val='cluster.json read error')
+        ret = createReturn(code=500, val="fail to configuration : " + str(e))
         print ('EXCEPTION : ',e)
 
     return ret
@@ -488,12 +489,30 @@ def main():
                 configSkydiveLink(args.ccvm)
                 configMoldUserDashboard()
 
-                json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_loki.py","config", "--ccvm", args.ccvm, "--cube", args.cube, "--scvm", args.scvm))
+                json.loads(sh.python3(
+                    "/usr/share/ablestack/ablestack-wall/python/deploy_wall_https.py"
+                ))
+
+                # Wall / Netdive TLS 인증서 배포
+                sh.python3("/usr/share/ablestack/ablestack-wall/python/deploy_wall_https.py")
+                sh.python3(
+                    "/usr/share/ablestack/ablestack-wall/python/deploy_netdive_https.py",
+                    "--ccvm", args.ccvm,
+                    "--cube", args.cube
+                )
+
+                json.loads(sh.python3(
+                    "/usr/share/ablestack/ablestack-wall/python/config_loki.py",
+                    "config",
+                    "--ccvm", args.ccvm,
+                    "--cube", args.cube,
+                    "--scvm", args.scvm
+                ))
 
                 ret = createReturn(code=200, val="success wall configuration")
                 print(json.dumps(json.loads(ret), indent=4))
             except Exception as e:
-                ret = createReturn(code=500, val="fail to configuration")
+                ret = createReturn(code=500, val="fail to configuration : " + str(e))
                 print(json.dumps(json.loads(ret), indent=4))
         else:
             try:
@@ -504,7 +523,20 @@ def main():
                 configSkydiveLink(args.ccvm)
                 configMoldUserDashboard()
 
-                json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_loki.py","config", "--ccvm", args.ccvm, "--cube", args.cube))
+                # Wall / Netdive TLS 인증서 배포
+                sh.python3("/usr/share/ablestack/ablestack-wall/python/deploy_wall_https.py")
+                sh.python3(
+                    "/usr/share/ablestack/ablestack-wall/python/deploy_netdive_https.py",
+                    "--ccvm", args.ccvm,
+                    "--cube", args.cube
+                )
+
+                json.loads(sh.python3(
+                    "/usr/share/ablestack/ablestack-wall/python/config_loki.py",
+                    "config",
+                    "--ccvm", args.ccvm,
+                    "--cube", args.cube
+                ))
 
                 systemctl('stop', "grafana-server")
 
@@ -513,7 +545,7 @@ def main():
                 systemctl('enable', '--now', "grafana-server")
                 systemctl('enable', '--now', "prometheus")
                 systemctl('enable', '--now', "process-exporter")
-                systemctl('enable', '--now', "netdive-analyzer")
+                systemctl('enable', "netdive-analyzer")
 
                 systemctl('restart', "grafana-server")
                 systemctl('restart', '--now', "prometheus")
@@ -521,7 +553,7 @@ def main():
                 ret = createReturn(code=200, val="success wall configuration")
                 print(json.dumps(json.loads(ret), indent=4))
             except Exception as e:
-                ret = createReturn(code=500, val="fail to configuration")
+                ret = createReturn(code=500, val="fail to configuration : " + str(e))
                 print(json.dumps(json.loads(ret), indent=4))
     if (args.action) == 'update':
         try:
