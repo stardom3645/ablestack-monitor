@@ -12,6 +12,9 @@ import json
 import sys
 from ablestack import *
 
+WALL_GRAFANA_PORT = "19400"
+ROOT_CA_CERT_PATH = "/usr/share/ablestack/ablestack-wall/grafana/tls/rootCA.crt"
+
 
 '''
 함수명 : testNotification
@@ -25,15 +28,15 @@ def testNotification():
         key = apikey.readline()
 
     wall_ip = sys.argv[1]
-    url = 'http://admin:admin@' + wall_ip + \
-        ':3000/api/alert-notifications/test'
+    url = 'https://admin:admin@' + wall_ip + \
+        ':' + WALL_GRAFANA_PORT + '/api/alert-notifications/test'
 
     headers = {'Accept': 'application/json', 'Content-Type': 'application/json',
                'Authorization': 'Bearer' + key}
     with open("/usr/share/ablestack/ablestack-wall/properties/notification.json", "r") as notificationJsonFile:
         data = json.load(notificationJsonFile)
 
-    res = requests.post(url, data=json.dumps(data), headers=headers)
+    res = requests.post(url, data=json.dumps(data), headers=headers, verify=ROOT_CA_CERT_PATH)
 
     ret = createReturn(code=res.status_code, val=res.text)
     print(json.dumps(json.loads(ret), indent=4))

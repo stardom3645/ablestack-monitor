@@ -12,6 +12,9 @@ import json
 import sys
 from ablestack import *
 
+WALL_GRAFANA_PORT = "19400"
+ROOT_CA_CERT_PATH = "/usr/share/ablestack/ablestack-wall/grafana/tls/rootCA.crt"
+
 
 '''
 함수명 : createApiKey
@@ -22,15 +25,15 @@ from ablestack import *
 def createApiKey():
     wall_ip = sys.argv[1]
     key_name = sys.argv[2]
-    url = 'http://admin:admin@' + wall_ip + \
-        ':3000/api/auth/keys'
+    url = 'https://admin:admin@' + wall_ip + \
+        ':' + WALL_GRAFANA_PORT + '/api/auth/keys'
 
     headers = {'Accept': 'application/json',
                'Content-Type': 'application/json'}
 
     data = '{"name":' + '"'+key_name+'"' + ', "role": "Admin"}'
 
-    res = requests.post(url, data=data, headers=headers)
+    res = requests.post(url, data=data, headers=headers, verify=ROOT_CA_CERT_PATH)
     # print(str(res.status_code) + "|" + res.text)
     ret = createReturn(code=res.status_code, val=res.text)
     print(json.dumps(json.loads(ret), indent=4))
