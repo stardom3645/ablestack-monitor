@@ -13,6 +13,25 @@ from ablestack import *
 import json
 import sys
 
+def logServiceError(action, service, error):
+    message = str(error).replace("\n", " ")
+    if len(message) > 1000:
+        message = message[:1000] + "..."
+    sys.stderr.write(f">> [SERVICE][{action}] {service}: {type(error).__name__}: {message}\n")
+
+def runServiceAction(action, services):
+    for service in services:
+        try:
+            if action == 'start':
+                systemctl('enable', '--now', service)
+            elif action == 'stop':
+                systemctl('stop', service)
+                systemctl('disable', '--now', service)
+            elif action == 'restart':
+                systemctl('restart', service)
+        except Exception as e:
+            logServiceError(action, service, e)
+            raise
 
 def parseArgs():
     parser = argparse.ArgumentParser(description='Prometheus Yaml file parsing and replace targets',
@@ -27,16 +46,15 @@ def parseArgs():
 
 
 def startServices(service):
-    systemctl('enable', '--now', service)
+    runServiceAction('start', service)
 
 
 def stopServices(service):
-    systemctl('stop', service)
-    systemctl('disable', '--now', service)
+    runServiceAction('stop', service)
 
 
 def restartServices(service):
-    systemctl('restart', service)
+    runServiceAction('restart', service)
 
 
 def main():
