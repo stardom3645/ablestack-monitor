@@ -526,6 +526,48 @@ def gluePrometheusIpUpdate():
 def findGluePrometheusIp():
     return ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', "ablecube", "grep $(ceph orch ps |grep prometheus | awk '{print $2 \"-mngt\"}') /etc/hosts | awk '{print $1}'" ).strip()
 
+def ensureRemoteServices(hosts, services):
+    if hosts is None:
+        return
+
+    service_args = " ".join(services)
+    command = "systemctl daemon-reload && systemctl enable --now " + service_args + " && systemctl restart " + service_args
+    for host in hosts:
+        ssh('-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', host, command).strip()
+
+def ensureScvmProcessConfig(scvm):
+    if scvm is None:
+        return
+
+    for scvm_ip in scvm:
+        result = ssh('-o','StrictHostKeyChecking=no','-o','ConnectTimeout=5', scvm_ip, '/usr/bin/ls /usr/share/ablestack/ablestack-wall/process-exporter/').splitlines()
+        if 'scvm_process.yml' in result:
+            ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "\cp -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml /usr/share/ablestack/ablestack-wall/process-exporter/process.yml").strip()
+            ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "rm -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml").strip()
+
+def configLokiPromtail(ccvm, cube, scvm=None):
+    if os_type == "ablestack-hci":
+        result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_loki.py", "config", "--ccvm", ccvm, "--cube", cube, "--scvm", scvm))
+    else:
+        result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_loki.py", "config", "--ccvm", ccvm, "--cube", cube))
+
+    if result["code"] != 200:
+        raise Exception("fail to update loki and promtail : " + result["val"])
+
+def checkPrometheusConfig():
+    promtool = Command("/usr/share/ablestack/ablestack-wall/prometheus/promtool")
+    promtool("check", "config", "/usr/share/ablestack/ablestack-wall/prometheus/prometheus.yml")
+
+def updateNetdive(ccvm, cube):
+    try:
+        netdive_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_netdive.py", "config", "--ccvm", ccvm, "--cube", cube))
+        if netdive_result["code"] != 200:
+            return "fail to update netdive : " + netdive_result["val"]
+    except Exception as e:
+        return "fail to update netdive : " + str(e)
+
+    return ""
+
 def main():
     args = parseArgs()
     if (args.action) == 'config':
@@ -579,23 +621,35 @@ def main():
     if (args.action) == 'update':
         try:
             configYaml(args.cube, args.ccvm, args.scvm)
-            systemctl('restart', 'prometheus')
-            netdive_result = json.loads(sh.python3("/usr/share/ablestack/ablestack-wall/python/config_netdive.py","config", "--ccvm", args.ccvm, "--cube", args.cube))
-            if netdive_result["code"] == 200:
-                if os_type == "ablestack-hci":
-                    for scvm_ip in args.scvm:
-                        result = ssh('-o','StrictHostKeyChecking=no','-o','ConnectTimeout=5', scvm_ip, '/usr/bin/ls /usr/share/ablestack/ablestack-wall/process-exporter/').splitlines()
-                        if 'scvm_process.yml' in result:
-                            ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "\cp -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml /usr/share/ablestack/ablestack-wall/process-exporter/process.yml").strip()
-                            ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "systemctl enable --now node-exporter.service process-exporter.service").strip()
-                            ssh('-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5', scvm_ip, "rm -f /usr/share/ablestack/ablestack-wall/process-exporter/scvm_process.yml").strip()
-            else:
-                createReturn(code=500, val="fail to update netdive : " + netdive_result["val"])
 
-            ret = createReturn(code=200, val="success prometheus update")
+            ensureRemoteServices(args.cube, [
+                "node-exporter.service",
+                "process-exporter.service",
+                "libvirt-exporter.service",
+                "license-exporter.service",
+                "promtail.service"
+            ])
+
+            if os_type == "ablestack-hci":
+                ensureScvmProcessConfig(args.scvm)
+                ensureRemoteServices(args.scvm, [
+                    "node-exporter.service",
+                    "process-exporter.service",
+                    "promtail.service"
+                ])
+
+            configLokiPromtail(args.ccvm, args.cube, args.scvm)
+            checkPrometheusConfig()
+            systemctl('restart', 'prometheus')
+
+            netdive_warning = updateNetdive(args.ccvm, args.cube)
+            if netdive_warning:
+                ret = createReturn(code=200, val="success wall update. warning: " + netdive_warning)
+            else:
+                ret = createReturn(code=200, val="success wall update")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
-            ret = createReturn(code=500, val="fail to update prometheus : "+e)
+            ret = createReturn(code=500, val="fail to update wall : " + str(e))
             print(json.dumps(json.loads(ret), indent=4))
     if (args.action) == 'glueDsUpdate':
         try:
@@ -603,7 +657,7 @@ def main():
             ret = createReturn(code=200, val="success Glue prometheus ip update")
             print(json.dumps(json.loads(ret), indent=4))
         except Exception as e:
-            ret = createReturn(code=500, val="fail to update Glue prometheus ip : "+e)
+            ret = createReturn(code=500, val="fail to update Glue prometheus ip : " + str(e))
             print(json.dumps(json.loads(ret), indent=4))
 
     return ret
