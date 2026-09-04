@@ -201,7 +201,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(probe_success{pingip=~\"$host:9090\"}) - sum(probe_success{pingip=~\"$host:9090\"})",
+          "expr": "count(probe_success{pingip=~\"$host:19100\"}) - sum(probe_success{pingip=~\"$host:19100\"})",
           "hide": false,
           "instant": true,
           "interval": "",

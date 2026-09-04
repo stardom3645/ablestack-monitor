@@ -1354,11 +1354,11 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "10.10.1.1:9090|10.10.1.2:9090|10.10.1.3:9090",
-          "value": "10.10.1.1:9090|10.10.1.2:9090|10.10.1.3:9090"
+          "text": "10.10.1.1:19100|10.10.1.2:19100|10.10.1.3:19100",
+          "value": "10.10.1.1:19100|10.10.1.2:19100|10.10.1.3:19100"
         },
         "datasource": "Mold",
-        "definition": "SELECT\n\tCONCAT(GROUP_CONCAT(private_ip_address SEPARATOR ':9090|'),':9090')\nFROM host\nWHERE\n\tremoved IS NULL\n\tAND type = \"Routing\"",
+        "definition": "SELECT\n\tCONCAT(GROUP_CONCAT(private_ip_address SEPARATOR ':19100|'),':19100')\nFROM host\nWHERE\n\tremoved IS NULL\n\tAND type = \"Routing\"",
         "description": null,
         "error": null,
         "hide": 2,
@@ -1367,7 +1367,7 @@
         "multi": false,
         "name": "cubeips",
         "options": [],
-        "query": "SELECT\n\tCONCAT(GROUP_CONCAT(private_ip_address SEPARATOR ':9090|'),':9090')\nFROM host\nWHERE\n\tremoved IS NULL\n\tAND type = \"Routing\"",
+        "query": "SELECT\n\tCONCAT(GROUP_CONCAT(private_ip_address SEPARATOR ':19100|'),':19100')\nFROM host\nWHERE\n\tremoved IS NULL\n\tAND type = \"Routing\"",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,

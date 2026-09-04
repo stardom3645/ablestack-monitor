@@ -1115,7 +1115,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n  probe_success{pingip=~\".*:9090\"}\n),\n \"pingip\",\n \"$1\",\n \"pingip\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
+          "expr": "label_replace(\n(\n  probe_success{pingip=~\".*:19100\"}\n),\n \"pingip\",\n \"$1\",\n \"pingip\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"cube-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
