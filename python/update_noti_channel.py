@@ -12,6 +12,9 @@ import json
 import sys
 from ablestack import *
 
+WALL_GRAFANA_PORT = "19400"
+ROOT_CA_CERT_PATH = "/usr/share/ablestack/ablestack-wall/grafana/tls/rootCA.crt"
+
 
 '''
 함수명 : updateNotification
@@ -25,8 +28,8 @@ def updateNotification():
         key = apikey.readline()
 
     wall_ip = sys.argv[1]
-    url = 'http://admin:admin@' + wall_ip + \
-        ':3000/api/alert-notifications/uid/ablecloud-admin'
+    url = 'https://admin:admin@' + wall_ip + \
+        ':' + WALL_GRAFANA_PORT + '/api/alert-notifications/uid/ablecloud-admin'
 
     headers = {'Accept': 'application/json', 'Content-Type': 'application/json',
                'Authorization': 'Bearer' + key}
@@ -34,7 +37,7 @@ def updateNotification():
     with open("/usr/share/ablestack/ablestack-wall/properties/notification.json", "r") as notificationJsonFile:
         data = json.load(notificationJsonFile)
 
-    res = requests.put(url, data=json.dumps(data), headers=headers)
+    res = requests.put(url, data=json.dumps(data), headers=headers, verify=ROOT_CA_CERT_PATH)
     # print(str(res.status_code) + "|" + res.text)
     ret = createReturn(code=res.status_code, val=res.text)
     print(json.dumps(json.loads(ret), indent=4))

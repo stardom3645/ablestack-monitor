@@ -48,7 +48,7 @@
       "title": "넷다이브",
       "tooltip": "",
       "type": "link",
-      "url": "http://10.10.1.10:8082"
+      "url": "https://10.10.1.10:19500"
     }
   ],
   "liveNow": false,
@@ -207,7 +207,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(probe_success{pingip=~\"$ccvm:8080\"}) + sum(probe_success{pingip=~\"$ccvm:8080\"})",
+          "expr": "sum(probe_success{pingip=~\"$ccvm:443\"}) + sum(probe_success{pingip=~\"$ccvm:443\"})",
           "hide": false,
           "instant": true,
           "interval": "",

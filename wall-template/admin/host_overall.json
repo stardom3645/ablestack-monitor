@@ -48,7 +48,7 @@
       "title": "넷다이브",
       "tooltip": "",
       "type": "link",
-      "url": "http://10.10.1.10:8082"
+      "url": "https://10.10.1.10:19500"
     }
   ],
   "liveNow": false,

@@ -976,7 +976,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "label_replace(\n(\n  probe_success{pingip=~\".*:8080\"}\n),\n \"pingip\",\n \"$1\",\n \"pingip\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"ccvm-blackbox\"}",
+          "expr": "label_replace(\n(\n  probe_success{pingip=~\".*:443\"}\n),\n \"pingip\",\n \"$1\",\n \"pingip\",\n \"(.*):.*\"\n)\n/ on (pingip) group_left() probe_success{pingip=~\".*\", job=\"ccvm-blackbox\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,

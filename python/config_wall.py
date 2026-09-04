@@ -34,7 +34,7 @@ blackbox_exporter_port = ":3005"
 ipmi_exporter_port = ":3006"
 license_exporter_port = ":3007"
 cube_service_port = ":9090"
-mold_service_port = ":8080"
+mold_service_port = ":443"
 mold_db_port = ":3306"
 glue_prometheus_port = ":9095"
 
@@ -377,7 +377,7 @@ def configDS(scvm=None):  # 기본값 None 추가
         "localhost:3001' WHERE name = 'Wall' AND org_id = '2'"
 
     ds_update_query5 = "UPDATE data_source SET url = \'https://" + \
-            "ccvm:8081' WHERE name = 'yesoreyeram-infinity-datasource'"
+            "ccvm:19400' WHERE name = 'yesoreyeram-infinity-datasource'"
 
     cur = conn.cursor()
     cur.execute(ds_update_query1)
@@ -401,14 +401,14 @@ def configSkydiveLink(ccvm):
     conn = sqlite3.connect("/usr/share/ablestack/ablestack-wall/grafana/data/grafana.db")
     cur = conn.cursor()
 
-    cur.execute("SELECT id, data FROM dashboard WHERE org_id = 1 AND data LIKE '%:8082%'")
+    cur.execute("SELECT id, data FROM dashboard WHERE org_id = 1 AND (data LIKE '%:8082%' OR data LIKE '%:19500%')")
     rows = cur.fetchall()
 
     # 수정 1: https? 를 사용하여 http:// 와 https:// 모두 매칭되도록 변경
-    pattern = re.compile(r"https?://(?:\d{1,3}\.){3}\d{1,3}:8082(?P<tail>[^\"'\s]*)")
+    pattern = re.compile(r"https?://(?:\d{1,3}\.){3}\d{1,3}:(?:8082|19500)(?P<tail>[^\"'\s]*)")
 
     # 수정 2: 치환될 결과를 무조건 https:// 로 고정
-    replacement = rf"https://{ccvm_ip}:8082\g<tail>"
+    replacement = rf"https://{ccvm_ip}:19500\g<tail>"
 
     updated = 0
     for id_, data in rows:

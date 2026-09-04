@@ -13,7 +13,7 @@ Copyright (c) 2021 ABLECLOUD Co. Ltd
 import os
 import argparse
 import json
-import subprocess
+import time
 from subprocess import call
 from ablestack import *
 from sh import systemctl
@@ -25,6 +25,7 @@ env['LANGUAGE'] = "en"
 
 # SSH 대기 방지용 공통 옵션입니다.
 SSH_COMMON_OPTS = "-o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=5"
+ANALYZER_HEALTH_URL = "https://localhost:19500/api/capture"
 
 
 '''
@@ -60,19 +61,27 @@ def cubeServiceConfig(cube_ip):
 
 
 def StartAnalyzer():
-    try:
-        # 1. 먼저 활성화(enable)를 시도합니다. (--now 없이 등록만)
-        systemctl("enable", "netdive-analyzer")
+    systemctl("enable", "netdive-analyzer")
+    systemctl("restart", "netdive-analyzer")
 
-        # 2. 이미 실행 중이든 아니든 'restart'를 통해 깨끗하게 다시 시작합니다.
-        # 이렇게 하면 'activating' 상태에서 멈춘 경우도 해결됩니다.
-        sys.stderr.write(">> [INFO] Restarting netdive-analyzer service...\n")
-        systemctl("restart", "netdive-analyzer")
 
-    except Exception as e:
-        # 에러가 나더라도 로그만 찍고 스크립트가 완전히 죽지 않게 예외 처리를 보강합니다.
-        sys.stderr.write(f">> [WARNING] Analyzer service issue: {str(e)}\n")
-        # 만약 restart 실패가 치명적이라면 여기서 raise e를 하여 중단시킬 수 있습니다.
+def WaitAnalyzerReady():
+    tries = 30
+
+    for _ in range(tries):
+        rc = call(
+            [f"curl -sfk {ANALYZER_HEALTH_URL} > /dev/null 2>&1"],
+            universal_newlines=True,
+            shell=True,
+            env=env
+        )
+
+        if rc == 0:
+            return 200
+
+        time.sleep(1)
+
+    return 500
 
 
 '''
@@ -129,6 +138,12 @@ def main():
         try:
             # 1) ccvm에서 analyzer를 먼저 기동
             StartAnalyzer()
+
+            analyzer_ready = WaitAnalyzerReady()
+            if analyzer_ready != 200:
+                ret = createReturn(code=500, val="fail to start netdive analyzer")
+                print(json.dumps(json.loads(ret), indent=4))
+                return ret
 
             # 2) cube들에서 agent를 기동
             result = SendCommandToHost(args.cube)
