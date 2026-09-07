@@ -372,8 +372,23 @@ def configDS(scvm=None):  # 기본값 None 추가
     ds_update_query4 = "UPDATE data_source SET url = \'http://" + \
         "localhost:3001' WHERE name = 'Wall' AND org_id = '2'"
 
-    ds_update_query5 = "UPDATE data_source SET url = \'https://" + \
-            "ccvm:19400' WHERE name = 'yesoreyeram-infinity-datasource'"
+    ds_update_query5 = (
+        "UPDATE data_source "
+        "SET url = 'https://ccvm:19400', "
+        "json_data = replace(replace(json_data, "
+        "'https://ccvm:8081', 'https://ccvm:19400'), "
+        "'http://127.0.0.1:3000', 'https://ccvm:19400') "
+        "WHERE name = 'yesoreyeram-infinity-datasource'"
+    )
+
+    ds_update_query6 = (
+        "UPDATE plugin_setting "
+        "SET json_data = replace(replace(json_data, "
+        "'https://ccvm:8081', 'https://ccvm:19400'), "
+        "'http://127.0.0.1:3000', 'https://ccvm:19400') "
+        "WHERE json_data LIKE '%https://ccvm:8081%' "
+        "OR json_data LIKE '%http://127.0.0.1:3000%'"
+    )
 
     cur = conn.cursor()
     cur.execute(ds_update_query1)
@@ -382,6 +397,7 @@ def configDS(scvm=None):  # 기본값 None 추가
     cur.execute(ds_update_query3)
     cur.execute(ds_update_query4)
     cur.execute(ds_update_query5)
+    cur.execute(ds_update_query6)
 
     conn.commit()
     conn.close()
@@ -622,6 +638,8 @@ def main():
     if (args.action) == 'update':
         try:
             configYaml(args.cube, args.ccvm, args.scvm)
+            configDS(args.scvm)
+            configSkydiveLink(args.ccvm)
 
             ensureRemoteServices(args.cube, [
                 "node-exporter.service",
@@ -642,6 +660,7 @@ def main():
             configLokiPromtail(args.ccvm, args.cube, args.scvm)
             checkPrometheusConfig()
             systemctl('restart', 'prometheus')
+            systemctl('restart', 'grafana-server')
 
             netdive_warning = updateNetdive(args.ccvm, args.cube)
             if netdive_warning:
